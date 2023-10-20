@@ -56,7 +56,7 @@ class PackageHelper
 
     public static function getPsr4Dictonary()
     {
-        $psr4 = include(__DIR__ . '/../../../../../vendor/composer/autoload_psr4.php');
+        $psr4 = include(__DIR__ . '/../../../../../../composer/autoload_psr4.php');
         return $psr4;
     }
 
