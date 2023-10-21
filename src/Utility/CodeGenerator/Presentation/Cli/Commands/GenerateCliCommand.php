@@ -12,14 +12,13 @@ use Untek\Model\Cqrs\CommandBusInterface;
 class GenerateCliCommand extends Command
 {
 
-    protected CommandBusInterface $bus;
-    protected array $interacts;
-
-    public function __construct(CommandBusInterface $bus, string $name = null, array $interacts)
+    public function __construct(
+        string $name = null,
+        private CommandBusInterface $bus,
+        private array $interacts
+    )
     {
         parent::__construct($name);
-        $this->bus = $bus;
-        $this->interacts = $interacts;
     }
 
     protected function input(SymfonyStyle $io): array
@@ -53,7 +52,7 @@ class GenerateCliCommand extends Command
         $result = [];
         foreach ($commands as $command) {
             $handleResult = $this->bus->handle($command);
-            if($handleResult) {
+            if ($handleResult) {
                 $result = ArrayHelper::merge($result, $handleResult);
             }
         }
