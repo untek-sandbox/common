@@ -5,6 +5,7 @@ namespace Untek\Utility\CodeGenerator\Application\Handlers;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGenerator\Application\Validators\GenerateRestApiCommandValidator;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
@@ -50,7 +51,7 @@ class GenerateRestApiCommandHandler
     {
         $controllerClassName = $this->getControllerClassName($command);
 
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
+        /*$configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
 
@@ -62,7 +63,16 @@ class GenerateRestApiCommandHandler
             service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class),
         ]);';
             $configGenerator->appendCode($controllerDefinition);
-        }
+        }*/
+
+        $controllerDefinition =
+            '    $services->set(\\' . $controllerClassName . '::class, \\' . $controllerClassName . '::class)
+        ->args([
+            service(\Untek\Model\Cqrs\CommandBusInterface::class),
+            service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class),
+        ]);';
+        $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
+        $configFile = $consoleConfigGenerator->generate($controllerDefinition, $controllerClassName);
 
         return $configFile;
     }

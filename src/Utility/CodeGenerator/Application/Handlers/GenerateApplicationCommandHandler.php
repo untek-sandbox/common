@@ -6,6 +6,7 @@ use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Laminas\Code\Generator\PropertyGenerator;
 use Laminas\Code\Generator\TypeGenerator;
@@ -30,7 +31,7 @@ class GenerateApplicationCommandHandler
     {
         $handlerClassName = $this->getHandlerClassName($command);
 
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
+        /*$configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
 
@@ -38,7 +39,12 @@ class GenerateApplicationCommandHandler
             $controllerDefinition =
                 '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
             $configGenerator->appendCode($controllerDefinition);
-        }
+        }*/
+
+        $controllerDefinition =
+            '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
+        $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
+        $configFile = $consoleConfigGenerator->generate($controllerDefinition, $handlerClassName);
 
         return $configFile;
     }
