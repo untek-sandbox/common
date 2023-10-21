@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts;
+namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication;
 
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;

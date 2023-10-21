@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts;
+namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -60,7 +60,7 @@ Or select new namespace with exist commands.');
         return $io->askQuestion($question);
     }
 
-    private function getCommandsFromNameSpace(string $namespace): array
+    protected function getCommandsFromNameSpace(string $namespace): array
     {
         $commandDirectory = PackageHelper::pathByNamespace($namespace . '\\Application\\Commands');
         $queryDirectory = PackageHelper::pathByNamespace($namespace . '\\Application\\Queries');

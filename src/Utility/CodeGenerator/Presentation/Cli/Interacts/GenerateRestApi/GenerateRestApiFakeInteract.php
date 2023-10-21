@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts;
+namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
@@ -35,27 +35,5 @@ Please, run command "code-generator:generate-application" and retry this command
 Or select new namespace with exist commands.');
             return [];
         }
-    }
-
-    private function getCommandsFromNameSpace(string $namespace): array
-    {
-        $commandDirectory = PackageHelper::pathByNamespace($namespace . '\\Application\\Commands');
-        $queryDirectory = PackageHelper::pathByNamespace($namespace . '\\Application\\Queries');
-
-        $commandClasses = $queueClasses = [];
-        $fs = new Filesystem();
-
-        if ($fs->exists($commandDirectory)) {
-            $commandClasses = $this->getResourcesByPath($commandDirectory);
-        }
-        if ($fs->exists($queryDirectory)) {
-            $queueClasses = $this->getResourcesByPath($queryDirectory);
-        }
-
-        $commandClasses = $this->getClassNames($commandClasses);
-        $queueClasses = $this->getClassNames($queueClasses);
-
-        $classes = array_merge($commandClasses, $queueClasses);
-        return $classes;
     }
 }

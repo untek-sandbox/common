@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 
 class GenerateRestApiCommandHandler
 {
@@ -20,6 +21,8 @@ class GenerateRestApiCommandHandler
      */
     public function __invoke(GenerateRestApiCommand $command)
     {
+        $files = [];
+
         $validator = new GenerateRestApiCommandValidator();
         $validator->validate($command);
 
@@ -33,55 +36,55 @@ class GenerateRestApiCommandHandler
         $template = __DIR__ . '/../../Resources/templates/rest-api-controller.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
+        $files[] = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
 
-        $this->generateContainerConfig($command);
-        $this->generateRoutConfig($command);
+        $files[] = $this->generateContainerConfig($command);
+        $files[] = $this->generateRoutConfig($command);
 
         // TODO: генерить авто-тест
+
+        return $files;
     }
 
-    private function generateContainerConfig(GenerateRestApiCommand $command): void
+    private function generateContainerConfig(GenerateRestApiCommand $command): string
     {
         $controllerClassName = $this->getControllerClassName($command);
-        $fileGenerator = new FileGenerator();
-        $fs = new Filesystem();
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
-        if (!$fs->exists($configFile)) {
-            $configFileTemplate = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
-            $fileGenerator->generatePhpFile($configFile, $configFileTemplate);
-        }
 
-        if (!$fileGenerator->hasCode($configFile, $controllerClassName)) {
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
+        $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
+        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        if(!$configGenerator->hasCode($controllerClassName)) {
             $controllerDefinition =
                 '    $services->set(\\' . $controllerClassName . '::class, \\' . $controllerClassName . '::class)
         ->args([
             service(\Untek\Model\Cqrs\CommandBusInterface::class),
             service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class),
         ]);';
-            $fileGenerator->appendCodeInFile($configFile, $controllerDefinition);
+            $configGenerator->appendCode($controllerDefinition);
         }
+
+        return $configFile;
     }
 
-    private function generateRoutConfig(GenerateRestApiCommand $command): void
+    private function generateRoutConfig(GenerateRestApiCommand $command): string
     {
         $controllerClassName = $this->getControllerClassName($command);
-        $fileGenerator = new FileGenerator();
-        $fs = new Filesystem();
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/rest-api-routes.php';
-        if (!$fs->exists($configFile)) {
-            $configFileTemplate = __DIR__ . '/../../Resources/templates/route-config.tpl.php';
-            $fileGenerator->generatePhpFile($configFile, $configFileTemplate);
-        }
 
-        if (!$fileGenerator->hasCode($configFile, $controllerClassName)) {
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/rest-api-routes.php';
+        $templateFile = __DIR__ . '/../../Resources/templates/route-config.tpl.php';
+        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        if(!$configGenerator->hasCode($controllerClassName)) {
             $controllerDefinition =
                 '    $routes
         ->add(\'' . $command->getUri() . '\', \'/' . $command->getUri() . '\')
         ->controller(\\' . $controllerClassName . '::class)
         ->methods([\'' . $command->getHttpMethod() . '\']);';
-            $fileGenerator->appendCodeInFile($configFile, $controllerDefinition);
+            $configGenerator->appendCode($controllerDefinition);
         }
+
+        return $configFile;
     }
 
     private function getControllerClassName(GenerateRestApiCommand $command): string

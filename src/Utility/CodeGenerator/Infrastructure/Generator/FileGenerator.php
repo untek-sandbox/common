@@ -10,12 +10,17 @@ use Untek\Core\Instance\Helpers\ClassHelper;
 class FileGenerator
 {
 
-    public function generatePhpClass(string $className, string $template, array $parameters = []): void
+    public function __construct()
+    {
+    }
+
+    public function generatePhpClass(string $className, string $template, array $parameters = []): string
     {
         $parameters['namespace'] = ClassHelper::getNamespace($className);
         $parameters['className'] = ClassHelper::getClassOfClassName($className);
         $fileName = PackageHelper::pathByNamespace($className) . '.php';
         $this->generatePhpFile($fileName, $template, $parameters);
+        return $fileName;
     }
 
     public function generatePhpFile(string $fileName, string $template, array $parameters = [])
@@ -43,6 +48,9 @@ class FileGenerator
 
     public function hasCode(string $fileName, string $needle): bool
     {
+        if(!is_file($fileName)) {
+            return false;
+        }
         $code = file_get_contents($fileName);
         return str_contains($code, $needle);
     }

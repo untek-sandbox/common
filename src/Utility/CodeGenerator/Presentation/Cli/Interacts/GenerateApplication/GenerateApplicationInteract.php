@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts;
+namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication;
 
 use Symfony\Component\Console\Question\Question;
 use Untek\Core\Text\Helpers\Inflector;

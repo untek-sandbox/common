@@ -26,9 +26,9 @@ class GenerateCliCommand extends Command
     {
         $commands = [];
         foreach ($this->interacts as $interact) {
-            $commands1 = $interact->input($io);
-            if ($commands1) {
-                $commands = ArrayHelper::merge($commands, $commands1);
+            $interactCommands = $interact->input($io);
+            if ($interactCommands) {
+                $commands = ArrayHelper::merge($commands, $interactCommands);
             }
         }
         return $commands;
@@ -37,10 +37,12 @@ class GenerateCliCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-//        $io->title('Code generator');
         $commands = $this->input($io);
         if ($commands) {
-            $this->handleCommands($commands);
+            $files = $this->handleCommands($commands);
+            $io->newLine();
+            $io->writeln('Generated files:');
+            $io->listing($files);
             $io->success('Code generated successfully');
         }
         return Command::SUCCESS;
@@ -50,7 +52,10 @@ class GenerateCliCommand extends Command
     {
         $result = [];
         foreach ($commands as $command) {
-            $result[] = $this->bus->handle($command);
+            $handleResult = $this->bus->handle($command);
+            if($handleResult) {
+                $result = ArrayHelper::merge($result, $handleResult);
+            }
         }
         return $result;
     }

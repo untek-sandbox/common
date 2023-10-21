@@ -2,24 +2,66 @@
 
 namespace Untek\Utility\CodeGenerator\Application\Handlers;
 
+use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Laminas\Code\Generator\PropertyGenerator;
 use Laminas\Code\Generator\TypeGenerator;
 use Untek\Core\Text\Helpers\Inflector;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 
 class GenerateApplicationCommandHandler
 {
 
     public function __invoke(GenerateApplicationCommand $command)
     {
-        $this->generateCommandClass($command);
-        $this->generateCommandHandlerClass($command);
-        $this->generateCommandValidatorClass($command);
+        $files = [];
+        $files[] = $this->generateCommandClass($command);
+        $files[] = $this->generateCommandHandlerClass($command);
+        $files[] = $this->generateCommandValidatorClass($command);
+        $files[] = $this->generateContainerConfig($command);
+        $files[] = $this->generateCommandBusConfig($command);
+        return $files;
     }
 
-    private function generateCommandValidatorClass(GenerateApplicationCommand $command) {
+    private function generateContainerConfig(GenerateApplicationCommand $command): string
+    {
+        $handlerClassName = $this->getHandlerClassName($command);
+
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
+        $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
+        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        if(!$configGenerator->hasCode($handlerClassName)) {
+            $controllerDefinition =
+                '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
+            $configGenerator->appendCode($controllerDefinition);
+        }
+
+        return $configFile;
+    }
+
+    private function generateCommandBusConfig(GenerateApplicationCommand $command): string
+    {
+        $handlerClassName = $this->getHandlerClassName($command);
+        $commandClassName = $this->getCommandClass($command);
+
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/command-bus.php';
+        $templateFile = __DIR__ . '/../../Resources/templates/command-bus-config.tpl.php';
+        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        if(!$configGenerator->hasCode($handlerClassName)) {
+            $controllerDefinition =
+                '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';
+            $configGenerator->appendCode($controllerDefinition);
+        }
+
+        return $configFile;
+    }
+
+    private function generateCommandValidatorClass(GenerateApplicationCommand $command): string {
         $validatorClassName = $this->getCommandValidatorClass($command);
         $commandClassName = $this->getCommandClass($command);
 
@@ -30,7 +72,7 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../Resources/templates/validator.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
+        return $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
     }
 
     private function getCommandValidatorClass(GenerateApplicationCommand $command): string {
@@ -51,7 +93,7 @@ class GenerateApplicationCommandHandler
         return $properties;
     }
 
-    private function generateCommandClass(GenerateApplicationCommand $command) {
+    private function generateCommandClass(GenerateApplicationCommand $command): string {
         $commandClassName = $this->getCommandClass($command);
 
         $params = [
@@ -60,13 +102,19 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../Resources/templates/command.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $fileGenerator->generatePhpClass($commandClassName, $template, $params);
+        return $fileGenerator->generatePhpClass($commandClassName, $template, $params);
     }
 
-    private function generateCommandHandlerClass(GenerateApplicationCommand $command) {
+    private function getHandlerClassName(GenerateApplicationCommand $command): string {
         $camelizeName = Inflector::camelize($command->getName());
         $camelizeUnitName = $camelizeName . Inflector::camelize($command->getType());
         $handlerClassName = $command->getNamespace() . '\\Application\\Handlers\\' . $camelizeUnitName . 'Handler';
+        return $handlerClassName;
+    }
+
+    private function generateCommandHandlerClass(GenerateApplicationCommand $command): string {
+        $handlerClassName = $this->getHandlerClassName($command);
+
         $commandClassName = $this->getCommandClass($command);
         $validatorClassName = $this->getCommandValidatorClass($command);
 
@@ -77,7 +125,7 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../Resources/templates/handler.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $fileGenerator->generatePhpClass($handlerClassName, $template, $params);
+        return $fileGenerator->generatePhpClass($handlerClassName, $template, $params);
     }
 
     private function getCommandClass(GenerateApplicationCommand $command): string {
