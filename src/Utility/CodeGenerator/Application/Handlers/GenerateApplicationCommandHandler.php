@@ -31,20 +31,10 @@ class GenerateApplicationCommandHandler
     {
         $handlerClassName = $this->getHandlerClassName($command);
 
-        /*$configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
-        $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-
-        if(!$configGenerator->hasCode($handlerClassName)) {
-            $controllerDefinition =
-                '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
-            $configGenerator->appendCode($controllerDefinition);
-        }*/
-
-        $controllerDefinition =
+        $handlerDefinition =
             '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
-        $configFile = $consoleConfigGenerator->generate($controllerDefinition, $handlerClassName);
+        $configFile = $consoleConfigGenerator->generate($handlerDefinition, $handlerClassName);
 
         return $configFile;
     }

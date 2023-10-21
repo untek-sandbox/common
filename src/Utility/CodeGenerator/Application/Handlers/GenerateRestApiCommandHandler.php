@@ -51,20 +51,6 @@ class GenerateRestApiCommandHandler
     {
         $controllerClassName = $this->getControllerClassName($command);
 
-        /*$configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/services/main.php';
-        $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-
-        if(!$configGenerator->hasCode($controllerClassName)) {
-            $controllerDefinition =
-                '    $services->set(\\' . $controllerClassName . '::class, \\' . $controllerClassName . '::class)
-        ->args([
-            service(\Untek\Model\Cqrs\CommandBusInterface::class),
-            service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class),
-        ]);';
-            $configGenerator->appendCode($controllerDefinition);
-        }*/
-
         $controllerDefinition =
             '    $services->set(\\' . $controllerClassName . '::class, \\' . $controllerClassName . '::class)
         ->args([
