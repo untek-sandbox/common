@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Validators;
+namespace Untek\Utility\CodeGeneratorRestApi\Application\Validators;
 
 use Symfony\Component\Validator\Constraint;
 use Untek\Model\Validator\Libs\AbstractObjectValidator;

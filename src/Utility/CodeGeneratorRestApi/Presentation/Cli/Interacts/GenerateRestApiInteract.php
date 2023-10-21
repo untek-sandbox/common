@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi;
+namespace Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -9,7 +9,7 @@ use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
+use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;

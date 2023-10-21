@@ -5,8 +5,8 @@ use Untek\Framework\Console\Symfony4\Interfaces\CommandConfiguratorInterface;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Commands\GenerateCodeCommand;
 use Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts\GenerateApplicationFakeInteract;
 use Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts\GenerateApplicationInteract;
-use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi\GenerateRestApiFakeInteract;
-use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi\GenerateRestApiInteract;
+use Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts\GenerateRestApiFakeInteract;
+use Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts\GenerateRestApiInteract;
 
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
 

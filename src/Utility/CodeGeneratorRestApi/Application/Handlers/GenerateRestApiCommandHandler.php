@@ -1,10 +1,10 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Handlers;
+namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
-use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
+use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Helpers\CommandHelper;
-use Untek\Utility\CodeGenerator\Application\Validators\GenerateRestApiCommandValidator;
+use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Symfony\Component\Filesystem\Filesystem;

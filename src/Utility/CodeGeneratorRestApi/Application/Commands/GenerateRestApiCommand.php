@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Commands;
+namespace Untek\Utility\CodeGeneratorRestApi\Application\Commands;
 
 class GenerateRestApiCommand
 {
