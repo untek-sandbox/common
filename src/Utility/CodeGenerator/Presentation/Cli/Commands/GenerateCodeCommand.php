@@ -9,7 +9,7 @@ use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\CommandBusInterface;
 
-class GenerateCliCommand extends Command
+class GenerateCodeCommand extends Command
 {
 
     public function __construct(
