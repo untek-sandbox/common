@@ -7,8 +7,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
-class GenerateRestApiFakeInteract extends GenerateRestApiInteract
+class GenerateRestApiFakeInteract extends GenerateRestApiInteract implements InteractInterface
 {
 
     public function input(SymfonyStyle $io): array

@@ -9,10 +9,11 @@ use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Presentation\Enums\PropertyTypeEnum;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 
-class GenerateApplicationInteract
+class GenerateApplicationInteract implements InteractInterface
 {
 
     public function input(SymfonyStyle $io): array

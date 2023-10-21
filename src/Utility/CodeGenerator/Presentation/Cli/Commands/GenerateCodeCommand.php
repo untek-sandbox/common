@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
 class GenerateCodeCommand extends Command
 {
@@ -25,6 +26,7 @@ class GenerateCodeCommand extends Command
     {
         $commands = [];
         foreach ($this->interacts as $interact) {
+            /** @var InteractInterface $interact */
             $interactCommands = $interact->input($io);
             if ($interactCommands) {
                 $commands = ArrayHelper::merge($commands, $interactCommands);

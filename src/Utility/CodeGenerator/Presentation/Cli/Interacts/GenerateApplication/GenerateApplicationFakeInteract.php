@@ -5,8 +5,9 @@ namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplica
 
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
-class GenerateApplicationFakeInteract
+class GenerateApplicationFakeInteract implements InteractInterface
 {
 
     public function input(SymfonyStyle $io): array

@@ -11,9 +11,10 @@ use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Helpers\CommandHelper;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 
-class GenerateRestApiInteract
+class GenerateRestApiInteract implements InteractInterface
 {
 
     public function input(SymfonyStyle $io): array
