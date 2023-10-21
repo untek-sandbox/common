@@ -7,6 +7,5 @@ use Untek\Utility\CodeGeneratorApplication\Application\Handlers\GenerateApplicat
 use Untek\Utility\CodeGeneratorRestApi\Application\Handlers\GenerateRestApiCommandHandler;
 
 return function (CommandBusConfiguratorInterface $configurator) {
-//    $configurator->define(GenerateApplicationCommand::class, GenerateApplicationCommandHandler::class);
-//    $configurator->define(GenerateRestApiCommand::class, GenerateRestApiCommandHandler::class);
+    $configurator->define(GenerateApplicationCommand::class, GenerateApplicationCommandHandler::class);
 };

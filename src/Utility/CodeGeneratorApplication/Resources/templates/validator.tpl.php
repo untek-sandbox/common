@@ -7,7 +7,7 @@
  * @var PropertyGenerator[] $properties
  */
 
-use Untek\Utility\CodeGenerator\Presentation\Enums\PropertyTypeEnum;
+use Untek\Utility\CodeGeneratorApplication\Presentation\Enums\PropertyTypeEnum;
 use Laminas\Code\Generator\PropertyGenerator;
 
 ?>

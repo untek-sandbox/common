@@ -10,7 +10,7 @@ use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
-use Untek\Utility\CodeGenerator\Application\Helpers\CommandHelper;
+use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 

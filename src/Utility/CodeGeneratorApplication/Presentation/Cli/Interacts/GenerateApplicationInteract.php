@@ -8,9 +8,9 @@ use Untek\Core\Text\Helpers\Inflector;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
-use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
+use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
-use Untek\Utility\CodeGenerator\Presentation\Enums\PropertyTypeEnum;
+use Untek\Utility\CodeGeneratorApplication\Presentation\Enums\PropertyTypeEnum;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 
 class GenerateApplicationInteract implements InteractInterface

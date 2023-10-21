@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Helpers;
+namespace Untek\Utility\CodeGeneratorRestApi\Application\Helpers;
 
 use Untek\Core\Instance\Helpers\ClassHelper;
 

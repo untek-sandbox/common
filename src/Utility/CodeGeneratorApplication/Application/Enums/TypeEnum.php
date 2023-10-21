@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Enums;
+namespace Untek\Utility\CodeGeneratorApplication\Application\Enums;
 
 class TypeEnum
 {

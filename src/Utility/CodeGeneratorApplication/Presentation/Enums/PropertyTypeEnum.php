@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Presentation\Enums;
+namespace Untek\Utility\CodeGeneratorApplication\Presentation\Enums;
 
 use DateTimeImmutable;
 
