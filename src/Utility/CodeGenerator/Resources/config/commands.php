@@ -3,8 +3,8 @@
 use Psr\Container\ContainerInterface;
 use Untek\Framework\Console\Symfony4\Interfaces\CommandConfiguratorInterface;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Commands\GenerateCodeCommand;
-use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication\GenerateApplicationFakeInteract;
-use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication\GenerateApplicationInteract;
+use Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts\GenerateApplicationFakeInteract;
+use Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts\GenerateApplicationInteract;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi\GenerateRestApiFakeInteract;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateRestApi\GenerateRestApiInteract;
 

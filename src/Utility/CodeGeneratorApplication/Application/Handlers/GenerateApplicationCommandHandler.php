@@ -1,9 +1,9 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Handlers;
+namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
 use Untek\Core\Code\Helpers\ComposerHelper;
-use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator;

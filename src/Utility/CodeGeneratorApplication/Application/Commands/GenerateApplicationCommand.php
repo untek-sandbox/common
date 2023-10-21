@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Utility\CodeGenerator\Application\Commands;
+namespace Untek\Utility\CodeGeneratorApplication\Application\Commands;
 
 class GenerateApplicationCommand
 {

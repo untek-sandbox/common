@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication;
+namespace Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts;
 
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
 class GenerateApplicationFakeInteract implements InteractInterface

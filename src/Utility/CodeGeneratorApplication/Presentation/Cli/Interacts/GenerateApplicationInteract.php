@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Untek\Utility\CodeGenerator\Presentation\Cli\Interacts\GenerateApplication;
+namespace Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts;
 
 use Symfony\Component\Console\Question\Question;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Utility\CodeGenerator\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Presentation\Enums\PropertyTypeEnum;
