@@ -32,20 +32,61 @@ class GenerateDatabaseCommandHandler
         $validator = new GenerateDatabaseCommandValidator();
         $validator->validate($command);
 
+        $files[] = $this->generateRepositoryInterface($command);
+        $files[] = $this->generateModelClass($command);
+        $files[] = $this->generateRepository($command);
         $files[] = $this->generateMigration($command);
 
         return $files;
     }
 
-    private function prepareProperties(GenerateDatabaseCommand $command): array {
-        $properties = [];
-        foreach ($command->getProperties() as &$commandAttribute) {
-            $name = Inflector::variablize($commandAttribute['name']);
-            $propertyGenerator = new PropertyGenerator($name, '', PropertyGenerator::FLAG_PRIVATE, TypeGenerator::fromTypeString($commandAttribute['type']));
-            $propertyGenerator->omitDefaultValue();
-            $properties[] = $propertyGenerator;
-        }
-        return $properties;
+    private function getInterfaceClassName(GenerateDatabaseCommand $command): string {
+        return $command->getNamespace() . '\\Application\\Services\\' . Inflector::camelize($command->getTableName()) . 'RepositoryInterface';
+    }
+
+    private function getModelClass(GenerateDatabaseCommand $command): string {
+        return $command->getNamespace() . '\\Domain\\Model\\' . Inflector::camelize($command->getTableName());
+    }
+
+    private function generateRepositoryInterface(GenerateDatabaseCommand $command): string {
+        $className = $this->getInterfaceClassName($command);
+//        dd($className);
+
+        $params = [
+            'tableName' => $command->getTableName(),
+        ];
+        $template = __DIR__ . '/../../Resources/templates/repository-interface.php';
+
+        $fileGenerator = new FileGenerator();
+        return $fileGenerator->generatePhpClass($className, $template, $params);
+    }
+
+    private function generateModelClass(GenerateDatabaseCommand $command): string {
+        $className = $this->getModelClass($command);
+
+        $params = [
+            'properties' => $this->prepareProperties($command),
+        ];
+        $template = __DIR__ . '/../../Resources/templates/model.tpl.php';
+
+        $fileGenerator = new FileGenerator();
+        return $fileGenerator->generatePhpClass($className, $template, $params);
+    }
+
+    private function generateRepository(GenerateDatabaseCommand $command): string {
+        $modelClassName = $this->getModelClass($command);
+        $className = $command->getNamespace() . '\\Infrastructure\\Persistence\\Doctrine\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
+        $interfaceClassName = $this->getInterfaceClassName($command);
+
+        $params = [
+            'tableName' => $command->getTableName(),
+            'interfaceClassName' => $interfaceClassName,
+            'modelClassName' => $modelClassName,
+        ];
+        $template = __DIR__ . '/../../Resources/templates/repository.php';
+
+        $fileGenerator = new FileGenerator();
+        return $fileGenerator->generatePhpClass($className, $template, $params);
     }
 
     private function generateMigration(GenerateDatabaseCommand $command): string {
@@ -63,5 +104,16 @@ class GenerateDatabaseCommandHandler
         $fileGenerator = new FileGenerator();
         $fileGenerator->generatePhpFile($fileName, $template, $params);
         return $fileName;
+    }
+
+    private function prepareProperties(GenerateDatabaseCommand $command): array {
+        $properties = [];
+        foreach ($command->getProperties() as &$commandAttribute) {
+            $name = Inflector::variablize($commandAttribute['name']);
+            $propertyGenerator = new PropertyGenerator($name, '', PropertyGenerator::FLAG_PRIVATE, TypeGenerator::fromTypeString($commandAttribute['type']));
+            $propertyGenerator->omitDefaultValue();
+            $properties[] = $propertyGenerator;
+        }
+        return $properties;
     }
 }
