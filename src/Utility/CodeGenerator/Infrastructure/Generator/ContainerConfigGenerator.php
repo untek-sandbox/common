@@ -15,7 +15,7 @@ class ContainerConfigGenerator
         $configFile = ComposerHelper::getPsr4Path($this->namespace) . '/Resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../Resources/templates/container-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-        if(!$configGenerator->hasCode($codeForCheck) && !$codeForCheck) {
+        if(!$configGenerator->hasCode($codeForCheck) || !$codeForCheck) {
             $configGenerator->appendCode($codeForAppend);
         }
         return $configFile;

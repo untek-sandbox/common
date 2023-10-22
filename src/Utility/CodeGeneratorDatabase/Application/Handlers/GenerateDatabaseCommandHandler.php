@@ -35,6 +35,7 @@ class GenerateDatabaseCommandHandler
         $files[] = $this->generateRepositoryInterface($command);
         $files[] = $this->generateModelClass($command);
         $files[] = $this->generateRepository($command);
+        $files[] = $this->generateContainerConfig($command);
         $files[] = $this->generateMigration($command);
 
         return $files;
@@ -46,6 +47,26 @@ class GenerateDatabaseCommandHandler
 
     private function getModelClass(GenerateDatabaseCommand $command): string {
         return $command->getNamespace() . '\\Domain\\Model\\' . Inflector::camelize($command->getTableName());
+    }
+
+    private function getRepositoryClass(GenerateDatabaseCommand $command): string {
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Doctrine\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
+    }
+
+    private function generateContainerConfig(GenerateDatabaseCommand $command): string
+    {
+        $repositoryClassName = $this->getRepositoryClass($command);
+        $repositoryInterfaceClassName = $this->getInterfaceClassName($command);
+
+        $handlerDefinition =
+            '    $services->set(\\' . $repositoryInterfaceClassName . '::class, \\' . $repositoryClassName . '::class)
+        ->args([
+            service(\Doctrine\DBAL\Connection::class),
+        ]);';
+        $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
+        $configFile = $consoleConfigGenerator->generate($handlerDefinition, $repositoryInterfaceClassName);
+
+        return $configFile;
     }
 
     private function generateRepositoryInterface(GenerateDatabaseCommand $command): string {
@@ -75,7 +96,7 @@ class GenerateDatabaseCommandHandler
 
     private function generateRepository(GenerateDatabaseCommand $command): string {
         $modelClassName = $this->getModelClass($command);
-        $className = $command->getNamespace() . '\\Infrastructure\\Persistence\\Doctrine\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
+        $className = $this->getRepositoryClass($command);
         $interfaceClassName = $this->getInterfaceClassName($command);
 
         $params = [
