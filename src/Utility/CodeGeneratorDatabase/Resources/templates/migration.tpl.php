@@ -35,6 +35,8 @@ class <?= $className ?> extends BaseCreateTableMigration
         echo '      $table->integer(\''.$propertyName.'\')->comment(\'\');';
     } elseif($propertyType == PropertyTypeEnum::STRING) {
         echo '      $table->string(\''.$propertyName.'\')->comment(\'\');';
+    } else {
+        echo '      $table->unknown(\''.$propertyName.'\')->comment(\'\');';
     }
     ?>
 
