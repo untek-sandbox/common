@@ -44,8 +44,8 @@ class GenerateApplicationCommandHandler
         $handlerClassName = $this->getHandlerClassName($command);
         $commandClassName = $this->getCommandClass($command);
 
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/command-bus.php';
-        $templateFile = __DIR__ . '/../../Resources/templates/command-bus-config.tpl.php';
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/command-bus.php';
+        $templateFile = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
 
         if(!$configGenerator->hasCode($handlerClassName)) {
@@ -65,7 +65,7 @@ class GenerateApplicationCommandHandler
             'properties' => $this->prepareProperties($command),
             'commandClassName' => $commandClassName,
         ];
-        $template = __DIR__ . '/../../Resources/templates/validator.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/validator.tpl.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
@@ -95,7 +95,7 @@ class GenerateApplicationCommandHandler
         $params = [
             'properties' => $this->prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../Resources/templates/command.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/command.tpl.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($commandClassName, $template, $params);
@@ -118,7 +118,7 @@ class GenerateApplicationCommandHandler
             'commandClassName' => $commandClassName,
             'validatorClassName' => $validatorClassName,
         ];
-        $template = __DIR__ . '/../../Resources/templates/handler.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($handlerClassName, $template, $params);

@@ -34,7 +34,7 @@ class GenerateRestApiCommandHandler
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $command->getCommandClass(),
         ];
-        $template = __DIR__ . '/../../Resources/templates/rest-api-controller.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
 
         $fileGenerator = new FileGenerator();
         $files[] = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
@@ -67,14 +67,15 @@ class GenerateRestApiCommandHandler
     {
         $controllerClassName = $this->getControllerClassName($command);
 
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/Resources/config/rest-api-routes.php';
-        $templateFile = __DIR__ . '/../../Resources/templates/route-config.tpl.php';
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api-routes.php';
+        $templateFile = __DIR__ . '/../../resources/templates/route-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
 
         if(!$configGenerator->hasCode($controllerClassName)) {
+            $routeName = $command->getHttpMethod() . '_' . $command->getUri();
             $controllerDefinition =
                 '    $routes
-        ->add(\'' . $command->getUri() . '\', \'/' . $command->getUri() . '\')
+        ->add(\'' . $routeName . '\', \'/' . $command->getUri() . '\')
         ->controller(\\' . $controllerClassName . '::class)
         ->methods([\'' . $command->getHttpMethod() . '\']);';
             $configGenerator->appendCode($controllerDefinition);

@@ -76,7 +76,7 @@ class GenerateDatabaseCommandHandler
         $params = [
             'tableName' => $command->getTableName(),
         ];
-        $template = __DIR__ . '/../../Resources/templates/repository-interface.php';
+        $template = __DIR__ . '/../../resources/templates/repository-interface.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($className, $template, $params);
@@ -88,7 +88,7 @@ class GenerateDatabaseCommandHandler
         $params = [
             'properties' => $this->prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../Resources/templates/model.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/model.tpl.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($className, $template, $params);
@@ -104,7 +104,7 @@ class GenerateDatabaseCommandHandler
             'interfaceClassName' => $interfaceClassName,
             'modelClassName' => $modelClassName,
         ];
-        $template = __DIR__ . '/../../Resources/templates/repository.php';
+        $template = __DIR__ . '/../../resources/templates/repository.php';
 
         $fileGenerator = new FileGenerator();
         return $fileGenerator->generatePhpClass($className, $template, $params);
@@ -113,14 +113,14 @@ class GenerateDatabaseCommandHandler
     private function generateMigration(GenerateDatabaseCommand $command): string {
         $time = date('Y_m_d_His');
         $className = 'm_' . $time . '_create_' . $command->getTableName() . '_table';
-        $fileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/Resources/migrations/' . $className . '.php';
+        $fileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/migrations/' . $className . '.php';
 
         $params = [
             'tableName' => $command->getTableName(),
             'className' => $className,
             'properties' => $this->prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../Resources/templates/migration.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
 
         $fileGenerator = new FileGenerator();
         $fileGenerator->generatePhpFile($fileName, $template, $params);
