@@ -4,6 +4,7 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
@@ -15,6 +16,7 @@ class GenerateRestApiFakeInteract extends GenerateRestApiInteract implements Int
 
     public function input(SymfonyStyle $io): array
     {
+        DeprecateHelper::hardThrow();
         $namespace = 'Forecast\Map\Modules\Park';
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
 //        dd($commandClasses);

@@ -8,13 +8,14 @@ use Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts\GenerateRestAp
 
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
 
-    $isTest = true;
+//    $isTest = false;
     $commandBus = $container->get(\Untek\Model\Cqrs\CommandBusInterface::class);
     $commandConfigurator->registerCommandInstance(new GenerateCodeCommand(
         'code-generator:generate-rest-api',
         $commandBus,
         [
-            ($isTest ? new GenerateRestApiFakeInteract() : new GenerateRestApiInteract()),
+            new GenerateRestApiInteract(),
+//            ($isTest ? new GenerateRestApiFakeInteract() : new GenerateRestApiInteract()),
         ]
     ));
 };

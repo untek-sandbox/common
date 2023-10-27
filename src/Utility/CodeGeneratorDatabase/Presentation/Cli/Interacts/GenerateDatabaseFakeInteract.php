@@ -4,6 +4,7 @@
 namespace Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
@@ -14,6 +15,7 @@ class GenerateDatabaseFakeInteract extends GenerateDatabaseInteract implements I
 
     public function input(SymfonyStyle $io): array
     {
+        DeprecateHelper::hardThrow();
         $namespace = 'Forecast\Map\Modules\Park';
         $tableName = 'park_car';
         $properties = [

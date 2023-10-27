@@ -4,7 +4,9 @@ namespace Untek\Utility\CodeGenerator\Presentation\Cli\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\CommandBusInterface;
@@ -20,6 +22,16 @@ class GenerateCodeCommand extends Command
     )
     {
         parent::__construct($name);
+    }
+
+    protected function configure()
+    {
+        $this->addOption(
+            'inputFile',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'File with input data'
+        );
     }
 
     protected function input(SymfonyStyle $io): array
@@ -38,7 +50,17 @@ class GenerateCodeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $commands = $this->input($io);
+
+        $inputFile = $input->getOption('inputFile');
+
+        if($inputFile) {
+            $store = new StoreFile($inputFile);
+            $commands = $store->load();
+            $io->info('Loaded from config file.');
+        } else {
+            $commands = $this->input($io);
+        }
+
         if ($commands) {
             $files = $this->handleCommands($commands);
             $io->newLine();

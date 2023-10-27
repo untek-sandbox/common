@@ -3,6 +3,7 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
@@ -13,6 +14,7 @@ class GenerateApplicationFakeInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
+        DeprecateHelper::hardThrow();
         $namespace = 'Forecast\Map\Modules\Park';
         $properties = [
             [

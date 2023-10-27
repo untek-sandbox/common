@@ -8,13 +8,14 @@ use Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts\GenerateAp
 
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
 
-    $isTest = true;
+//    $isTest = false;
     $commandBus = $container->get(\Untek\Model\Cqrs\CommandBusInterface::class);
     $commandConfigurator->registerCommandInstance(new GenerateCodeCommand(
         'code-generator:generate-application',
         $commandBus,
         [
-            ($isTest ? new GenerateApplicationFakeInteract() : new GenerateApplicationInteract()),
+            new GenerateApplicationInteract(),
+//            ($isTest ? new GenerateApplicationFakeInteract() : new GenerateApplicationInteract()),
         ]
     ));
 };
