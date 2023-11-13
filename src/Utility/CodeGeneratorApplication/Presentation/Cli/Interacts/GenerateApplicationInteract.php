@@ -18,7 +18,7 @@ class GenerateApplicationInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', 'Forecast\Map\ModuleExample\Generated', [Validator::class, 'validateClassName']);
+        $namespace = $io->ask('Enter a namespace', null, [Validator::class, 'validateClassName']);
         $type = $this->inputType($io);
         $name = $io->ask('Enter a command name', null, [Validator::class, 'validateClassName']);
         $properties = $this->inputProperties($io);

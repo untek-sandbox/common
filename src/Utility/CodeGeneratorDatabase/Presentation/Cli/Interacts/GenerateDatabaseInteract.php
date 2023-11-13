@@ -19,7 +19,7 @@ class GenerateDatabaseInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', 'Forecast\Map\ModuleExample\Generated', [Validator::class, 'validateClassName']);
+        $namespace = $io->ask('Enter a namespace', null, [Validator::class, 'validateClassName']);
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);
