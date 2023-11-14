@@ -11,6 +11,8 @@ use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
+DeprecateHelper::hardThrow();
+
 class GenerateRestApiFakeInteract extends GenerateRestApiInteract implements InteractInterface
 {
 

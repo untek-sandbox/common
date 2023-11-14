@@ -29,6 +29,7 @@ final class Validator
         if(!is_string($className)) {
             throw new RuntimeCommandException('Value is empty');
         }
+        self::isEnglish($className);
         // remove potential opening slash so we don't match on it
         $pieces = explode('\\', ltrim($className, '\\'));
         $shortClassName = Str::getShortClassName($className);
@@ -70,6 +71,14 @@ final class Validator
 
         // return original class name
         return $className;
+    }
+
+    public static function isEnglish(string $value = null): string
+    {
+        if (strlen($value) != strlen(utf8_decode($value))) {
+            throw new RuntimeCommandException('This value is not english.');
+        }
+        return $value;
     }
 
     public static function notBlank(string $value = null): string
@@ -151,6 +160,7 @@ final class Validator
 
     public static function validatePropertyName(string $name): string
     {
+        self::isEnglish($name);
         // check for valid PHP variable name
         if (!Str::isValidPhpVariableName($name)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid PHP property name.', $name));
@@ -161,6 +171,7 @@ final class Validator
 
     public static function validateDoctrineFieldName(string $name, ManagerRegistry|LegacyManagerRegistry $registry): string
     {
+        self::isEnglish($name);
         if (!$registry instanceof ManagerRegistry && !$registry instanceof LegacyManagerRegistry) {
             throw new \InvalidArgumentException(sprintf('Argument 2 to %s::validateDoctrineFieldName must be an instance of %s, %s passed.', __CLASS__, ManagerRegistry::class, \is_object($registry) ? $registry::class : \gettype($registry)));
         }
@@ -202,6 +213,7 @@ final class Validator
     public static function classExists(string $className, string $errorMessage = ''): string
     {
         self::notBlank($className);
+        self::isEnglish($className);
 
         if (!class_exists($className)) {
             $errorMessage = $errorMessage ?: sprintf('Class "%s" doesn\'t exist; please enter an existing full class name.', $className);
@@ -234,6 +246,7 @@ final class Validator
     public static function classDoesNotExist($className): string
     {
         self::notBlank($className);
+        self::isEnglish($className);
 
         if (class_exists($className)) {
             throw new RuntimeCommandException(sprintf('Class "%s" already exists.', $className));
@@ -245,6 +258,7 @@ final class Validator
     public static function classIsUserInterface($userClassName): string
     {
         self::classExists($userClassName);
+        self::isEnglish($userClassName);
 
         if (!isset(class_implements($userClassName)[UserInterface::class])) {
             throw new RuntimeCommandException(sprintf('The class "%s" must implement "%s".', $userClassName, UserInterface::class));

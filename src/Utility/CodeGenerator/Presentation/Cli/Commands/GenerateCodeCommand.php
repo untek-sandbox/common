@@ -52,7 +52,6 @@ class GenerateCodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $inputFile = $input->getOption('inputFile');
-
         if($inputFile) {
             $store = new StoreFile($inputFile);
             $commands = $store->load();

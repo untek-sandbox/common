@@ -25,7 +25,12 @@ class GenerateRestApiInteract implements InteractInterface
             $commandClass = $this->inputCommand($io, $commandClasses);
 
             $commandClassName = $namespace . '\\Application\\' . $commandClass;
-            $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, [Validator::class, 'notBlank']);
+            $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, function ($value): ?string {
+                Validator::notBlank($value);
+                Validator::isEnglish($value);
+                return $value;
+            });
+
             $method = $this->inputHttpMethod($io, $commandClass);
 
             $command = new GenerateRestApiCommand();

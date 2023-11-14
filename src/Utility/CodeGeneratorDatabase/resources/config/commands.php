@@ -3,7 +3,6 @@
 use Psr\Container\ContainerInterface;
 use Untek\Framework\Console\Symfony4\Interfaces\CommandConfiguratorInterface;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Commands\GenerateCodeCommand;
-use Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts\GenerateDatabaseFakeInteract;
 use Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts\GenerateDatabaseInteract;
 
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
@@ -15,7 +14,6 @@ return function (CommandConfiguratorInterface $commandConfigurator, ContainerInt
         $commandBus,
         [
             new GenerateDatabaseInteract(),
-//            ($isTest ? new GenerateDatabaseFakeInteract() : new GenerateDatabaseInteract()),
         ]
     ));
 };

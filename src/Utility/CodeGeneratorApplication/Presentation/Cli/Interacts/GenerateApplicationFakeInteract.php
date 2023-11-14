@@ -9,6 +9,8 @@ use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicat
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 
+DeprecateHelper::hardThrow();
+
 class GenerateApplicationFakeInteract implements InteractInterface
 {
 

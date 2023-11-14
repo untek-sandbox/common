@@ -10,6 +10,8 @@ use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
+DeprecateHelper::hardThrow();
+
 class GenerateDatabaseFakeInteract extends GenerateDatabaseInteract implements InteractInterface
 {
 
