@@ -3,6 +3,10 @@
 namespace Untek\Model\DataProvider;
 
 use Doctrine\Persistence\ObjectRepository;
+use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\ExpandQueryInterface;
+use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\FilterQueryInterface;
+use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\PageQueryInterface;
+use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\SortQueryInterface;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\Dto\CollectionData;
 use Untek\Model\DataProvider\Dto\PageResponse;
@@ -22,12 +26,27 @@ class DataProvider
      * @return CollectionData
      * @throws GreaterMaxPageException
      */
-    public function findAll(GetListQueryInterface $query): CollectionData
+    public function findAll(object $query): CollectionData
     {
-        $criteria = $query->getFilter();
-        $orderBy = $query->getSort();
-        $limit = $query->getPage()->getSize();
-        $pageNumber = $query->getPage()->getNumber();
+        if($query instanceof SortQueryInterface) {
+            $orderBy = $query->getSort();
+        } else {
+            $orderBy = [];
+        }
+
+        if($query instanceof FilterQueryInterface) {
+            $criteria = $query->getFilter();
+        } else {
+            $criteria = [];
+        }
+
+        if($query instanceof PageQueryInterface) {
+            $limit = $query->getPage()->getSize();
+            $pageNumber = $query->getPage()->getNumber();
+        } else {
+            $limit = null;
+            $pageNumber = 1;
+        }
 
         $offset = $this->calculateOffset($query);
         $collection = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
