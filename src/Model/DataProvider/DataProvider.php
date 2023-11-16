@@ -3,16 +3,14 @@
 namespace Untek\Model\DataProvider;
 
 use Doctrine\Persistence\ObjectRepository;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\ExpandQueryInterface;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\FilterQueryInterface;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\PageQueryInterface;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Interfaces\SortQueryInterface;
+use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\Dto\CollectionData;
 use Untek\Model\DataProvider\Dto\PageResponse;
 use Untek\Model\DataProvider\Exceptions\GreaterMaxPageException;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\GetListQueryInterface;
-use Untek\Core\Contract\Common\Exceptions\NotFoundException;
+use Untek\Model\DataProvider\Interfaces\FilterQueryInterface;
+use Untek\Model\DataProvider\Interfaces\PageQueryInterface;
+use Untek\Model\DataProvider\Interfaces\SortQueryInterface;
 
 class DataProvider
 {
@@ -22,7 +20,7 @@ class DataProvider
     }
 
     /**
-     * @param GetListQueryInterface $query
+     * @param object $query
      * @return CollectionData
      * @throws GreaterMaxPageException
      */
@@ -91,7 +89,7 @@ class DataProvider
         return $entity;
     }
 
-    protected function calculateOffset(GetListQueryInterface $query): ?int
+    protected function calculateOffset(object $query): ?int
     {
         $limit = $query->getPage()->getSize();
         $pageNumber = $query->getPage()->getNumber();
