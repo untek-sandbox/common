@@ -9,5 +9,5 @@ interface PageQueryInterface
 
     public function getPage(): PageRequest;
 
-    public function setPage(PageRequest $pageRequest): void;
+    public function setPage(PageRequest $page): void;
 }
