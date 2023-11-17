@@ -12,7 +12,7 @@ class CommandBusLoadConfigGenerator
     }
 
     public function generate(string $modulePath): string {
-        $codeForAppend = '$configLoader->boot(__DIR__ . \'/../'.$modulePath.'\');';
+        $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../'.$modulePath.'\');';
         $configFile = __DIR__ . '/../../../../../../../../config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);

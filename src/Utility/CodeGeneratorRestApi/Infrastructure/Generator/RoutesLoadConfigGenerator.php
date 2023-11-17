@@ -13,7 +13,7 @@ class RoutesLoadConfigGenerator
     }
 
     public function generate(string $modulePath, string $prefix = null): string {
-        $codeForAppend = '$routes
+        $codeForAppend = '    $routes
         ->import(__DIR__ . \'/../../../'.$modulePath.'\')
         ->prefix(\''.$prefix.'\');';
         $configFile = __DIR__ . '/../../../../../../../../context/rest-api/config/routes.php';

@@ -17,7 +17,7 @@ class ContainerLoadConfigGenerator
         $templateFile = __DIR__ . '/../../resources/templates/container-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
         if(!$configGenerator->hasCode($modulePath)) {
-            $configGenerator->appendCode($codeForAppend);
+            $configGenerator->appendCode($codeForAppend . PHP_EOL);
         }
         return $configFile;
     }

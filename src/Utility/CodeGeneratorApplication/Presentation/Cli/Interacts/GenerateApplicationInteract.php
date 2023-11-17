@@ -4,9 +4,11 @@
 namespace Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts;
 
 use Symfony\Component\Console\Question\Question;
+use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
+use Untek\Utility\CodeGenerator\Presentation\Libs\Exception\RuntimeCommandException;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
@@ -18,7 +20,15 @@ class GenerateApplicationInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', null, [Validator::class, 'validateClassName']);
+        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::validateClassName($value);
+            $path = ComposerHelper::getPsr4Path($value);
+            if(empty($path)) {
+                throw new RuntimeCommandException('Incorrect namespace');
+            }
+            return $value;
+        });
         $type = $this->inputType($io);
         $name = $io->ask('Enter a command name', null, [Validator::class, 'validateClassName']);
         $properties = $this->inputProperties($io);

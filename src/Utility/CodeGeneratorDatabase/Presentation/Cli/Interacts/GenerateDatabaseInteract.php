@@ -5,10 +5,12 @@ namespace Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
+use Untek\Utility\CodeGenerator\Presentation\Libs\Exception\RuntimeCommandException;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
@@ -19,7 +21,15 @@ class GenerateDatabaseInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', null, [Validator::class, 'validateClassName']);
+        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::validateClassName($value);
+            $path = ComposerHelper::getPsr4Path($value);
+            if(empty($path)) {
+                throw new RuntimeCommandException('Incorrect namespace');
+            }
+            return $value;
+        });
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);

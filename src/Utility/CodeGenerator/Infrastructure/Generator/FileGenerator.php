@@ -40,7 +40,7 @@ class FileGenerator
         $codeLines = explode(PHP_EOL, $code);
         $lastLine = array_pop($codeLines);
         $codeLines[] = '';
-        $codeLines[] = "\t" . trim($codeForAppend);
+        $codeLines[] = $codeForAppend;
         $codeLines[] = $lastLine;
         $code = implode(PHP_EOL, $codeLines);
         $fs->dumpFile($fileName, $code);
