@@ -20,6 +20,7 @@ class GenerateRestApiInteract implements InteractInterface
     public function input(SymfonyStyle $io): array
     {
         $namespace = $io->ask('Enter a namespace', null, [Validator::class, 'validateClassName']);
+        $moduleName = $io->ask('Enter a module name', ClassHelper::getClassOfClassName($namespace), [Validator::class, 'validateClassName']);
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);

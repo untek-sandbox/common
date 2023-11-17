@@ -30,6 +30,29 @@ class GenerateRestApiCommandHandler
         $validator = new GenerateRestApiCommandValidator();
         $validator->validate($command);
 
+        $files[] = $this->generateController($command);
+        $files[] = $this->generateControllerTest($command);
+        $files[] = $this->generateContainerConfig($command);
+        $files[] = $this->generateRoutConfig($command);
+        $files[] = $this->generateRoutLoadConfig($command);
+        $files[] = 'Endpoint: '.$command->getHttpMethod().' rest-api/' . $command->getVersion() . '/' . $command->getUri();
+
+        return $files;
+    }
+
+    private function generateControllerTest(GenerateRestApiCommand $command): string {
+        $controllerTestClassName = $this->getControllerTestClassName($command);
+        $params = [
+            'endpoint' => '/' . $command->getVersion() . '/' . $command->getUri(),
+            'method' => $command->getHttpMethod(),
+        ];
+        $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
+
+        $fileGenerator = new FileGenerator();
+        return $fileGenerator->generatePhpClass($controllerTestClassName, $template, $params);
+    }
+
+    private function generateController(GenerateRestApiCommand $command): string {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $controllerClassName = $this->getControllerClassName($command);
 
@@ -40,30 +63,19 @@ class GenerateRestApiCommandHandler
         $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $files[] = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
-
-        $files[] = $this->generateContainerConfig($command);
-        $files[] = $this->generateRoutConfig($command);
-        $files[] = $this->generateRoutLoadConfig($command);
-        $files[] = 'Endpoint: '.$command->getHttpMethod().' rest-api/' . $command->getVersion() . '/' . $command->getUri();
-
-        // TODO: генерить авто-тест
-
-        return $files;
+        return $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
     }
 
     private function generateContainerConfig(GenerateRestApiCommand $command): string
     {
         $controllerClassName = $this->getControllerClassName($command);
 
-        $controllerDefinition =
-            '    $services->set(\\' . $controllerClassName . '::class, \\' . $controllerClassName . '::class)
-        ->args([
-            service(\Untek\Model\Cqrs\CommandBusInterface::class),
-            service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class),
-        ]);';
+        $args = [
+            'service(\Untek\Model\Cqrs\CommandBusInterface::class)',
+            'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
+        ];
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
-        $configFile = $consoleConfigGenerator->generate($controllerDefinition, $controllerClassName);
+        $configFile = $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
 
         return $configFile;
     }
@@ -109,5 +121,13 @@ class GenerateRestApiCommandHandler
         $endCommandClassName = CommandHelper::getType($command->getCommandClass());
         $pureCommandClassName = substr($commandClassName, 0, 0 - strlen($endCommandClassName));
         return $command->getNamespace() . '\\Presentation\\Http\\RestApi\\Controllers\\' . $pureCommandClassName . 'Controller';
+    }
+
+    private function getControllerTestClassName(GenerateRestApiCommand $command): string
+    {
+        $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
+        $endCommandClassName = CommandHelper::getType($command->getCommandClass());
+        $pureCommandClassName = substr($commandClassName, 0, 0 - strlen($endCommandClassName));
+        return 'Tests\\RestApi\\'.$command->getModuleName().'\\' . $pureCommandClassName . 'Test';
     }
 }

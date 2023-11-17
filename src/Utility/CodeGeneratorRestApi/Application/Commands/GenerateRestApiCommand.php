@@ -6,6 +6,7 @@ class GenerateRestApiCommand
 {
 
     private string $namespace;
+    private string $moduleName;
     private string $commandClass;
     private string $uri;
     private string $httpMethod;
@@ -19,6 +20,16 @@ class GenerateRestApiCommand
     public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
+    }
+
+    public function getModuleName(): string
+    {
+        return $this->moduleName;
+    }
+
+    public function setModuleName(string $moduleName): void
+    {
+        $this->moduleName = $moduleName;
     }
 
     public function getCommandClass(): string

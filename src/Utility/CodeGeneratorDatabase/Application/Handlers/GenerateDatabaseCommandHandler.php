@@ -58,20 +58,17 @@ class GenerateDatabaseCommandHandler
         $repositoryClassName = $this->getRepositoryClass($command);
         $repositoryInterfaceClassName = $this->getInterfaceClassName($command);
 
-        $handlerDefinition =
-            '    $services->set(\\' . $repositoryInterfaceClassName . '::class, \\' . $repositoryClassName . '::class)
-        ->args([
-            service(\Doctrine\DBAL\Connection::class),
-        ]);';
+        $args = [
+            'service(\Doctrine\DBAL\Connection::class)'
+        ];
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
-        $configFile = $consoleConfigGenerator->generate($handlerDefinition, $repositoryInterfaceClassName);
+        $configFile = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
 
         return $configFile;
     }
 
     private function generateRepositoryInterface(GenerateDatabaseCommand $command): string {
         $className = $this->getInterfaceClassName($command);
-//        dd($className);
 
         $params = [
             'tableName' => $command->getTableName(),

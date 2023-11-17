@@ -11,11 +11,23 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(string $codeForAppend, string $codeForCheck = null): string {
+    public function generate(string $abstractClassName, string $concreteClassName, array $args = null): string {
+        $codeForAppend =
+            '    $services->set(\\' . $abstractClassName . '::class, \\' . $abstractClassName . '::class)';
+
+        if($args) {
+            $argsCode = implode(',' . PHP_EOL . "\t\t", $args);
+            $codeForAppend .= '->args([
+        '.$argsCode.'
+    ])';
+        }
+        $codeForAppend .= ';';
+
+
         $configFile = ComposerHelper::getPsr4Path($this->namespace) . '/resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-        if(!$configGenerator->hasCode($codeForCheck) || !$codeForCheck) {
+        if(!$configGenerator->hasCode($concreteClassName)) {
             $configGenerator->appendCode($codeForAppend);
         }
         return $configFile;

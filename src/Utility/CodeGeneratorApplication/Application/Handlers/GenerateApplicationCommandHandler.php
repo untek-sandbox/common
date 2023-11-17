@@ -35,11 +35,8 @@ class GenerateApplicationCommandHandler
     private function generateContainerConfig(GenerateApplicationCommand $command): string
     {
         $handlerClassName = $this->getHandlerClassName($command);
-
-        $handlerDefinition =
-            '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
-        $configFile = $consoleConfigGenerator->generate($handlerDefinition, $handlerClassName);
+        $configFile = $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
 
         return $configFile;
     }

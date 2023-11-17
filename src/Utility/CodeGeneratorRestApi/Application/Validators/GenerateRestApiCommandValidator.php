@@ -18,6 +18,11 @@ class GenerateRestApiCommandValidator extends AbstractObjectValidator
                     new Assert\Length(null, 1, 255),
                     new Assert\Type('string'),
                 ],
+                'moduleName' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(null, 1, 255),
+                    new Assert\Type('string'),
+                ],
                 'commandClass' => [
                     new Assert\NotBlank(),
                     new Assert\Length(null, 1, 255),
