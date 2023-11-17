@@ -64,7 +64,7 @@ class GenerateDatabaseCommandHandler
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
         $configFile = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateRepositoryInterface(GenerateDatabaseCommand $command): string {
@@ -76,7 +76,9 @@ class GenerateDatabaseCommandHandler
         $template = __DIR__ . '/../../resources/templates/repository-interface.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($className, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($className, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function generateModelClass(GenerateDatabaseCommand $command): string {
@@ -88,7 +90,9 @@ class GenerateDatabaseCommandHandler
         $template = __DIR__ . '/../../resources/templates/model.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($className, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($className, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function generateRepository(GenerateDatabaseCommand $command): string {
@@ -104,7 +108,9 @@ class GenerateDatabaseCommandHandler
         $template = __DIR__ . '/../../resources/templates/repository.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($className, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($className, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function generateMigration(GenerateDatabaseCommand $command): string {
@@ -121,7 +127,7 @@ class GenerateDatabaseCommandHandler
 
         $fileGenerator = new FileGenerator();
         $fileGenerator->generatePhpFile($fileName, $template, $params);
-        return $fileName;
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function prepareProperties(GenerateDatabaseCommand $command): array {
@@ -133,5 +139,11 @@ class GenerateDatabaseCommandHandler
             $properties[] = $propertyGenerator;
         }
         return $properties;
+    }
+
+    private function fileNameTotoRelative(string $filename): string {
+        $fs = new Filesystem();
+        $fileName = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
+        return rtrim($fileName, '/');
     }
 }

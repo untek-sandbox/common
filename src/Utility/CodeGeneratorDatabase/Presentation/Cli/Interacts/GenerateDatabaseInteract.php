@@ -34,15 +34,17 @@ class GenerateDatabaseInteract implements InteractInterface
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);
 
-            $commandClassName = $namespace . '\\Application\\' . $commandClass;
-            $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, [Validator::class, 'notBlank']);
-            $method = $this->inputHttpMethod($io, $commandClass);
+//            $commandClassName = $namespace . '\\Application\\' . $commandClass;
+            $tableName = $io->ask('Enter a table name', null, [Validator::class, 'notBlank']);
+//            $method = $this->inputHttpMethod($io, $commandClass);
 
             $command = new GenerateDatabaseCommand();
             $command->setNamespace($namespace);
-            $command->setCommandClass($commandClassName);
-            $command->setUri($uri);
-            $command->setHttpMethod($method);
+            $command->setTableName($tableName);
+
+//            $command->setCommandClass($commandClassName);
+//            $command->setUri($uri);
+//            $command->setHttpMethod($method);
 
             return [$command];
         } else {

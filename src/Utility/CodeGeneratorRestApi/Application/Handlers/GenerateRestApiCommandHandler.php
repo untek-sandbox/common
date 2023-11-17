@@ -49,7 +49,9 @@ class GenerateRestApiCommandHandler
         $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($controllerTestClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($controllerTestClassName, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function generateController(GenerateRestApiCommand $command): string {
@@ -63,7 +65,9 @@ class GenerateRestApiCommandHandler
         $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function generateContainerConfig(GenerateRestApiCommand $command): string
@@ -77,7 +81,7 @@ class GenerateRestApiCommandHandler
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
         $configFile = $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateRoutConfig(GenerateRestApiCommand $command): string
@@ -98,7 +102,7 @@ class GenerateRestApiCommandHandler
             $configGenerator->appendCode($controllerDefinition);
         }
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateRoutLoadConfig(GenerateRestApiCommand $command): string
@@ -112,7 +116,7 @@ class GenerateRestApiCommandHandler
         $consoleLoadConfigGenerator = new RoutesLoadConfigGenerator($command->getNamespace());
         $configFile = $consoleLoadConfigGenerator->generate($modulePath, '/' . $command->getVersion());
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function getControllerClassName(GenerateRestApiCommand $command): string
@@ -129,5 +133,11 @@ class GenerateRestApiCommandHandler
         $endCommandClassName = CommandHelper::getType($command->getCommandClass());
         $pureCommandClassName = substr($commandClassName, 0, 0 - strlen($endCommandClassName));
         return 'Tests\\RestApi\\'.$command->getModuleName().'\\' . $pureCommandClassName . 'Test';
+    }
+
+    private function fileNameTotoRelative(string $filename): string {
+        $fs = new Filesystem();
+        $fileName = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
+        return rtrim($fileName, '/');
     }
 }

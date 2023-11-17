@@ -38,7 +38,7 @@ class GenerateApplicationCommandHandler
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
         $configFile = $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateContainerLoadConfig(GenerateApplicationCommand $command): string
@@ -54,7 +54,7 @@ class GenerateApplicationCommandHandler
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($command->getNamespace());
         $configFile = $consoleLoadConfigGenerator->generate($modulePath);
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateCommandBusConfig(GenerateApplicationCommand $command): string
@@ -72,7 +72,7 @@ class GenerateApplicationCommandHandler
             $configGenerator->appendCode($controllerDefinition);
         }
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateCommandBusLoadConfig(GenerateApplicationCommand $command): string
@@ -88,7 +88,7 @@ class GenerateApplicationCommandHandler
         $consoleLoadConfigGenerator = new CommandBusLoadConfigGenerator($command->getNamespace());
         $configFile = $consoleLoadConfigGenerator->generate($modulePath);
 
-        return $configFile;
+        return $this->fileNameTotoRelative($configFile);
     }
 
     private function generateCommandValidatorClass(GenerateApplicationCommand $command): string {
@@ -102,7 +102,9 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../resources/templates/validator.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function getCommandValidatorClass(GenerateApplicationCommand $command): string {
@@ -132,7 +134,9 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../resources/templates/command.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($commandClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($commandClassName, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function getHandlerClassName(GenerateApplicationCommand $command): string {
@@ -155,7 +159,9 @@ class GenerateApplicationCommandHandler
         $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        return $fileGenerator->generatePhpClass($handlerClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($handlerClassName, $template, $params);
+
+        return $this->fileNameTotoRelative($fileName);
     }
 
     private function getCommandClass(GenerateApplicationCommand $command): string {
@@ -166,5 +172,11 @@ class GenerateApplicationCommandHandler
             $commandClassName = $command->getNamespace() . '\\Application\\Queries\\' . $camelizeUnitName;
         }
         return $commandClassName;
+    }
+
+    private function fileNameTotoRelative(string $filename): string {
+        $fs = new Filesystem();
+        $fileName = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
+        return rtrim($fileName, '/');
     }
 }
