@@ -27,7 +27,7 @@ class InMemoryUserProvider extends \Symfony\Component\Security\Core\User\InMemor
             $password = $attributes['password'] ?? null;
             $enabled = $attributes['enabled'] ?? true;
             $roles = $attributes['roles'] ?? [];
-            $user = new InMemoryUser($username, $password, $roles, $enabled);
+            $user = new InMemoryUser($attributes['username'], $password, $roles, $enabled);
 
             $this->createUser($user);
         }
