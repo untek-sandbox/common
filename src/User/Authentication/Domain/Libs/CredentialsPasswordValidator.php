@@ -8,6 +8,7 @@ use Untek\Core\EventDispatcher\Traits\EventDispatcherTrait;
 use Untek\Crypt\Base\Domain\Exceptions\InvalidPasswordException;
 use Untek\Crypt\Base\Domain\Services\PasswordService;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
+use Untek\User\Authentication\Domain\Exceptions\BadPasswordException;
 
 class CredentialsPasswordValidator
 {
@@ -21,15 +22,15 @@ class CredentialsPasswordValidator
         $this->setEventDispatcher($eventDispatcher);
     }
 
-    public function isValidPassword(Enumerable $credentials, string $password): bool
+    public function isValidPassword(Enumerable $credentials, string $password): CredentialEntity
     {
         foreach ($credentials as $credentialEntity) {
             $isValid = $this->isValidPasswordByCredential($credentialEntity, $password);
             if ($isValid) {
-                return true;
+                return $credentialEntity;
             }
         }
-        return false;
+        throw new BadPasswordException('Incorrect password');
     }
 
     protected function isValidPasswordByCredential(CredentialEntity $credentialEntity, string $password): bool

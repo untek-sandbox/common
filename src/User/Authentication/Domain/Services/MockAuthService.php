@@ -73,7 +73,7 @@ class MockAuthService implements AuthServiceInterface
             throw $exception;*/
         }
 
-        $credentials = $this->credentialService->findAll($loginForm->getLogin(), 'login');
+        $credentials = $this->credentialService->findAll($loginForm->getLogin(), ['login', 'phone']);
 
         $isValidPassword = $this->credentialsPasswordValidator->isValidPassword(
             $credentials,

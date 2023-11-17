@@ -4,8 +4,10 @@ namespace Untek\User\Authentication\Application\Handlers;
 
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
 use Untek\User\Authentication\Application\Validators\GenerateTokenByPasswordCommandValidator;
+use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Exceptions\BadPasswordException;
 use Untek\User\Authentication\Domain\Exceptions\LoginNotFoundException;
+use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 use Untek\User\Authentication\Domain\Model\Token;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -39,6 +41,7 @@ class GenerateTokenByPasswordCommandHandler
         private CredentialServiceInterface $credentialService,
         private LoggerInterface $logger,
         private ValidatorInterface $validator,
+        private IdentityRepositoryInterface $identityRepository
 //        EventDispatcherInterface $eventDispatcher,
 
     ) {
@@ -77,27 +80,33 @@ class GenerateTokenByPasswordCommandHandler
 //        $authEvent = new AuthEvent($loginForm);
 //        $this->getEventDispatcher()->dispatch($authEvent, AuthEventEnum::BEFORE_AUTH);
 
-        try {
-            $userEntity = $this->userProvider->loadUserByIdentifier($command->getLogin());
-        } catch (UserNotFoundException $e) {
-            $message = 'User not found.';
-            throw new LoginNotFoundException($message);
+        /** @var CredentialEntity[] $credentials */
+        $credentials = $this->credentialService->findAll($command->getLogin(), ['login', 'phone']);
+
+        if($credentials->isEmpty()) {
+            throw new LoginNotFoundException('User not found.');
         }
 
-        $credentials = $this->credentialService->findAll($command->getLogin(), 'login');
-
-        $isValidPassword = $this->credentialsPasswordValidator->isValidPassword(
+        $credentialEntity = $this->credentialsPasswordValidator->isValidPassword(
             $credentials,
             $command->getPassword()
         );
-        if (!$isValidPassword) {
+        try {
+            $userEntity = $this->identityRepository->getUserById($credentialEntity->getIdentityId());
+        } catch (UserNotFoundException $e) {
+            throw new LoginNotFoundException('User not found.');
+        }
+
+        /*if (!$isValidPassword) {
             $this->logger->warning('auth verificationPassword');
 //            $this->getEventDispatcher()->dispatch($authEvent, AuthEventEnum::AFTER_AUTH_ERROR);
             throw new BadPasswordException('Incorrect password');
-        }
+        }*/
 
 //        $authEvent->setIdentityEntity($userEntity);
 //        $this->getEventDispatcher()->dispatch($authEvent, AuthEventEnum::AFTER_AUTH_SUCCESS);
+
+//        print_r($credentials[0]->getIdentityId());
 
         return $userEntity;
     }

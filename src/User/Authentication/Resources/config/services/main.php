@@ -30,6 +30,7 @@ use Untek\User\Authentication\Domain\Services\MockTokenService;
 use Untek\User\Authentication\Domain\UserProviders\MockApiTokenUserProvider;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Untek\Component\App\Services\ControllerAccessChecker;
+use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -47,7 +48,8 @@ return static function (ContainerConfigurator $configurator): void {
         service(CredentialServiceInterface::class),
         service(LoggerInterface::class),
         service(ValidatorInterface::class),
-        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
+//        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
+        service(IdentityRepositoryInterface::class),
     ]);
     $services->set(GenerateTokenByPasswordController::class, GenerateTokenByPasswordController::class)
         ->args([
