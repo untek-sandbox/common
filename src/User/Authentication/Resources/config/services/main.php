@@ -50,6 +50,7 @@ return static function (ContainerConfigurator $configurator): void {
         service(ValidatorInterface::class),
 //        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
         service(IdentityRepositoryInterface::class),
+        ['login', 'phone'],
     ]);
     $services->set(GenerateTokenByPasswordController::class, GenerateTokenByPasswordController::class)
         ->args([
