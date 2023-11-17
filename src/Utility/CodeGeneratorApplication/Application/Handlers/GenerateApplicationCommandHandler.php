@@ -2,7 +2,10 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CommandBusLoadConfigGenerator;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerLoadConfigGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
@@ -23,7 +26,9 @@ class GenerateApplicationCommandHandler
         $files[] = $this->generateCommandHandlerClass($command);
         $files[] = $this->generateCommandValidatorClass($command);
         $files[] = $this->generateContainerConfig($command);
+        $files[] = $this->generateContainerLoadConfig($command);
         $files[] = $this->generateCommandBusConfig($command);
+        $files[] = $this->generateCommandBusLoadConfig($command);
         return $files;
     }
 
@@ -35,6 +40,22 @@ class GenerateApplicationCommandHandler
             '    $services->set(\\' . $handlerClassName . '::class, \\' . $handlerClassName . '::class);';
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());
         $configFile = $consoleConfigGenerator->generate($handlerDefinition, $handlerClassName);
+
+        return $configFile;
+    }
+
+    private function generateContainerLoadConfig(GenerateApplicationCommand $command): string
+    {
+        $handlerClassName = $this->getHandlerClassName($command);
+
+        $path = ComposerHelper::getPsr4Path($command->getNamespace());
+        $fs = new Filesystem();
+        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
+
+        $modulePath = $relative.'resources/config/services/main.php';
+
+        $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($command->getNamespace());
+        $configFile = $consoleLoadConfigGenerator->generate($modulePath);
 
         return $configFile;
     }
@@ -53,6 +74,22 @@ class GenerateApplicationCommandHandler
                 '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';
             $configGenerator->appendCode($controllerDefinition);
         }
+
+        return $configFile;
+    }
+
+    private function generateCommandBusLoadConfig(GenerateApplicationCommand $command): string
+    {
+        $handlerClassName = $this->getHandlerClassName($command);
+
+        $path = ComposerHelper::getPsr4Path($command->getNamespace());
+        $fs = new Filesystem();
+        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
+
+        $modulePath = $relative.'resources/config/command-bus.php';
+
+        $consoleLoadConfigGenerator = new CommandBusLoadConfigGenerator($command->getNamespace());
+        $configFile = $consoleLoadConfigGenerator->generate($modulePath);
 
         return $configFile;
     }

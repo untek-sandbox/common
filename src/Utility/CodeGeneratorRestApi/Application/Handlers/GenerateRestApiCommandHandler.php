@@ -2,6 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CommandBusLoadConfigGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
@@ -12,6 +14,7 @@ use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfigGenerator;
 
 class GenerateRestApiCommandHandler
 {
@@ -41,6 +44,8 @@ class GenerateRestApiCommandHandler
 
         $files[] = $this->generateContainerConfig($command);
         $files[] = $this->generateRoutConfig($command);
+        $files[] = $this->generateRoutLoadConfig($command);
+        $files[] = 'Endpoint: '.$command->getHttpMethod().' rest-api/' . $command->getVersion() . '/' . $command->getUri();
 
         // TODO: генерить авто-тест
 
@@ -67,7 +72,7 @@ class GenerateRestApiCommandHandler
     {
         $controllerClassName = $this->getControllerClassName($command);
 
-        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api-routes.php';
+        $configFile = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api/'.$command->getVersion().'-routes.php';
         $templateFile = __DIR__ . '/../../resources/templates/route-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
 
@@ -80,6 +85,20 @@ class GenerateRestApiCommandHandler
         ->methods([\'' . $command->getHttpMethod() . '\']);';
             $configGenerator->appendCode($controllerDefinition);
         }
+
+        return $configFile;
+    }
+
+    private function generateRoutLoadConfig(GenerateRestApiCommand $command): string
+    {
+        $path = ComposerHelper::getPsr4Path($command->getNamespace());
+        $fs = new Filesystem();
+        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
+
+        $modulePath = $relative.'resources/config/rest-api/'.$command->getVersion().'-routes.php';
+
+        $consoleLoadConfigGenerator = new RoutesLoadConfigGenerator($command->getNamespace());
+        $configFile = $consoleLoadConfigGenerator->generate($modulePath, '/' . $command->getVersion());
 
         return $configFile;
     }

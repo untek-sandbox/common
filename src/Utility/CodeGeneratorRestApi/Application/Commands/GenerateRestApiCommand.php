@@ -9,6 +9,7 @@ class GenerateRestApiCommand
     private string $commandClass;
     private string $uri;
     private string $httpMethod;
+    private string $version = 'v1';
 
     public function getNamespace(): string
     {
@@ -48,6 +49,16 @@ class GenerateRestApiCommand
     public function setHttpMethod(string $httpMethod): void
     {
         $this->httpMethod = $httpMethod;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): void
+    {
+        $this->version = $version;
     }
 
 }
