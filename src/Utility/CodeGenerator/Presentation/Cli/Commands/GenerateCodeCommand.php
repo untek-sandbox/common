@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
+use Untek\Core\Text\Helpers\TemplateHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\CommandBusInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
@@ -55,6 +56,9 @@ class GenerateCodeCommand extends Command
 
         $inputFile = $input->getOption('inputFile');
         if($inputFile) {
+            $inputFile = TemplateHelper::render($inputFile, [
+                'directory' => $_SERVER['OLDPWD'],
+            ], '{{', '}}');
             $store = new StoreFile($inputFile);
             $commands = $store->load();
             $io->info('Loaded from config file.');
