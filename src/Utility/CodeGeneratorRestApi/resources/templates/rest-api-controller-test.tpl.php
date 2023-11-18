@@ -19,6 +19,10 @@ class <?= $className ?> extends AbstractRestApiTestCase
 
     public function testExample()
     {
+        self::markTestIncomplete('Auto-test needs improvement');
+
+        // TODO: Improve the test and add even more test cases
+
         $data = [
 
         ];
