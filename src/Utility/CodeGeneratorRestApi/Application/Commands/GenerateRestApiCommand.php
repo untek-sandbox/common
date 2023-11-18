@@ -10,7 +10,7 @@ class GenerateRestApiCommand
     private string $commandClass;
     private string $uri;
     private string $httpMethod;
-    private string $version = 'v1';
+    private string $version;
 
     public function getNamespace(): string
     {

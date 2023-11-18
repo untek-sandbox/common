@@ -20,17 +20,9 @@ class GenerateApplicationInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::validateClassName($value);
-            $path = ComposerHelper::getPsr4Path($value);
-            if(empty($path)) {
-                throw new RuntimeCommandException('Incorrect namespace');
-            }
-            return $value;
-        });
+        $namespace = $this->inputNamespace($io);
         $type = $this->inputType($io);
-        $name = $io->ask('Enter a command name', null, [Validator::class, 'validateClassName']);
+        $name = $io->ask('Enter a action name', null, [Validator::class, 'validateClassName']);
         $properties = $this->inputProperties($io);
 
         $command = new GenerateApplicationCommand();
@@ -42,10 +34,23 @@ class GenerateApplicationInteract implements InteractInterface
         return [$command];
     }
 
+    private function inputNamespace(SymfonyStyle $io): string {
+        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::validateClassName($value);
+            /*$path = ComposerHelper::getPsr4Path($value);
+            if(empty($path)) {
+                throw new RuntimeCommandException('Incorrect namespace');
+            }*/
+            return $value;
+        });
+        return $namespace;
+    }
+
     private function inputType(SymfonyStyle $io): string
     {
         $question = new ChoiceQuestion(
-            'Select type',
+            'Select action type',
             [
                 TypeEnum::COMMAND,
                 TypeEnum::QUERY,

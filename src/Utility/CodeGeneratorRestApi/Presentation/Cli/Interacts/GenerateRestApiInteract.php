@@ -21,35 +21,23 @@ class GenerateRestApiInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::validateClassName($value);
-            $path = ComposerHelper::getPsr4Path($value);
-            if(empty($path)) {
-                throw new RuntimeCommandException('Incorrect namespace');
-            }
-            return $value;
-        });
+        $namespace = $this->inputNamespace($io);
         $moduleName = $io->ask('Enter a module name', ClassHelper::getClassOfClassName($namespace), [Validator::class, 'validateClassName']);
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);
+            $uri = $this->inputUri($io);
+            $method = $this->inputHttpMethod($io, $commandClass);
+            $apiVestion = getenv('REST_API_VERSION');
 
             $commandClassName = $namespace . '\\Application\\' . $commandClass;
-            $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, function ($value): ?string {
-                Validator::notBlank($value);
-                Validator::isEnglish($value);
-                return $value;
-            });
-
-            $method = $this->inputHttpMethod($io, $commandClass);
-
             $command = new GenerateRestApiCommand();
             $command->setNamespace($namespace);
             $command->setCommandClass($commandClassName);
             $command->setUri($uri);
             $command->setHttpMethod($method);
-
+            $command->setModuleName($moduleName);
+            $command->setVersion($apiVestion);
             return [$command];
         } else {
             $io->warning('Not found commands and queries in namespace "' . $namespace . '". 
@@ -57,6 +45,28 @@ Please, run command "code-generator:generate-application" and retry this command
 Or select new namespace with exist commands.');
             return [];
         }
+    }
+
+    private function inputNamespace(SymfonyStyle $io): string {
+        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::validateClassName($value);
+            /*$path = ComposerHelper::getPsr4Path($value);
+            if(empty($path)) {
+                throw new RuntimeCommandException('Incorrect namespace');
+            }*/
+            return $value;
+        });
+        return $namespace;
+    }
+
+    private function inputUri(SymfonyStyle $io): string {
+        $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::isEnglish($value);
+            return $value;
+        });
+        return $uri;
     }
 
     private function inputHttpMethod(SymfonyStyle $io, string $commandClass): string
@@ -136,7 +146,7 @@ Or select new namespace with exist commands.');
     private function inputCommand(SymfonyStyle $io, array $commands): string
     {
         $question = new ChoiceQuestion(
-            'Select command',
+            'Select command or query',
             $commands
         );
         return $io->askQuestion($question);

@@ -10,6 +10,7 @@ use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
 class GenerateCodeCommand extends Command
@@ -39,6 +40,7 @@ class GenerateCodeCommand extends Command
         $commands = [];
         foreach ($this->interacts as $interact) {
             /** @var InteractInterface $interact */
+
             $interactCommands = $interact->input($io);
             if ($interactCommands) {
                 $commands = ArrayHelper::merge($commands, $interactCommands);
@@ -61,7 +63,18 @@ class GenerateCodeCommand extends Command
         }
 
         if ($commands) {
-            $files = $this->handleCommands($commands);
+            try {
+                $files = $this->handleCommands($commands);
+            } catch (UnprocessableEntityException $exception) {
+                $errors = [];
+                foreach ($exception->getViolations() as $violation) {
+                    $fieldName = $violation->getPropertyPath();
+                    $error = "$fieldName: {$violation->getMessage()}";
+                    $errors[] = $error;
+                }
+                throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL .implode(PHP_EOL, $errors));
+            }
+
             $io->newLine();
             $io->writeln('Generated files:');
             $io->listing($files);

@@ -81,6 +81,14 @@ final class Validator
         return $value;
     }
 
+    public static function isNumeric(string|int $value = null): string
+    {
+        if (!is_numeric($value)) {
+            throw new RuntimeCommandException('This value is not english.');
+        }
+        return $value;
+    }
+
     public static function notBlank(string $value = null): string
     {
         if (null === $value || '' === $value) {

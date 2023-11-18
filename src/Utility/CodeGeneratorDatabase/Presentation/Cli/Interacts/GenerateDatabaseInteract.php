@@ -21,15 +21,7 @@ class GenerateDatabaseInteract implements InteractInterface
 
     public function input(SymfonyStyle $io): array
     {
-        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::validateClassName($value);
-            $path = ComposerHelper::getPsr4Path($value);
-            if(empty($path)) {
-                throw new RuntimeCommandException('Incorrect namespace');
-            }
-            return $value;
-        });
+        $namespace = $this->inputNamespace($io);
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);
@@ -53,6 +45,19 @@ Please, run command "code-generator:generate-application" and retry this command
 Or select new namespace with exist commands.');
             return [];
         }
+    }
+
+    private function inputNamespace(SymfonyStyle $io): string {
+        $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
+            Validator::notBlank($value);
+            Validator::validateClassName($value);
+            /*$path = ComposerHelper::getPsr4Path($value);
+            if(empty($path)) {
+                throw new RuntimeCommandException('Incorrect namespace');
+            }*/
+            return $value;
+        });
+        return $namespace;
     }
 
     private function inputHttpMethod(SymfonyStyle $io, string $commandClass): string

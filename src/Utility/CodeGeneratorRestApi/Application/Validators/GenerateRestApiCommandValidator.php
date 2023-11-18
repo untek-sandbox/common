@@ -40,8 +40,7 @@ class GenerateRestApiCommandValidator extends AbstractObjectValidator
                 ],
                 'version' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(null, 1, 255),
-                    new Assert\Type('string'),
+                    new Assert\Positive(),
                 ],
             ]
         ]);
