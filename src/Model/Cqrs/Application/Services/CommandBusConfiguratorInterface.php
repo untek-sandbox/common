@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Model\Cqrs;
+namespace Untek\Model\Cqrs\Application\Services;
 
 interface CommandBusConfiguratorInterface
 {

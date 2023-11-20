@@ -1,6 +1,6 @@
 <?php
 
-use Untek\Model\Cqrs\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
 use Untek\User\Authentication\Application\Handlers\GenerateTokenByPasswordCommandHandler;
 

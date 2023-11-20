@@ -1,8 +1,10 @@
 <?php
 
-namespace Untek\Model\Cqrs;
+namespace Untek\Model\Cqrs\Infrastructure\Services;
 
 use Psr\Container\ContainerInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 
 class CommandBus implements CommandBusInterface
 {

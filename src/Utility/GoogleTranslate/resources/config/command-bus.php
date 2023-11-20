@@ -1,6 +1,6 @@
 <?php
 
-use Untek\Model\Cqrs\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
 
 return function (CommandBusConfiguratorInterface $configurator) {
 

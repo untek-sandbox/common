@@ -11,7 +11,7 @@
 
 namespace <?= $namespace ?>;
 
-use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

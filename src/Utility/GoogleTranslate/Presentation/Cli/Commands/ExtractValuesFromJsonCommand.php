@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 
 class ExtractValuesFromJsonCommand extends Command

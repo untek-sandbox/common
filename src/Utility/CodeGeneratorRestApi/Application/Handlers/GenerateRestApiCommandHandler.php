@@ -76,7 +76,7 @@ class GenerateRestApiCommandHandler
         $controllerClassName = $this->getControllerClassName($command);
 
         $args = [
-            'service(\Untek\Model\Cqrs\CommandBusInterface::class)',
+            'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)',
             'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
         ];
         $consoleConfigGenerator = new ContainerConfigGenerator($command->getNamespace());

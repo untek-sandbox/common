@@ -2,7 +2,7 @@
 
 use Psr\Container\ContainerInterface;
 use Untek\Framework\Console\Symfony4\Interfaces\CommandConfiguratorInterface;
-use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\GoogleTranslate\Presentation\Cli\Commands\TranslateJsonCommand;
 use Untek\Utility\GoogleTranslate\Presentation\Cli\Commands\ExtractValuesFromJsonCommand;
 

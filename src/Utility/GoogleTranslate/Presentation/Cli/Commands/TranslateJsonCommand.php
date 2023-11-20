@@ -13,7 +13,7 @@ use Symfony\Component\VarDumper\Cloner\Data;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\GoogleTranslate\Application\DataToFlat;
 use Untek\Utility\GoogleTranslate\Application\ProxyTranslate;

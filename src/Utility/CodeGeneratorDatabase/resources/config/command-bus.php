@@ -1,6 +1,6 @@
 <?php
 
-use Untek\Model\Cqrs\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Application\Handlers\GenerateDatabaseCommandHandler;
 

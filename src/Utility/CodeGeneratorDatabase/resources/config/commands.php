@@ -8,7 +8,7 @@ use Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts\GenerateDatab
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
 
 //    $isTest = true;
-    $commandBus = $container->get(\Untek\Model\Cqrs\CommandBusInterface::class);
+    $commandBus = $container->get(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class);
     $commandConfigurator->registerCommandInstance(new GenerateCodeCommand(
         'code-generator:generate-database',
         $commandBus,

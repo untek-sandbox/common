@@ -2,10 +2,10 @@
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Untek\Model\Cqrs\CommandBus;
-use Untek\Model\Cqrs\CommandBusConfigurator;
-use Untek\Model\Cqrs\CommandBusConfiguratorInterface;
-use Untek\Model\Cqrs\CommandBusInterface;
+use Untek\Model\Cqrs\Infrastructure\Services\CommandBus;
+use Untek\Model\Cqrs\Infrastructure\Services\CommandBusConfigurator;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {

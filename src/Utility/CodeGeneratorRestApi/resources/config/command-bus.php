@@ -1,6 +1,6 @@
 <?php
 
-use Untek\Model\Cqrs\CommandBusConfiguratorInterface;
+use Untek\Model\Cqrs\Application\Services\CommandBusConfiguratorInterface;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Handlers\GenerateRestApiCommandHandler;
 
