@@ -77,6 +77,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args(
             [
                 include __DIR__ . '/../../../../../../../resources/file-db/user/user_credential.php',
+                ['login', 'phone'],
             ]
         );
 
