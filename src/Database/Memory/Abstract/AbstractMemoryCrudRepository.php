@@ -59,11 +59,15 @@ abstract class AbstractMemoryCrudRepository extends AbstractMemoryRepository imp
         $collection = $this->findAll();
         $max = 0;
         foreach ($collection as $item) {
-
             if ($item->getId() > $max) {
                 $max = $item->getId();
             }
         }
         $entity->setId($max + 1);
+        $this->insert($entity);
+    }
+
+    protected function insert(object $entity) {
+
     }
 }

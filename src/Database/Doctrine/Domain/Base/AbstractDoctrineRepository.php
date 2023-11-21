@@ -20,7 +20,7 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         $this->connection = $connection;
     }
 
-    public function getConnection(): Connection
+    protected function getConnection(): Connection
     {
         return $this->connection;
     }
