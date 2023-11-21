@@ -41,7 +41,7 @@ class GenerateTokenByPasswordCommandHandler
         private LoggerInterface $logger,
         private ValidatorInterface $validator,
         private IdentityRepositoryInterface $identityRepository,
-        private array $creadentialTypes
+        private array $credentialTypes
 //        EventDispatcherInterface $eventDispatcher,
 
     ) {
@@ -81,7 +81,7 @@ class GenerateTokenByPasswordCommandHandler
 //        $this->getEventDispatcher()->dispatch($authEvent, AuthEventEnum::BEFORE_AUTH);
 
         /** @var CredentialEntity[] $credentials */
-        $credentials = $this->credentialService->findAll($command->getLogin(), $this->creadentialTypes);
+        $credentials = $this->credentialService->findAll($command->getLogin(), $this->credentialTypes);
 
         if($credentials->isEmpty()) {
             throw new UserNotFoundException('User not found.');

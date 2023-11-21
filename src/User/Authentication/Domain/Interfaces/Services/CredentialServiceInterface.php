@@ -6,5 +6,5 @@ use Untek\Core\Collection\Interfaces\Enumerable;
 
 interface CredentialServiceInterface
 {
-    public function findAll(string $credential, array $types): Enumerable;
+    public function findAll(string $credential, array $types = null): Enumerable;
 }

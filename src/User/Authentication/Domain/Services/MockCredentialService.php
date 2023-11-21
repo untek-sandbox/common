@@ -9,12 +9,13 @@ use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterf
 
 class MockCredentialService implements CredentialServiceInterface
 {
-    public function __construct(private array $items)
+    public function __construct(private array $items, private array $credentialTypes)
     {
     }
 
-    public function findAll(string $credential, array $types): Enumerable
+    public function findAll(string $credential, array $types = null): Enumerable
     {
+        $types = $types ?: $this->credentialTypes;
         $credentialsCollection = new Collection();
         foreach ($this->items as $item) {
             foreach ($types as $type) {
