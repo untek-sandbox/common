@@ -26,9 +26,9 @@ class GenerateTokenByPasswordController extends AbstractRestApiController
         try {
             $tokenDto = $this->bus->handle($command);
         } catch (BadPasswordException $e) {
-            throw UnprocessableEntityException::create($e->getMessage(), null, [], null, '[password]', null);
+            UnprocessableEntityException::throwException($e->getMessage(), '[password]');
         } catch (UserNotFoundException $e) {
-            throw UnprocessableEntityException::create($e->getMessage(), null, [], $command, '[login]', $command->getLogin());
+            UnprocessableEntityException::throwException($e->getMessage(), '[login]');
         }
 
         return new JsonResponse([

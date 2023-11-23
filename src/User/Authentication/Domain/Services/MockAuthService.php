@@ -61,7 +61,7 @@ class MockAuthService implements AuthServiceInterface
             $userEntity = $this->userProvider->loadUserByIdentifier($loginForm->getLogin());
         } catch (UserNotFoundException $e) {
             $message = 'User not found.';
-            throw UnprocessableEntityException::create($message, null, [], $loginForm, '[login]', $loginForm->getLogin());
+            UnprocessableEntityException::throwException($message, '[login]');
             /*$errorCollection = new Collection();
             $ValidationErrorEntity = new ValidationErrorEntity;
             $ValidationErrorEntity->setField('login');
@@ -99,7 +99,7 @@ class MockAuthService implements AuthServiceInterface
             'Incorrect password', // I18Next::t('authentication', 'auth.incorrect_password')
         );
         $errorCollection->add($ValidationErrorEntity);*/
-        throw UnprocessableEntityException::create('Incorrect password', null, [], null, '[password]', null);
+        UnprocessableEntityException::throwException('Incorrect password', '[password]');
 //        $exception = new UnprocessibleEntityException();
 //        $exception->setErrorCollection($errorCollection);
 //        throw $exception;
