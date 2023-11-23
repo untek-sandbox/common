@@ -25,13 +25,17 @@ class DoctrineFacade
             'user' => $dbConnectionConfig['username'] ?? null,
             'password' => $dbConnectionConfig['password'] ?? null,
             'host' => $dbConnectionConfig['host'] ?? '127.0.0.1',
-            'driver' => 'pdo_' . $dbConnectionConfig['driver'] ?? 'mysql',
+            'driver' => 'pdo_' . $dbConnectionConfig['driver'],
             'charset' => 'utf8',
             /*'driverOptions' => [
                 \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             ],*/
         ];
-        $config = new Configuration;
+        if($connectionConfig['driver'] == 'pdo_sqlite') {
+            $connectionConfig['path'] = $connectionConfig['dbname'];
+            unset($connectionConfig['dbname']);
+        }
+        $config = new Configuration();
         $connection = DriverManager::getConnection($connectionConfig, $config);
         return $connection;
     }
