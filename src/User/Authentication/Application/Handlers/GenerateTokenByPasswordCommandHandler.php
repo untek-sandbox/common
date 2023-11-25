@@ -82,7 +82,7 @@ class GenerateTokenByPasswordCommandHandler
 
         /** @var CredentialEntity[] $credentials */
         $credentials = $this->credentialService->findAll($command->getLogin(), $this->credentialTypes);
-
+//dd($credentials);
         if($credentials->isEmpty()) {
             throw new UserNotFoundException('User not found.');
         }

@@ -3,9 +3,10 @@
 namespace Untek\User\Authentication\Domain\Repositories\InMemory;
 
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\User\InMemoryUser;
+//use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
+use Untek\User\Identity\Domain\Model\InMemoryUser;
 
 class IdentityRepository implements IdentityRepositoryInterface
 {
@@ -19,14 +20,13 @@ class IdentityRepository implements IdentityRepositoryInterface
         foreach ($this->users as $attributes) {
             if($attributes['id'] === $id) {
                 $username = $attributes['username'] ?? true;
-                $password = null;
                 $enabled = $attributes['enabled'] ?? true;
                 $roles = $attributes['roles'] ?? [];
 
 
 //                print_r($attributes);
 //                exit;
-                return new InMemoryUser($username, $password, $roles, $enabled);
+                return new InMemoryUser($attributes['id'], $username, $roles, $enabled);
             }
         }
 
