@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Untek\Framework\RestApi\Presentation\Http\Symfony\Controllers\AbstractRestApiController;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\User\Authentication\Domain\Exceptions\BlockedUserException;
 
 class GenerateTokenByPasswordController extends AbstractRestApiController
 {
@@ -28,6 +29,8 @@ class GenerateTokenByPasswordController extends AbstractRestApiController
         } catch (BadPasswordException $e) {
             UnprocessableEntityException::throwException($e->getMessage(), '[password]');
         } catch (UserNotFoundException $e) {
+            UnprocessableEntityException::throwException($e->getMessage(), '[login]');
+        } catch (BlockedUserException $e) {
             UnprocessableEntityException::throwException($e->getMessage(), '[login]');
         }
 

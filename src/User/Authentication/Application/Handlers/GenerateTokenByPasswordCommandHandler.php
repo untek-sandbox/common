@@ -2,10 +2,12 @@
 
 namespace Untek\User\Authentication\Application\Handlers;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
 use Untek\User\Authentication\Application\Validators\GenerateTokenByPasswordCommandValidator;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Exceptions\BadPasswordException;
+use Untek\User\Authentication\Domain\Exceptions\BlockedUserException;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 use Untek\User\Authentication\Domain\Model\Token;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -23,6 +25,7 @@ use Untek\User\Authentication\Domain\Interfaces\Services\AuthServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Untek\User\Authentication\Domain\Libs\CredentialsPasswordValidator;
+use Untek\User\Identity\Domain\Interfaces\UserIdentityInterface;
 
 class GenerateTokenByPasswordCommandHandler
 {
@@ -60,6 +63,10 @@ class GenerateTokenByPasswordCommandHandler
 
         $userEntity = $this->getIdentityByForm($command);
 
+        if(!$userEntity->isEnabled()) {
+            throw new BlockedUserException('This user is blocked.');
+        }
+
         $this->logger->info('auth tokenByForm');
         $tokenEntity = $this->tokenService->getTokenByIdentity($userEntity);
         $tokenEntity->setIdentity($userEntity);
@@ -69,7 +76,7 @@ class GenerateTokenByPasswordCommandHandler
 
     /**
      * @param GenerateTokenByPasswordCommand $command
-     * @return UserInterface
+     * @return UserInterface | UserIdentityInterface
      * @throws UserNotFoundException|BadPasswordException
      */
     private function getIdentityByForm(GenerateTokenByPasswordCommand $command): UserInterface
@@ -82,7 +89,7 @@ class GenerateTokenByPasswordCommandHandler
 
         /** @var CredentialEntity[] $credentials */
         $credentials = $this->credentialService->findAll($command->getLogin(), $this->credentialTypes);
-//dd($credentials);
+
         if($credentials->isEmpty()) {
             throw new UserNotFoundException('User not found.');
         }

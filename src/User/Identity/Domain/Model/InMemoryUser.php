@@ -5,9 +5,11 @@ namespace Untek\User\Identity\Domain\Model;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Untek\User\Identity\Domain\Interfaces\UserIdentityInterface;
 
 final class InMemoryUser implements
     UserInterface,
+    UserIdentityInterface,
 //    EquatableInterface,
     \Stringable
 {
@@ -42,14 +44,6 @@ final class InMemoryUser implements
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
     public function getRoles(): array
     {
         return $this->roles;
@@ -81,33 +75,5 @@ final class InMemoryUser implements
     public function eraseCredentials(): void
     {
     }
-
-    /*public function isEqualTo(UserInterface $user): bool
-    {
-        if (!$user instanceof self) {
-            return false;
-        }
-
-        if ($this->getPassword() !== $user->getPassword()) {
-            return false;
-        }
-
-        $currentRoles = array_map('strval', (array) $this->getRoles());
-        $newRoles = array_map('strval', (array) $user->getRoles());
-        $rolesChanged = \count($currentRoles) !== \count($newRoles) || \count($currentRoles) !== \count(array_intersect($currentRoles, $newRoles));
-        if ($rolesChanged) {
-            return false;
-        }
-
-        if ($this->getUserIdentifier() !== $user->getUserIdentifier()) {
-            return false;
-        }
-
-        if ($this->isEnabled() !== $user->isEnabled()) {
-            return false;
-        }
-
-        return true;
-    }*/
 }
 
