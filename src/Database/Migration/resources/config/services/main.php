@@ -13,6 +13,7 @@ use Untek\Model\EntityManager\Interfaces\EntityManagerConfiguratorInterface;
 use Untek\Model\EntityManager\Interfaces\EntityManagerInterface;
 use Untek\Model\EntityManager\Libs\EntityManager;
 use Untek\Model\EntityManager\Libs\EntityManagerConfigurator;
+use Doctrine\DBAL\Connection;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
@@ -31,7 +32,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(SchemaRepository::class, SchemaRepository::class)
         ->args([
-            service(Manager::class)
+            service(Connection::class)
         ]);
 
     $services->set(SourceRepository::class, SourceRepository::class);

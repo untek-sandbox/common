@@ -1,0 +1,40 @@
+<?php
+
+use Doctrine\DBAL\Connection;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Untek\Database\Base\Domain\Libs\Dependency;
+use Untek\Database\Base\Domain\Repositories\Eloquent\SchemaRepository;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use Untek\Database\Seed\Presentation\Cli\Commands\ImportSeedCliCommand;
+use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
+use Untek\Database\Seed\Application\Handlers\GetTablesQueryHandler;
+
+return static function (ContainerConfigurator $configurator): void {
+    $services = $configurator->services();
+
+    $services->set(Dependency::class, Dependency::class)
+        ->args([
+            service(SchemaRepository::class),
+        ]);
+    
+    $services->set(ImportSeedCommandHandler::class, ImportSeedCommandHandler::class)
+    ->args([
+        service(Dependency::class),
+        service(Connection::class),
+        __DIR__ . '/../../../../../../../../../resources/file-db/user',
+    ]);
+    
+    $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
+    ->args([
+        service(CommandBusInterface::class),
+    ]);
+
+    $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
+    ->args([
+        service(Connection::class),
+        [
+            'eq_migration',
+        ],
+    ]);
+};

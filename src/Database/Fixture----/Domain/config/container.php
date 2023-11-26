@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'definitions' => [],
+    'singletons' => [
+
+    ],
+];

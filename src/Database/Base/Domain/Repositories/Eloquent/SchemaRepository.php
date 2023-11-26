@@ -2,8 +2,11 @@
 
 namespace Untek\Database\Base\Domain\Repositories\Eloquent;
 
+use Doctrine\DBAL\Connection;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;
+use Untek\Database\Base\Domain\Entities\ColumnEntity;
+use Untek\Database\Base\Domain\Entities\RelationEntity;
 use Untek\Database\Base\Domain\Entities\TableEntity;
 use Untek\Database\Base\Domain\Enums\DbDriverEnum;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
@@ -16,7 +19,11 @@ class SchemaRepository
 
     private $dbRepository;
 
-    public function __construct(Manager $capsule)
+    public function __construct(private Connection $connection)
+    {
+    }
+
+    /*public function __construct(Manager $capsule)
     {
         $this->setCapsule($capsule);
         $driver = $this->getConnection()->getDriverName();
@@ -28,7 +35,7 @@ class SchemaRepository
         } else {
             $this->dbRepository = new \Untek\Database\Base\Domain\Repositories\Mysql\DbRepository($capsule);
         }
-    }
+    }*/
 
     public function connectionName()
     {
@@ -60,9 +67,9 @@ class SchemaRepository
         $newCollection = new Collection();
         foreach ($collection as $tableEntity) {
             if (in_array($tableEntity->getName(), $nameList)) {
-                $columnCollection = $this->dbRepository->allColumnsByTable($tableEntity->getName(), $tableEntity->getSchemaName());
+                $columnCollection = $this->allColumnsByTable($tableEntity->getName(), $tableEntity->getSchemaName());
                 $tableEntity->setColumns($columnCollection);
-                $relationCollection = $this->dbRepository->allRelations($tableEntity->getName());
+                $relationCollection = $this->allRelations($tableEntity->getName());
                 $tableEntity->setRelations($relationCollection);
                 $newCollection->add($tableEntity);
             }
@@ -70,11 +77,54 @@ class SchemaRepository
         return $newCollection;
     }
 
-    /**
-     * @return Enumerable | TableEntity[]
-     */
-    public function allTables(): Enumerable
+    protected function allRelations(string $tableName) {
+        $foreignKeys = $this->connection->getSchemaManager()->listTableForeignKeys($tableName);
+        
+        $collection = new Collection();
+        
+        if($foreignKeys) {
+            foreach ($foreignKeys as $key) {
+                $relationEntity = new RelationEntity();
+//                $relationEntity->setConstraintName($key->getName());
+                $relationEntity->setTableName($tableName);
+                $relationEntity->setColumnName($key->getLocalColumns()[0]);
+                $relationEntity->setForeignTableName($key->getForeignTableName());
+                $relationEntity->setForeignColumnName($key->getForeignColumns()[0]);
+                $collection->add($relationEntity);
+            }
+        }
+        
+        return $collection;
+    }
+
+    protected function allColumnsByTable(string $tableName, string $schemaName = 'public'): Enumerable
     {
-        return $this->dbRepository->allTables();
+        $columnList = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        $columnCollection = new Collection();
+        foreach ($columnList as $column) {
+            $columnType = $column->getType()->getName();
+            $columnEntity = new ColumnEntity();
+            $columnEntity->setName($column->getName());
+            $columnEntity->setType($columnType);
+            $columnCollection->add($columnEntity);
+        }
+        return $columnCollection;
+    }
+
+    /**
+     * @return TableEntity[]
+     */
+    public function allTables(): array
+    {
+        $collection = [];
+        $tableNames = $this->connection->getSchemaManager()->listTableNames();
+        foreach ($tableNames as $tableName) {
+            $tableEntity = new TableEntity();
+            $tableEntity->setName($tableName);
+            $tableEntity->setSchemaName('public');
+//            $tableEntity->setDbName($connection->getDatabaseName());
+            $collection[] = $tableEntity;
+        }
+        return $collection;
     }
 }

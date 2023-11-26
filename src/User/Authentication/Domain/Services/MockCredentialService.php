@@ -21,7 +21,7 @@ class MockCredentialService implements CredentialServiceInterface
             foreach ($types as $type) {
                 if ($item['credential'] == $credential && $item['type'] == $type) {
                     $credentialEntity = new CredentialEntity();
-                    $credentialEntity->setIdentityId($item['identity_id']);
+                    $credentialEntity->setIdentityId($item['user_id']);
                     $credentialEntity->setCredential($item['credential']);
                     $credentialEntity->setType($item['type']);
                     $credentialEntity->setValidation($item['validation']);
