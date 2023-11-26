@@ -16,6 +16,9 @@ class ImportSeedCommandValidator extends AbstractObjectValidator
                 'tables' => [
                     new Assert\NotBlank(),
                 ],
+                'progressCallback' => [
+//                    new Assert\NotBlank(),
+                ],
             ]
         ]);
     }

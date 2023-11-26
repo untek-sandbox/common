@@ -17,6 +17,6 @@ class m_2017_01_04_202556_create_user_identity_table extends BaseCreateTableMigr
         $table->string('username')->comment('Имя пользователя');
         $table->integer('status_id')->comment('Статус');
         $table->dateTime('created_at')->comment('Время создания');
-        $table->dateTime('updated_at')->comment('Время обновления');
+        $table->dateTime('updated_at')->nullable()->comment('Время обновления');
     }
 }

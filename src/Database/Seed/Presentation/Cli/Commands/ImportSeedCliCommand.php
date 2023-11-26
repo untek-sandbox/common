@@ -9,6 +9,7 @@ use Untek\Database\Seed\Application\Commands\ImportSeedCommand;
 use Untek\Database\Seed\Application\Queries\GetTablesQuery;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
+use Untek\Framework\Console\Symfony4\Widgets\LogWidgetIo;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 
 class ImportSeedCliCommand extends Command
@@ -39,9 +40,21 @@ class ImportSeedCliCommand extends Command
         $question->setMultiselect(true);
         $selectedTables = $io->askQuestion($question);
 
+        $logWidget = new LogWidgetIo($io);
+        $logWidget->setPretty(true);
+        $logWidget->setLineLength(64);
+
+        $cb = function (string $tableName) use ($logWidget) {
+            $logWidget->start($tableName);
+            $logWidget->finishSuccess();
+        };
+
         $command = new ImportSeedCommand();
         $command->setTables($selectedTables);
+        $command->setProgressCallback($cb);
         $this->bus->handle($command);
+
+        $io->newLine();
 
         return Command::SUCCESS;
     }

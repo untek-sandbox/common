@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $configurator): void {
     ->args([
         service(Dependency::class),
         service(Connection::class),
-        __DIR__ . '/../../../../../../../../../resources/file-db/user',
+        __DIR__ . '/../../../../../../../../../resources/seeds',
     ]);
     
     $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)

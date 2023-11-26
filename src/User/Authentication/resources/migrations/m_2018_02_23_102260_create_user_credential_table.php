@@ -14,14 +14,14 @@ class m_2018_02_23_102260_create_user_credential_table extends BaseCreateTableMi
     public function tableStructure(Blueprint $table): void
     {
         $table->integer('id')->autoIncrement()->comment('Идентификатор');
-        $table->integer('identity_id')->comment('ID учетной записи');
+        $table->integer('user_id')->comment('ID учетной записи');
         $table->string('type')->comment('Тип аутентификации');
         $table->string('credential')->comment('Учетная запись');
         $table->string('validation')->comment('Хэш пароля');
 
         $table->unique(['type', 'credential']);
 
-        $this->addForeign($table, 'identity_id', 'user_identity');
+        $this->addForeign($table, 'user_id', 'user_identity');
     }
 
 }

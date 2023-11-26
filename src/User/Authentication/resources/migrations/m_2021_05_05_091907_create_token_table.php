@@ -14,7 +14,7 @@ class m_2021_05_05_091907_create_token_table extends BaseCreateTableMigration
     public function tableStructure(Blueprint $table): void
     {
         $table->integer('id')->autoIncrement()->comment('Идентификатор');
-        $table->integer('identity_id')->comment('ID учетной записи');
+        $table->integer('usert_id')->comment('ID учетной записи');
         $table->string('type')->comment('Тип токена');
         $table->string('value')->comment('Значение токена');
         $table->dateTime('created_at')->comment('Время создания');
@@ -22,6 +22,6 @@ class m_2021_05_05_091907_create_token_table extends BaseCreateTableMigration
 
         $table->unique(['type', 'value']);
 
-        $this->addForeign($table, 'identity_id', 'user_identity');
+        $this->addForeign($table, 'usert_id', 'user_identity');
     }
 }
