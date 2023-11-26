@@ -9,6 +9,7 @@ use Untek\Database\Seed\Presentation\Cli\Commands\ImportSeedCliCommand;
 use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Database\Seed\Application\Handlers\GetTablesQueryHandler;
+use Untek\Database\Seed\Presentation\Cli\Commands\ExportSeedCliCommand;
 
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
@@ -30,6 +31,11 @@ return static function (ContainerConfigurator $configurator): void {
         service(CommandBusInterface::class),
     ]);
 
+    $services->set(ExportSeedCliCommand::class, ExportSeedCliCommand::class)
+        ->args([
+            service(CommandBusInterface::class),
+        ]);
+
     $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
     ->args([
         service(Connection::class),
@@ -37,4 +43,6 @@ return static function (ContainerConfigurator $configurator): void {
             'eq_migration',
         ],
     ]);
+
+    $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class);
 };
