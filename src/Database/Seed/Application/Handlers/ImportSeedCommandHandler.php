@@ -46,6 +46,17 @@ class ImportSeedCommandHandler
             $seedFile = $seedList[$seedName];
             $this->import($seedName, $seedFile, $command->getProgressCallback());
         }
+        
+        /*$this->connection->beginTransaction();
+        try {
+            $this->connection->query('SET FOREIGN_KEY_CHECKS=0');
+            
+            $this->connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $this->connection->commit();
+        } catch (\Exception $e) {
+            $this->connection->rollback();
+        }*/
+        
     }
 
     private function import(string $tableName, string $seedFile, $cb)
@@ -57,18 +68,6 @@ class ImportSeedCommandHandler
         foreach ($data as $row) {
             $this->connection->insert($tableName, $row);
         }
-
-        /*$this->connection->beginTransaction();
-        try {
-//                $this->connection->query('SET FOREIGN_KEY_CHECKS=0');
-            $this->connection->query('DELETE FROM ' . $tableName);
-            $this->connection->insert($tableName, $row);
-//                $this->connection->query('SET FOREIGN_KEY_CHECKS=1');
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollback();
-        }*/
-        
 
         call_user_func($cb, $tableName);
     }

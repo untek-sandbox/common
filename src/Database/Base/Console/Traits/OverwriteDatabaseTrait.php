@@ -9,6 +9,7 @@ use Untek\Core\Container\Helpers\ContainerHelper;
 use Untek\Core\Text\Helpers\TextHelper;
 use Untek\Database\Base\Domain\Repositories\Eloquent\SchemaRepository;
 use Untek\Component\Http\Helpers\UrlHelper;
+use Untek\Database\Eloquent\Domain\Capsule\Manager;
 
 trait OverwriteDatabaseTrait
 {
@@ -54,9 +55,9 @@ trait OverwriteDatabaseTrait
 
     protected function getConnectionUrl(): string
     {
-        /** @var SchemaRepository $schemaRepository */
-        $schemaRepository = ContainerHelper::getContainer()->get(SchemaRepository::class);
-        $connection = $schemaRepository->getConnection();
+        /** @var Manager $manager */
+        $manager = ContainerHelper::getContainer()->get(Manager::class);
+        $connection = $manager->getConnection();
 
         $params = [
             'scheme' => $connection->getConfig('driver'),

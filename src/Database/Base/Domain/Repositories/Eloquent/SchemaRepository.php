@@ -15,7 +15,7 @@ use Untek\Database\Eloquent\Domain\Traits\EloquentTrait;
 class SchemaRepository
 {
 
-    use EloquentTrait;
+//    use EloquentTrait;
 
     private $dbRepository;
 
@@ -37,10 +37,10 @@ class SchemaRepository
         }
     }*/
 
-    public function connectionName()
+    /*public function connectionName()
     {
         return 'default';
-    }
+    }*/
 
     /*public function getConnection(): Connection
     {
