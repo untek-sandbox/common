@@ -6,8 +6,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Core\Collection\Helpers\CollectionHelper;
+use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
+use Untek\Model\Entity\Helpers\EntityHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
 {
@@ -89,8 +90,25 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
      */
     protected function executeFindQuery(QueryBuilder $queryBuilder): array
     {
-        $array = $this->getConnection()->fetchAllAssociative($queryBuilder->getSQL());
-        return CollectionHelper::createEntityArray($this->getClassName(), $array);
+        $data = $this->getConnection()->fetchAllAssociative($queryBuilder->getSQL());
+        foreach ($data as $key => $item) {
+            $data[$key] = $this->restoreEntity($item);
+        }
+        return $data;
+    }
+
+    protected function serializeEntity(object $entity): array
+    {
+        $data = EntityHelper::toArrayForTablize($entity);
+        return $data;
+    }
+
+    protected function restoreEntity(array $item): object
+    {
+        $entityClass = $this->getClassName();
+        $entity = new $entityClass;
+        PropertyHelper::setAttributes($entity, $item);
+        return $entity;
     }
 
     private function makeFindQueryBuilder(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder

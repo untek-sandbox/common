@@ -94,7 +94,8 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
     public function create(object $entity): void
     {
         $queryBuilder = $this->getQueryBuilder();
-        $data = EntityHelper::toArrayForTablize($entity);
+//        $data = EntityHelper::toArrayForTablize($entity);
+        $data = $this->serializeEntity($entity);
         unset($data['id']);
         $columns = [];
         foreach ($data as $column => $value) {
