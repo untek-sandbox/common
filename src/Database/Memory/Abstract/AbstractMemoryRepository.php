@@ -6,11 +6,34 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Core\Collection\Libs\Collection;
+use Untek\Database\Base\Mapping\DefaultMapper;
+use Untek\Database\Base\Mapping\MapperInterface;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
 {
 
+    protected MapperInterface $mapper;
+
     abstract protected function getItems(): array;
+
+    protected function getMapper(): MapperInterface {
+        if(isset($this->mapper)) {
+            return $this->mapper;
+        }
+        return new DefaultMapper($this->getClassName());
+    }
+
+    protected function serializeEntity(object $entity): array
+    {
+        $data = $this->getMapper()->serializeEntity($entity);
+        return $data;
+    }
+
+    protected function restoreEntity(array $item): object
+    {
+        $entity = $this->getMapper()->restoreEntity($item);
+        return $entity;
+    }
 
     public function find($id)
     {

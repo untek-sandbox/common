@@ -2,6 +2,7 @@
 
 namespace Untek\Database\Memory\Abstract;
 
+use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\Contract\Interfaces\RepositoryCreateInterface;
 use Untek\Model\Contract\Interfaces\RepositoryDeleteByIdInterface;
@@ -16,6 +17,8 @@ abstract class AbstractMemoryCrudRepository extends AbstractMemoryRepository imp
     RepositoryFindOneByIdInterface,
     RepositoryUpdateInterface
 {
+
+    protected array $collection = [];
 
     public function countBy(array $criteria): int
     {
@@ -56,18 +59,39 @@ abstract class AbstractMemoryCrudRepository extends AbstractMemoryRepository imp
      */
     public function create(object $entity): void
     {
-        $collection = $this->findAll();
-        $max = 0;
-        foreach ($collection as $item) {
-            if ($item->getId() > $max) {
-                $max = $item->getId();
-            }
-        }
-        $entity->setId($max + 1);
+        $lastId = $this->lastInsertId();
+        $entity->setId($lastId + 1);
         $this->insert($entity);
     }
 
-    protected function insert(object $entity) {
+    protected function lastInsertId(): int {
+        $collection = $this->findAll();
+        $lastId = 0;
+        foreach ($collection as $item) {
+            if ($item->getId() > $lastId) {
+                $lastId = $item->getId();
+            }
+        }
+        return $lastId;
+    }
 
+    protected function insert(object $entity) {
+        $this->loadCollection();
+        $this->collection[] = $entity;
+        $this->dumpCollection();
+    }
+
+    protected function dumpCollection(): void {
+
+    }
+
+    protected function loadCollection(): void {
+
+    }
+
+    protected function getItems(): array
+    {
+        $this->loadCollection();
+        return $this->collection;
     }
 }

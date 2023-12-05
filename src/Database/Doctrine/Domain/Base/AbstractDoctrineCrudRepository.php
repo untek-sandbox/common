@@ -40,7 +40,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
      */
     public function countBy(array $criteria): int
     {
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->select('COUNT(*) as count');
         if ($criteria) {
             DoctrineQueryBuilderHelper::addWhere($criteria, $queryBuilder);
@@ -57,7 +57,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
     {
         $entity = $this->findOneById($id);
 
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->delete($this->getTableName());
         $queryBuilder->where($queryBuilder->expr()->eq('id', ':id'));
         $queryBuilder->setParameter('id', $entity->getId());
@@ -72,10 +72,11 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
     {
         $entity = $this->findOneById($entity->getId());
 
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->update($this->getTableName());
 
-        $data = EntityHelper::toArrayForTablize($entity);
+//        $data = EntityHelper::toArrayForTablize($entity);
+        $data = $this->serializeEntity($entity);
         unset($data['id']);
         foreach ($data as $column => $value) {
             $queryBuilder->set($column, ":$column");
@@ -93,7 +94,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
      */
     public function create(object $entity): void
     {
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder();
 //        $data = EntityHelper::toArrayForTablize($entity);
         $data = $this->serializeEntity($entity);
         unset($data['id']);

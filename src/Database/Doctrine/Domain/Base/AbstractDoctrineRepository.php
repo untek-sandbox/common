@@ -7,18 +7,43 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Core\Instance\Helpers\PropertyHelper;
+use Untek\Database\Base\Mapping\DefaultMapper;
+use Untek\Database\Base\Mapping\MapperInterface;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 use Untek\Model\Entity\Helpers\EntityHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
 {
     private Connection $connection;
+    protected MapperInterface $mapper;
 
     abstract public function getTableName(): string;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, MapperInterface $mapper = null)
     {
         $this->connection = $connection;
+        if($mapper != null) {
+            $this->mapper = $mapper;
+        }
+    }
+
+    protected function getMapper(): MapperInterface {
+        if(isset($this->mapper)) {
+            return $this->mapper;
+        }
+        return new DefaultMapper($this->getClassName());
+    }
+
+    protected function serializeEntity(object $entity): array
+    {
+        $data = $this->getMapper()->serializeEntity($entity);
+        return $data;
+    }
+
+    protected function restoreEntity(array $item): object
+    {
+        $entity = $this->getMapper()->restoreEntity($item);
+        return $entity;
     }
 
     protected function getConnection(): Connection
@@ -75,7 +100,7 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         return $this->executeFindQuery($queryBuilder);
     }
 
-    protected function getQueryBuilder(): QueryBuilder
+    protected function createQueryBuilder(): QueryBuilder
     {
         $connection = $this->getConnection();
         return $connection
@@ -97,23 +122,9 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         return $data;
     }
 
-    protected function serializeEntity(object $entity): array
-    {
-        $data = EntityHelper::toArrayForTablize($entity);
-        return $data;
-    }
-
-    protected function restoreEntity(array $item): object
-    {
-        $entityClass = $this->getClassName();
-        $entity = new $entityClass;
-        PropertyHelper::setAttributes($entity, $item);
-        return $entity;
-    }
-
     private function makeFindQueryBuilder(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->select('*');
         DoctrineQueryBuilderHelper::fillQueryBuilder($queryBuilder, $criteria, $orderBy, $limit, $offset);
         return $queryBuilder;
