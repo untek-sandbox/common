@@ -18,10 +18,12 @@ class DefaultHydrator implements HydratorInterface
         return $data;
     }
 
-    public function hydrate(array $item): object
+    public function hydrate(array $item, object $entity = null): object
     {
-        $entityClass = $this->entityClass;
-        $entity = new $entityClass;
+        if($entity == null) {
+            $entityClass = $this->entityClass;
+            $entity = new $entityClass;
+        }
         PropertyHelper::setAttributes($entity, $item);
         return $entity;
     }

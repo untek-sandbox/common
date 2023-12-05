@@ -9,5 +9,5 @@ interface HydratorInterface
 
     public function dehydrate(object $entity): array;
 
-    public function hydrate(array $item): object;
+    public function hydrate(array $item, object $entity = null): object;
 }

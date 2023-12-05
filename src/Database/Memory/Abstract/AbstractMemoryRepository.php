@@ -30,7 +30,7 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         return $data;
     }
 
-    protected function restoreEntity(array $item): object
+    protected function hydrate(array $item): object
     {
         $entity = $this->getMapper()->hydrate($item);
         return $entity;
