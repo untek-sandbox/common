@@ -5,20 +5,20 @@ namespace Untek\Database\Base\Mapping;
 use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Entity\Helpers\EntityHelper;
 
-class DefaultMapper implements MapperInterface
+class DefaultHydrator implements HydratorInterface
 {
 
     public function __construct(private string $entityClass)
     {
     }
 
-    public function serializeEntity(object $entity): array
+    public function dehydrate(object $entity): array
     {
         $data = EntityHelper::toArrayForTablize($entity);
         return $data;
     }
 
-    public function restoreEntity(array $item): object
+    public function hydrate(array $item): object
     {
         $entityClass = $this->entityClass;
         $entity = new $entityClass;

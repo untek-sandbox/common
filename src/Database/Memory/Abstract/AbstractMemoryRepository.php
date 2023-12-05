@@ -7,17 +7,18 @@ use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Database\Base\Mapping\DefaultMapper;
-use Untek\Database\Base\Mapping\MapperInterface;
+use Untek\Database\Base\Mapping\HydratorInterface;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
 {
 
-    protected MapperInterface $mapper;
+    protected HydratorInterface $mapper;
 
     abstract protected function getItems(): array;
 
-    protected function getMapper(): MapperInterface {
-        if(isset($this->mapper)) {
+    protected function getMapper(): HydratorInterface
+    {
+        if (isset($this->mapper)) {
             return $this->mapper;
         }
         return new DefaultMapper($this->getClassName());
@@ -25,13 +26,13 @@ abstract class AbstractMemoryRepository implements ObjectRepository
 
     protected function serializeEntity(object $entity): array
     {
-        $data = $this->getMapper()->serializeEntity($entity);
+        $data = $this->getMapper()->dehydrate($entity);
         return $data;
     }
 
     protected function restoreEntity(array $item): object
     {
-        $entity = $this->getMapper()->restoreEntity($item);
+        $entity = $this->getMapper()->hydrate($item);
         return $entity;
     }
 
@@ -65,7 +66,7 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         if ($orderBy) {
             $criteriaMatching->orderBy($orderBy);
         }
-        if($offset) {
+        if ($offset) {
             $criteriaMatching->setFirstResult($offset);
         }
         if ($limit) {

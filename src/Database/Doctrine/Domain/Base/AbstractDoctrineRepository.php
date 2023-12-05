@@ -6,29 +6,28 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Database\Base\Mapping\DefaultMapper;
-use Untek\Database\Base\Mapping\MapperInterface;
+use Untek\Database\Base\Mapping\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
-use Untek\Model\Entity\Helpers\EntityHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
 {
     private Connection $connection;
-    protected MapperInterface $mapper;
+    protected HydratorInterface $mapper;
 
     abstract public function getTableName(): string;
 
-    public function __construct(Connection $connection, MapperInterface $mapper = null)
+    public function __construct(Connection $connection, HydratorInterface $mapper = null)
     {
         $this->connection = $connection;
-        if($mapper != null) {
+        if ($mapper != null) {
             $this->mapper = $mapper;
         }
     }
 
-    protected function getMapper(): MapperInterface {
-        if(isset($this->mapper)) {
+    protected function getMapper(): HydratorInterface
+    {
+        if (isset($this->mapper)) {
             return $this->mapper;
         }
         return new DefaultMapper($this->getClassName());
@@ -36,13 +35,13 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
 
     protected function serializeEntity(object $entity): array
     {
-        $data = $this->getMapper()->serializeEntity($entity);
+        $data = $this->getMapper()->dehydrate($entity);
         return $data;
     }
 
     protected function restoreEntity(array $item): object
     {
-        $entity = $this->getMapper()->restoreEntity($item);
+        $entity = $this->getMapper()->hydrate($item);
         return $entity;
     }
 
