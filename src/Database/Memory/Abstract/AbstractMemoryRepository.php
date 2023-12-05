@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Core\Collection\Libs\Collection;
-use Untek\Database\Base\Hydrator\DefaultMapper;
+use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
@@ -21,10 +21,10 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         if (isset($this->mapper)) {
             return $this->mapper;
         }
-        return new DefaultMapper($this->getClassName());
+        return new DefaultHydrator($this->getClassName());
     }
 
-    protected function serializeEntity(object $entity): array
+    protected function dehydrate(object $entity): array
     {
         $data = $this->getMapper()->dehydrate($entity);
         return $data;

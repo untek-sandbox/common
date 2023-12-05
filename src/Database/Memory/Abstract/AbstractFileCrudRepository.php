@@ -25,7 +25,7 @@ abstract class AbstractFileCrudRepository extends AbstractMemoryCrudRepository
     protected function dumpCollection(): void {
         $itemsRaw = [];
         foreach ($this->collection as $entity) {
-            $itemsRaw[] = $this->serializeEntity($entity);
+            $itemsRaw[] = $this->dehydrate($entity);
         }
         $this->getStoreFile()->save($itemsRaw);
     }

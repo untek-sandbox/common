@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Database\Base\Hydrator\DefaultMapper;
+use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
@@ -30,16 +30,16 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         if (isset($this->mapper)) {
             return $this->mapper;
         }
-        return new DefaultMapper($this->getClassName());
+        return new DefaultHydrator($this->getClassName());
     }
 
-    protected function serializeEntity(object $entity): array
+    protected function dehydrate(object $entity): array
     {
         $data = $this->getMapper()->dehydrate($entity);
         return $data;
     }
 
-    protected function restoreEntity(array $item): object
+    protected function hydrate(array $item): object
     {
         $entity = $this->getMapper()->hydrate($item);
         return $entity;
@@ -116,7 +116,7 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
     {
         $data = $this->getConnection()->fetchAllAssociative($queryBuilder->getSQL());
         foreach ($data as $key => $item) {
-            $data[$key] = $this->restoreEntity($item);
+            $data[$key] = $this->hydrate($item);
         }
         return $data;
     }
