@@ -25,7 +25,7 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         }
     }
 
-    protected function getMapper(): HydratorInterface
+    protected function getHydrator(): HydratorInterface
     {
         if (isset($this->mapper)) {
             return $this->mapper;
@@ -35,13 +35,13 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
 
     protected function dehydrate(object $entity): array
     {
-        $data = $this->getMapper()->dehydrate($entity);
+        $data = $this->getHydrator()->dehydrate($entity);
         return $data;
     }
 
     protected function hydrate(array $item): object
     {
-        $entity = $this->getMapper()->hydrate($item);
+        $entity = $this->getHydrator()->hydrate($item);
         return $entity;
     }
 
