@@ -6,8 +6,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Database\Base\Mapping\DefaultMapper;
-use Untek\Database\Base\Mapping\HydratorInterface;
+use Untek\Database\Base\Hydrator\DefaultMapper;
+use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository

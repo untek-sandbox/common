@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Database\Base\Mapping;
+namespace Untek\Database\Base\Hydrator;
 
 use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Entity\Helpers\EntityHelper;

@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Core\Collection\Libs\Collection;
-use Untek\Database\Base\Mapping\DefaultMapper;
-use Untek\Database\Base\Mapping\HydratorInterface;
+use Untek\Database\Base\Hydrator\DefaultMapper;
+use Untek\Database\Base\Hydrator\HydratorInterface;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
 {
