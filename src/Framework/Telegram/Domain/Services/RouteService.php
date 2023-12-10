@@ -18,6 +18,13 @@ class RouteService
     private $_definitions = [];
     private ResponseService $responseService;
 
+    public function __construct(ResponseService $responseService = null)
+    {
+        if($responseService) {
+            $this->responseService = $responseService;
+        }
+    }
+
     public function definitions(): array
     {
 
