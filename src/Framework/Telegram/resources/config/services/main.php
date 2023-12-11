@@ -27,7 +27,10 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set(StoreRepository::class, StoreRepository::class);
+    $services->set(StoreRepository::class, StoreRepository::class)
+    ->args([
+        getenv('VAR_DIRECTORY') . '/telegram/server/state.json',
+    ]);
 
     $services->set(UpdatesRepository::class, UpdatesRepository::class);
     $services->set(ConfigRepository::class, ConfigRepository::class)
@@ -45,6 +48,7 @@ return static function (ContainerConfigurator $configurator): void {
         $services->set(ResponseRepositoryInterface::class, TestResponseRepository::class)
             ->args([
                 service(RequestService::class),
+                getenv('VAR_DIRECTORY') . '/telegram/response',
             ]);
     } else {
         $services->set(ResponseRepositoryInterface::class, TelegramResponseRepository::class);

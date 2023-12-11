@@ -1,13 +1,15 @@
 <?php
 
-
 namespace Untek\Framework\Telegram\Domain\Repositories\File;
-
 
 use Untek\Component\FormatAdapter\StoreFile;
 
 class StoreRepository
 {
+
+    public function __construct(private string $lockFile)
+    {
+    }
 
     public function getLastId()
     {
@@ -26,8 +28,7 @@ class StoreRepository
     }
     
     private function getStoreInstance(): StoreFile {
-        $stateFile = __DIR__ . '/../../../../../../../var/state.json';
-        $storeFile = new StoreFile($stateFile);
+        $storeFile = new StoreFile($this->lockFile);
         return $storeFile;
     }
 }

@@ -13,11 +13,8 @@ use Untek\Model\Entity\Helpers\EntityHelper;
 class ResponseRepository implements ResponseRepositoryInterface
 {
 
-    private $requestService;
-
-    public function __construct(RequestService $requestService)
+    public function __construct(private RequestService $requestService, private string $outputDir)
     {
-        $this->requestService = $requestService;
     }
 
     public function send(ResponseEntity $responseEntity, BotEntity $botEntity)
@@ -49,6 +46,6 @@ class ResponseRepository implements ResponseRepositoryInterface
 
     private function fileName(int $botId, int $chatId)
     {
-        return __DIR__ . '/../../../../var/dev/chat/' . $botId . '.json';
+        return $this->outputDir . '/' . $botId . '/' . $chatId . '.json';
     }
 }
