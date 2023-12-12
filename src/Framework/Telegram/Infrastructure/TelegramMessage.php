@@ -22,9 +22,11 @@ class TelegramMessage
      * @param string $parseMode
      * @throws RuntimeException
      */
-    public function sendMessageToChat(int $chatId, string $message, string $parseMode = 'Markdown'): array
+    public function sendMessage(int $chatId, string $message, string $parseMode = 'Markdown'): array
     {
-        $this->sendDocument($chatId, '/home/vitaliy/Загрузки/firefox.tmp/635f879ee8ff8.png');
+//        $this->sendDocument($chatId, '/home/vitaliy/Загрузки/firefox.tmp/635f879ee8ff8.png');exit;
+//        $this->sendPhoto($chatId, '/home/vitaliy/Загрузки/firefox.tmp/635f879ee8ff8.png', '11111');
+
         $requestData = [
             'chat_id' => $chatId,
             'text' => $message,
@@ -35,44 +37,27 @@ class TelegramMessage
 
     public function sendDocument(int $chatId, string $file, string $caption = null): array
     {
-        $extension = FilePathHelper::fileExt($file);
-        $mime = MimeTypeHelper::getMimeTypeByExt($extension);
-        $pureName = basename($file);
-        $arrayQuery = [
-            'chat_id' => $chatId,
-            'caption' => $caption,
-            'document' => curl_file_create($file, $mime, $pureName)
-        ];
-        /*$ch = curl_init('https://api.telegram.org/bot'. $this->botToken .'/sendDocument');
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $arrayQuery);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        $res = curl_exec($ch);
-        curl_close($ch);*/
-
         $options = [
             'multipart' => $this->toMultiPart([
                 'chat_id'=> $chatId,
+                'caption' => $caption,
+                'document'=> fopen($file, 'r')
+            ])
+        ];
+        return $this->sendRequest('sendDocument', [], $options);
+    }
+
+    public function sendPhoto(int $chatId, string $file, string $caption = null): array
+    {
+        $options = [
+            'multipart' => $this->toMultiPart([
+                'chat_id'=> $chatId,
+                'caption' => $caption,
                 'photo'=> fopen($file, 'r')
             ])
         ];
-
-        $client = new Client();
-        $res = $client->request('POST', 'sendPhoto', $options);
-
-        dd($res->getBody()->getContents());
+        return $this->sendRequest('sendPhoto', [], $options);
     }
-
-    private function toMultiPart(array $arr): array {
-        $result = [];
-        array_walk($arr, function($value, $key) use(&$result) {
-            $result[] = ['name' => $key, 'contents' => $value];
-        });
-        return $result;
-    }
-
-
 
     public function editMessage(int $chatId, int $messageId, string $message, string $parseMode = 'Markdown'): array
     {
@@ -85,14 +70,15 @@ class TelegramMessage
         return $this->sendRequest('editMessageText', $requestData);
     }
 
-    private function sendRequest(string $path, array $requestData, string $method = 'POST'): array {
+    private function sendRequest(string $path, array $requestData, array $options = [], string $method = 'POST'): array {
         $url = $this->generateUrl($path, $requestData);
         $client = new Client();
         try {
-            $response = $client->request($method, $url);
-            return json_decode($response->getBody()->getContents(), true);
+            $response = $client->request($method, $url, $options);
+            $result = json_decode($response->getBody()->getContents(), true);
+            return $result['result'];
         } catch (TransferException | GuzzleException $exception) {
-            throw new RuntimeException('Message not sent.');
+            throw new RuntimeException($exception->getMessage());
         }
     }
 
@@ -102,5 +88,11 @@ class TelegramMessage
         return $url;
     }
 
-
+    private function toMultiPart(array $arr): array {
+        $result = [];
+        array_walk($arr, function($value, $key) use(&$result) {
+            $result[] = ['name' => $key, 'contents' => $value];
+        });
+        return $result;
+    }
 }
