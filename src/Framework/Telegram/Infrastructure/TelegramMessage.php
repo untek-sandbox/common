@@ -52,19 +52,19 @@ class TelegramMessage
         curl_close($ch);*/
 
         $options = [
-            'multipart' => toMultiPart([
+            'multipart' => $this->toMultiPart([
                 'chat_id'=> $chatId,
                 'photo'=> fopen($file, 'r')
             ])
         ];
 
-        $client->request('POST', 'sendPhoto', $options);
+        $client = new Client();
+        $res = $client->request('POST', 'sendPhoto', $options);
 
-
-        dd($res);
+        dd($res->getBody()->getContents());
     }
 
-    function toMultiPart(array $arr) {
+    private function toMultiPart(array $arr): array {
         $result = [];
         array_walk($arr, function($value, $key) use(&$result) {
             $result[] = ['name' => $key, 'contents' => $value];
@@ -101,4 +101,6 @@ class TelegramMessage
         $url = "https://api.telegram.org/bot{$this->botToken}/{$path}?{$requestQuery}";
         return $url;
     }
+
+
 }
