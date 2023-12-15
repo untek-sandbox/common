@@ -3,12 +3,9 @@
 namespace Untek\Component\Relation\Libs\Types;
 
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Core\Collection\Libs\Collection;
-use Untek\Model\Shared\Interfaces\FindAllInterface;
+use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
-use Untek\Model\Query\Entities\Query;
-use Untek\Component\Relation\Interfaces\RelationInterface;
 
 class OneToManyRelation extends BaseRelation implements RelationInterface
 {

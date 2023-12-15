@@ -4,13 +4,10 @@ namespace Untek\Component\Relation\Libs\Types;
 
 use Doctrine\Persistence\ObjectRepository;
 use Psr\Container\ContainerInterface;
-use Untek\Core\Collection\Interfaces\Enumerable;
-use Untek\Model\Shared\Interfaces\FindAllInterface;
-use Untek\Core\Code\Factories\PropertyAccess;
-use Untek\Model\Query\Entities\Query;
-use Untek\Model\Query\Entities\Where;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Component\Relations\interfaces\CrudRepositoryInterface;
+use Untek\Core\Code\Factories\PropertyAccess;
+use Untek\Model\Query\Entities\Query;
 
 abstract class BaseRelation implements RelationInterface
 {

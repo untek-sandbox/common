@@ -55,12 +55,16 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         return $collection[0] ?? null;
     }
 
-    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $relations = null): array
     {
         $criteriaMatching = $this->createCriteria($criteria, $orderBy, $limit, $offset);
         $collection = new Collection($this->getItems());
         $collection = $collection->matching($criteriaMatching);
-        return $collection->toArray();
+        $list = $collection->toArray();
+        if($relations) {
+            $this->loadRelations($list, $relations);
+        }
+        return $list;
     }
 
     protected function createCriteria(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): Criteria
@@ -77,7 +81,7 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         }
         if ($criteria) {
             foreach ($criteria as $column => $value) {
-                if(is_array($value)) {
+                if (is_array($value)) {
                     $expr = new Comparison($column, Comparison::IN, $value);
                 } else {
                     $expr = new Comparison($column, Comparison::EQ, $value);

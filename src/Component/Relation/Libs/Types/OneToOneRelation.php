@@ -2,9 +2,9 @@
 
 namespace Untek\Component\Relation\Libs\Types;
 
+use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
-use Untek\Component\Relation\Interfaces\RelationInterface;
 
 class OneToOneRelation extends BaseRelation implements RelationInterface
 {

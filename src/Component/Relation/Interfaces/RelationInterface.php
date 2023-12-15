@@ -6,5 +6,4 @@ interface RelationInterface
 {
 
     public function run(array $collection): void;
-
 }

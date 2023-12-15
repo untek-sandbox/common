@@ -2,21 +2,18 @@
 
 namespace Untek\Component\Relation\Traits;
 
-use Untek\Model\Query\Entities\Query;
 use Untek\Component\Relation\Libs\RelationLoader;
 
 trait RepositoryRelationTrait
 {
 
-    public function relations()
+    public function relations(): array
     {
         return [];
     }
 
     public function loadRelations(array $collection, array $with)
     {
-
-//        if (method_exists($this, 'relations')) {
         $relations = $this->relations();
         if (empty($relations)) {
             return;
@@ -25,19 +22,5 @@ trait RepositoryRelationTrait
         $relationLoader->setRelations($relations);
         $relationLoader->setRepository($this);
         $relationLoader->loadRelations($collection, $with);
-//        }
     }
-
-    /*public function loadRelationsByQuery(array $collection, Query $query)
-    {
-        $this->loadRelations($collection, $query->getWith() ?: []);
-    }*/
-
-    /*public function loadRelations(array $collection, array $with)
-    {
-        $query = $this->forgeQuery();
-        $query->with($with);
-        $queryFilter = $this->queryFilterInstance($query);
-        $queryFilter->loadRelations($collection);
-    }*/
 }
