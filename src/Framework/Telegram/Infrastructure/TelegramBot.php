@@ -8,8 +8,9 @@ use GuzzleHttp\Exception\TransferException;
 use RuntimeException;
 use Untek\Core\FileSystem\Helpers\FilePathHelper;
 use Untek\Core\FileSystem\Helpers\MimeTypeHelper;
+use Untek\Framework\Telegram\Application\Services\TelegramBotInterface;
 
-class TelegramMessage
+class TelegramBot implements TelegramBotInterface
 {
 
     public function __construct(private $botToken)
@@ -24,9 +25,6 @@ class TelegramMessage
      */
     public function sendMessage(int $chatId, string $message, string $parseMode = 'Markdown'): array
     {
-//        $this->sendDocument($chatId, '/home/vitaliy/Загрузки/firefox.tmp/635f879ee8ff8.png');exit;
-//        $this->sendPhoto($chatId, '/home/vitaliy/Загрузки/firefox.tmp/635f879ee8ff8.png', '11111');
-
         $requestData = [
             'chat_id' => $chatId,
             'text' => $message,
