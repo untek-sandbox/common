@@ -50,6 +50,22 @@ final class InMemoryUser implements
     }
 
     /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
      * Returns the identifier for this user (e.g. its username or email address).
      */
     public function getUserIdentifier(): string

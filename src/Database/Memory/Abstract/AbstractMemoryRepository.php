@@ -5,12 +5,15 @@ namespace Untek\Database\Memory\Abstract;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Persistence\ObjectRepository;
+use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
 {
+
+    use RepositoryRelationTrait;
 
     protected HydratorInterface $mapper;
 
@@ -74,7 +77,11 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         }
         if ($criteria) {
             foreach ($criteria as $column => $value) {
-                $expr = new Comparison($column, Comparison::EQ, $value);
+                if(is_array($value)) {
+                    $expr = new Comparison($column, Comparison::IN, $value);
+                } else {
+                    $expr = new Comparison($column, Comparison::EQ, $value);
+                }
                 $criteriaMatching->andWhere($expr);
             }
         }
