@@ -6,9 +6,17 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\TransferException;
 use RuntimeException;
-use Untek\Core\FileSystem\Helpers\FilePathHelper;
-use Untek\Core\FileSystem\Helpers\MimeTypeHelper;
+use Untek\Core\Enum\Helpers\EnumHelper;
+use Untek\Core\FileSystem\Helpers\FileStorageHelper;
+use Untek\Core\Instance\Helpers\MappingHelper;
 use Untek\Framework\Telegram\Application\Services\TelegramBotInterface;
+use Untek\Framework\Telegram\Domain\Dto\Photo;
+use Untek\Framework\Telegram\Domain\Dto\SendDocumentResult;
+use Untek\Framework\Telegram\Domain\Dto\SendMessageResult;
+use Untek\Framework\Telegram\Domain\Dto\SendPhotoResult;
+use Untek\Framework\Telegram\Domain\Enums\ParseModeEnum;
+use Untek\Framework\Telegram\Infrastructure\Hydrators\SendDocumentResultHydrator;
+use Untek\Framework\Telegram\Infrastructure\Hydrators\SendPhotoResultHydrator;
 
 class TelegramBot implements TelegramBotInterface
 {
@@ -19,53 +27,63 @@ class TelegramBot implements TelegramBotInterface
 
     /**
      * @param int $chatId
-     * @param string $message
+     * @param string $text
      * @param string $parseMode
      * @throws RuntimeException
      */
-    public function sendMessage(int $chatId, string $message, string $parseMode = 'Markdown'): array
+    public function sendMessage(int $chatId, string $text, string $parseMode = ''): SendMessageResult
     {
+        EnumHelper::validate(ParseModeEnum::class, $parseMode);
         $requestData = [
             'chat_id' => $chatId,
-            'text' => $message,
+            'text' => $text,
             'parse_mode' => $parseMode,
         ];
-        return $this->sendRequest('sendMessage', $requestData);
+        $response = $this->sendRequest('sendMessage', $requestData);
+        return MappingHelper::restoreObject($response, SendMessageResult::class);
     }
 
-    public function sendDocument(int $chatId, string $file, string $caption = null): array
+    public function sendDocument(int $chatId, string $file, string $caption = null, string $parseMode = ''): SendDocumentResult
     {
+        EnumHelper::validate(ParseModeEnum::class, $parseMode);
         $options = [
             'multipart' => $this->toMultiPart([
                 'chat_id'=> $chatId,
                 'caption' => $caption,
-                'document'=> fopen($file, 'r')
+                'document'=> fopen($file, 'r'),
+                'parse_mode' => $parseMode,
             ])
         ];
-        return $this->sendRequest('sendDocument', [], $options);
+        $response = $this->sendRequest('sendDocument', [], $options);
+        return (new SendDocumentResultHydrator())->hydrate($response);
     }
 
-    public function sendPhoto(int $chatId, string $file, string $caption = null): array
+    public function sendPhoto(int $chatId, string $file, string $caption = null, string $parseMode = ''): SendPhotoResult
     {
+        EnumHelper::validate(ParseModeEnum::class, $parseMode);
         $options = [
             'multipart' => $this->toMultiPart([
                 'chat_id'=> $chatId,
                 'caption' => $caption,
-                'photo'=> fopen($file, 'r')
+                'photo'=> fopen($file, 'r'),
+                'parse_mode' => $parseMode,
             ])
         ];
-        return $this->sendRequest('sendPhoto', [], $options);
+        $response = $this->sendRequest('sendPhoto', [], $options);
+        return (new SendPhotoResultHydrator())->hydrate($response);
     }
 
-    public function editMessage(int $chatId, int $messageId, string $message, string $parseMode = 'Markdown'): array
+    public function editMessage(int $chatId, int $messageId, string $text, string $parseMode = ''): SendMessageResult
     {
+        EnumHelper::validate(ParseModeEnum::class, $parseMode);
         $requestData = [
             'chat_id' => $chatId,
             'message_id' => $messageId,
-            'text' => $message,
+            'text' => $text,
             'parse_mode' => $parseMode,
         ];
-        return $this->sendRequest('editMessageText', $requestData);
+        $response = $this->sendRequest('editMessageText', $requestData);
+        return MappingHelper::restoreObject($response, SendMessageResult::class);
     }
 
     private function sendRequest(string $path, array $requestData, array $options = [], string $method = 'POST'): array {
