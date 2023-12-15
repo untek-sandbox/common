@@ -42,14 +42,14 @@ abstract class BaseRelation implements RelationInterface
 
     public $fromPath = null;
 
-    abstract protected function loadRelation(Enumerable $collection): void;
+    abstract protected function loadRelation(array $collection): void;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function run(Enumerable|array $collection): void
+    public function run(array $collection): void
     {
         $this->loadRelation($collection);
         $collection = $this->prepareCollection($collection);
@@ -64,38 +64,26 @@ abstract class BaseRelation implements RelationInterface
         return $value;
     }
 
-    protected function prepareCollection(Enumerable|array $collection)
+    protected function prepareCollection(array $collection)
     {
         if ($this->prepareCollection) {
             call_user_func($this->prepareCollection, $collection);
         }
     }
 
-    protected function loadRelationByIds(array $ids)//: Enumerable
+    protected function loadRelationByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getRepositoryInstance();
         //$primaryKey = $foreignRepositoryInstance->primaryKey()[0];
-        $query = $this->getQuery();
-        $query->whereNew(new Where($this->foreignAttribute, $ids));
-        //$query->andWhere(['in', ]);
-        return $this->loadCollection($foreignRepositoryInstance, $ids, $query);
+        $criteria = [
+            $this->foreignAttribute => $ids
+        ];
+        return $this->loadCollection($foreignRepositoryInstance, $ids, $criteria);
     }
 
-    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, Query $query)//: Enumerable
+    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, array $criteria): array
     {
-        // todo: костыль, надо проверить наверняка
-        /*if (get_called_class() != OneToManyRelation::class) {
-            $query->limit(count($ids));
-        }*/
-//        dd($query->getWhereNew());
-        $query->limit(count($ids));
-
-        $criteria = [];
-        foreach ($query->getWhereNew() as $where) {
-            $criteria[$where->column] = $where->value;
-        }
-
-        $collection = $foreignRepositoryInstance->findBy($criteria);
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, count($ids));
         return $collection;
     }
 

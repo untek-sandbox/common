@@ -2,7 +2,6 @@
 
 namespace Untek\Component\Relation\Libs\Types;
 
-use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
 use Untek\Component\Relation\Interfaces\RelationInterface;
@@ -16,7 +15,7 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
     //public $foreignPrimaryKey = 'id';
     //public $foreignAttribute = 'id';
 
-    protected function loadRelation(Enumerable|array $collection): void
+    protected function loadRelation(array $collection): void
     {
         $ids = CollectionHelper::getColumn($collection, $this->relationAttribute);
         $ids = array_unique($ids);

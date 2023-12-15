@@ -3,7 +3,6 @@
 namespace Untek\Component\Relation\Libs\Types;
 
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Model\Shared\Interfaces\FindAllInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
@@ -20,7 +19,7 @@ class OneToManyRelation extends BaseRelation implements RelationInterface
     //public $foreignPrimaryKey = 'id';
     //public $foreignAttribute = 'id';
 
-    protected function loadRelation(Enumerable|array $collection): void
+    protected function loadRelation(array $collection): void
     {
         $ids = CollectionHelper::getColumn($collection, $this->relationAttribute);
         $ids = array_unique($ids);
@@ -43,17 +42,9 @@ class OneToManyRelation extends BaseRelation implements RelationInterface
         }
     }
 
-    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, Query $query)//: Enumerable
+    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, array $criteria): array
     {
-        //$query->limit(count($ids));
-
-        $criteria = [];
-        foreach ($query->getWhereNew() as $where) {
-            $criteria[$where->column] = $where->value;
-        }
-//dd($criteria);
-        $collection = $foreignRepositoryInstance->findBy($criteria);
-//        dd($collection);
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, count($ids));
         return $collection;
     }
 }

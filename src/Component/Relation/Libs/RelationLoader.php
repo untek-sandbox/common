@@ -4,17 +4,12 @@ namespace Untek\Component\Relation\Libs;
 
 use Doctrine\Persistence\ObjectRepository;
 use InvalidArgumentException;
-use Untek\Core\Arr\Helpers\ArrayHelper;
-use Untek\Core\Collection\Interfaces\Enumerable;
-use Untek\Core\Container\Helpers\ContainerHelper;
-use Untek\Core\Instance\Helpers\ClassHelper;
-use Untek\Core\Instance\Helpers\InstanceHelper;
-use Untek\Core\Instance\Helpers\PropertyHelper;
-use Untek\Model\Entity\Helpers\EntityHelper;
-use Untek\Model\Query\Entities\Query;
 use Untek\Component\Relation\Interfaces\RelationInterface;
+use Untek\Core\Arr\Helpers\ArrayHelper;
+use Untek\Core\Container\Helpers\ContainerHelper;
+use Untek\Core\Instance\Helpers\PropertyHelper;
+use Untek\Model\Query\Entities\Query;
 use Untek\Model\Repository\Interfaces\RelationConfigInterface;
-use Untek\Model\Repository\Interfaces\RepositoryInterface;
 
 class RelationLoader
 {
@@ -67,7 +62,7 @@ class RelationLoader
         return $relationTree;
     }
 
-    public function loadRelations(Enumerable|array $collection, array $with = [])
+    public function loadRelations(array $collection, array $with = [])
     {
         $relations = $this->relations;
         $relations = $this->prepareRelations($relations);

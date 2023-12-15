@@ -2,7 +2,6 @@
 
 namespace Untek\Component\Relation\Traits;
 
-use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Model\Query\Entities\Query;
 use Untek\Component\Relation\Libs\RelationLoader;
 
@@ -14,7 +13,7 @@ trait RepositoryRelationTrait
         return [];
     }
 
-    public function loadRelations(Enumerable|array $collection, array $with)
+    public function loadRelations(array $collection, array $with)
     {
 
 //        if (method_exists($this, 'relations')) {
@@ -29,12 +28,12 @@ trait RepositoryRelationTrait
 //        }
     }
 
-    /*public function loadRelationsByQuery(Enumerable $collection, Query $query)
+    /*public function loadRelationsByQuery(array $collection, Query $query)
     {
         $this->loadRelations($collection, $query->getWith() ?: []);
     }*/
 
-    /*public function loadRelations(Enumerable $collection, array $with)
+    /*public function loadRelations(array $collection, array $with)
     {
         $query = $this->forgeQuery();
         $query->with($with);

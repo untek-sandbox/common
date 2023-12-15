@@ -5,7 +5,6 @@ namespace Untek\Component\Relation\Libs\Types;
 use Psr\Container\ContainerInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
-use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Model\Shared\Interfaces\FindAllInterface;
 use Untek\Model\Query\Entities\Query;
@@ -51,20 +50,20 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         $this->container = $container;
     }
 
-    public function run(Enumerable $collection): void
+    public function run(array $collection): void
     {
         $this->loadRelation($collection);
         $collection = $this->prepareCollection($collection);
     }
 
-    protected function prepareCollection(Enumerable $collection)
+    protected function prepareCollection(array $collection)
     {
         if ($this->prepareCollection) {
             call_user_func($this->prepareCollection, $collection);
         }
     }
 
-    protected function loadRelationByIds(array $ids): Enumerable
+    protected function loadRelationByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getRepositoryInstance();
         $query = $this->getQuery();
@@ -72,7 +71,7 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         return $this->loadCollection($foreignRepositoryInstance, $ids, $query);
     }
 
-    protected function loadViaByIds(array $ids): Enumerable
+    protected function loadViaByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getViaRepositoryInstance();
         $query = $this->getQuery();
@@ -95,7 +94,7 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         return $this->container->get($this->viaRepositoryClass);
     }
 
-    protected function loadRelation(Enumerable $collection): void
+    protected function loadRelation(array $collection): void
     {
         $ids = CollectionHelper::getColumn($collection, $this->relationAttribute);
         $ids = array_unique($ids);
@@ -125,7 +124,7 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         }
     }
 
-    protected function loadCollection(FindAllInterface $foreignRepositoryInstance, array $ids, Query $query): Enumerable
+    protected function loadCollection(FindAllInterface $foreignRepositoryInstance, array $ids, Query $query): array
     {
         //$query->limit(count($ids));
         $collection = $foreignRepositoryInstance->findAll($query);
