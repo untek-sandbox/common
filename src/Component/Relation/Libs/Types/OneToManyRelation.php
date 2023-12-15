@@ -39,9 +39,10 @@ class OneToManyRelation extends BaseRelation implements RelationInterface
         }
     }
 
-    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, array $criteria): array
+    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
     {
-        $collection = $foreignRepositoryInstance->findBy($criteria, null, count($ids));
+        // count($ids)
+        $collection = $foreignRepositoryInstance->findBy($criteria);
         return $collection;
     }
 }

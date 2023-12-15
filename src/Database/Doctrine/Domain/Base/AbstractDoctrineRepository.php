@@ -6,12 +6,16 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
+use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
 {
+
+    use RepositoryRelationTrait;
+
     private Connection $connection;
     protected HydratorInterface $mapper;
 
@@ -93,10 +97,15 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
      * @return array
      * @throws Exception
      */
-    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $relations = null): array
     {
         $queryBuilder = $this->makeFindQueryBuilder($criteria, $orderBy, $limit, $offset);
-        return $this->executeFindQuery($queryBuilder);
+        $list = $this->executeFindQuery($queryBuilder);
+
+        if ($relations) {
+            $this->loadRelations($list, $relations);
+        }
+        return $list;
     }
 
     protected function createQueryBuilder(): QueryBuilder

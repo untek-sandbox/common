@@ -5,6 +5,7 @@ namespace Untek\Database\Doctrine\Domain\Base;
 use Doctrine\DBAL\Driver\PDOStatement;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\QueryException;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Contract\Common\Exceptions\InvalidMethodParameterException;
 use Untek\Model\Query\Enums\OperatorEnum;
@@ -18,6 +19,8 @@ use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 use Untek\Model\Relation\Libs\QueryFilter;
+
+DeprecateHelper::hardThrow();
 
 abstract class BaseDoctrineCrudRepository extends BaseDoctrineRepository implements CrudRepositoryInterface//, RelationConfigInterface
 {

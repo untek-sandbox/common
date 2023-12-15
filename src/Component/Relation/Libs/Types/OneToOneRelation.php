@@ -2,6 +2,7 @@
 
 namespace Untek\Component\Relation\Libs\Types;
 
+use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
@@ -21,7 +22,6 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
         $ids = array_unique($ids);
 
         $foreignCollection = $this->loadRelationByIds($ids);
-//        dd($foreignCollection);
         $foreignCollection = CollectionHelper::indexing($foreignCollection, $this->foreignAttribute);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         foreach ($collection as $entity) {
@@ -55,5 +55,12 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
             }
         }
         return true;
+    }
+
+    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
+    {
+        // count($ids)
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, 1);
+        return $collection;
     }
 }

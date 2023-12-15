@@ -35,9 +35,10 @@ abstract class BaseRelation implements RelationInterface
     /** @var Query Объект запроса для связного репозитория */
     public $query;
     protected $container;
-    //private $cache = [];
 
     public $fromPath = null;
+
+    abstract protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array;
 
     abstract protected function loadRelation(array $collection): void;
 
@@ -75,13 +76,7 @@ abstract class BaseRelation implements RelationInterface
         $criteria = [
             $this->foreignAttribute => $ids
         ];
-        return $this->loadCollection($foreignRepositoryInstance, $ids, $criteria);
-    }
-
-    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $ids, array $criteria): array
-    {
-        $collection = $foreignRepositoryInstance->findBy($criteria, null, count($ids));
-        return $collection;
+        return $this->loadCollection($foreignRepositoryInstance, $criteria);
     }
 
     protected function getQuery(): Query

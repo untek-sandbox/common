@@ -61,7 +61,7 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         $collection = new Collection($this->getItems());
         $collection = $collection->matching($criteriaMatching);
         $list = $collection->toArray();
-        if($relations) {
+        if ($relations) {
             $this->loadRelations($list, $relations);
         }
         return $list;

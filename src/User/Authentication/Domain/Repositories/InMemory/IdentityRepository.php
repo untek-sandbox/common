@@ -25,14 +25,22 @@ class IdentityRepository extends AbstractMemoryCrudRepository implements Identit
 
     protected function getItems(): array
     {
-        $items = [];
+        if (empty($this->collection)) {
+            $this->collection = $this->generateItems();
+        }
+        return $this->collection;
+    }
+
+    private function generateItems(): array
+    {
+        $collection = [];
         foreach ($this->users as $attributes) {
             $username = $attributes['username'] ?? true;
             $enabled = $attributes['enabled'] ?? true;
             $roles = $attributes['roles'] ?? [];
-            $items[] = new InMemoryUser($attributes['id'], $username, $roles, $enabled);
+            $collection[] = new InMemoryUser($attributes['id'], $username, $roles, $enabled);
         }
-        return $items;
+        return $collection;
     }
 
     public function getUserById(int $id): UserInterface

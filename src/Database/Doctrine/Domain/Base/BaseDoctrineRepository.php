@@ -7,10 +7,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOStatement;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Collection\Helpers\CollectionHelper;
 use Untek\Model\Entity\Helpers\EntityHelper;
 use Untek\Model\Shared\Interfaces\GetEntityClassInterface;
 use Untek\Database\Base\Domain\Traits\TableNameTrait;
+
+DeprecateHelper::hardThrow();
 
 abstract class BaseDoctrineRepository implements GetEntityClassInterface
 {

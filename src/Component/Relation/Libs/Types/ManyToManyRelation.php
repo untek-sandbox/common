@@ -2,6 +2,7 @@
 
 namespace Untek\Component\Relation\Libs\Types;
 
+use Doctrine\Persistence\ObjectRepository;
 use Psr\Container\ContainerInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
@@ -66,17 +67,19 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
     protected function loadRelationByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getRepositoryInstance();
-        $query = $this->getQuery();
-        $query->whereNew(new Where($this->foreignAttribute, $ids));
-        return $this->loadCollection($foreignRepositoryInstance, $ids, $query);
+        $criteria = [
+            $this->foreignAttribute => $ids
+        ];
+        return $this->loadCollection($foreignRepositoryInstance, $criteria);
     }
 
     protected function loadViaByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getViaRepositoryInstance();
-        $query = $this->getQuery();
-        $query->whereNew(new Where($this->viaSourceAttribute, $ids));
-        return $this->loadCollection($foreignRepositoryInstance, $ids, $query);
+        $criteria = [
+            $this->viaSourceAttribute => $ids
+        ];
+        return $this->loadCollection($foreignRepositoryInstance, $criteria);
     }
 
     protected function getQuery(): Query
@@ -124,10 +127,10 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         }
     }
 
-    protected function loadCollection(FindAllInterface $foreignRepositoryInstance, array $ids, Query $query): array
+    protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
     {
         //$query->limit(count($ids));
-        $collection = $foreignRepositoryInstance->findAll($query);
+        $collection = $foreignRepositoryInstance->findBy($criteria);
         return $collection;
     }
 }
