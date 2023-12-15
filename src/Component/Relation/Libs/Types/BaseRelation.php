@@ -7,7 +7,6 @@ use Psr\Container\ContainerInterface;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Component\Relations\interfaces\CrudRepositoryInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
-use Untek\Model\Query\Entities\Query;
 
 abstract class BaseRelation implements RelationInterface
 {
@@ -15,26 +14,26 @@ abstract class BaseRelation implements RelationInterface
     /** @var string Имя связи, указываемое в методе with.
      * Если пустое, то берется из атрибута relationEntityAttribute
      */
-    public $name;
+    public string $name;
 
     /** @var string Имя поля, в которое записывать вложенную сущность */
-    public $relationEntityAttribute;
+    public string $relationEntityAttribute;
 
     /** @var string Имя первичного ключа связной таблицы */
-    public $foreignAttribute = 'id';
+    public string $foreignAttribute = 'id';
 
     /** @var string Имя класса связного репозитория */
-    public $foreignRepositoryClass;
+    public string $foreignRepositoryClass;
 
     /** @var array Условие для присваивания связи, иногда нужно для полиморических связей */
-    public $condition = [];
+    public array $condition = [];
 
     /** @var callable Callback-метод для пост-обработки коллекции из связной таблицы */
     public $prepareCollection;
 
-    /** @var Query Объект запроса для связного репозитория */
-    public $query;
-    protected $container;
+    protected ContainerInterface $container;
+
+    public array $relations = [];
 
     public $fromPath = null;
 
@@ -72,16 +71,10 @@ abstract class BaseRelation implements RelationInterface
     protected function loadRelationByIds(array $ids): array
     {
         $foreignRepositoryInstance = $this->getRepositoryInstance();
-        //$primaryKey = $foreignRepositoryInstance->primaryKey()[0];
         $criteria = [
             $this->foreignAttribute => $ids
         ];
         return $this->loadCollection($foreignRepositoryInstance, $criteria);
-    }
-
-    protected function getQuery(): Query
-    {
-        return $this->query ? $this->query : new Query;
     }
 
     protected function getRepositoryInstance(): ObjectRepository

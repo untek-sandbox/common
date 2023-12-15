@@ -11,10 +11,7 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
 {
 
     /** Связующее поле */
-    public $relationAttribute;
-
-    //public $foreignPrimaryKey = 'id';
-    //public $foreignAttribute = 'id';
+    public string $relationAttribute;
 
     protected function loadRelation(array $collection): void
     {
@@ -60,7 +57,7 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
     protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
     {
         // count($ids)
-        $collection = $foreignRepositoryInstance->findBy($criteria, null, 1);
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, 1, null, $this->relations);
         return $collection;
     }
 }

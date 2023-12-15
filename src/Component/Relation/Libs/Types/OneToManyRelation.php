@@ -11,10 +11,7 @@ class OneToManyRelation extends BaseRelation implements RelationInterface
 {
 
     /** Связующее поле */
-    public $relationAttribute;
-
-    //public $foreignPrimaryKey = 'id';
-    //public $foreignAttribute = 'id';
+    public string $relationAttribute;
 
     protected function loadRelation(array $collection): void
     {
@@ -42,7 +39,7 @@ class OneToManyRelation extends BaseRelation implements RelationInterface
     protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
     {
         // count($ids)
-        $collection = $foreignRepositoryInstance->findBy($criteria);
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, null, null, $this->relations);
         return $collection;
     }
 }

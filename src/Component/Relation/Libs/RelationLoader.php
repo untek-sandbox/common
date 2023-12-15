@@ -8,7 +8,6 @@ use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Container\Helpers\ContainerHelper;
 use Untek\Core\Instance\Helpers\PropertyHelper;
-use Untek\Model\Query\Entities\Query;
 use Untek\Model\Repository\Interfaces\RelationConfigInterface;
 
 class RelationLoader
@@ -47,8 +46,6 @@ class RelationLoader
                 }
             } elseif (is_array($withItem)) {
                 $relParts = $withItem;
-            } elseif (is_object($withItem) && $withItem instanceof Query) {
-                $relParts = $withItem->getParam(Query::WITH);
             }
 
             if (!empty($relParts)) {
@@ -81,8 +78,7 @@ class RelationLoader
 
                 if (is_object($relation)) {
                     if ($relParts) {
-                        $relation->query = $relation->query ?: new Query();
-                        $relation->query->with($relParts);
+                        $relation->relations = $relParts;
                     }
                     $relation->run($collection);
                 }

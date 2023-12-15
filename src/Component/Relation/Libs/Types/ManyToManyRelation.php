@@ -8,38 +8,34 @@ use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Model\Shared\Interfaces\FindAllInterface;
-use Untek\Model\Query\Entities\Query;
-use Untek\Model\Query\Entities\Where;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 
 class ManyToManyRelation extends BaseRelation implements RelationInterface
 {
 
     /** Связующее поле */
-    public $relationAttribute;
+    public string $relationAttribute;
 
     /** @var string Имя связи, указываемое в методе with.
      * Если пустое, то берется из атрибута relationEntityAttribute
      */
-    public $name;
+    public string $name;
 
     /** @var string Имя поля, в которое записывать вложенную сущность */
-    public $relationEntityAttribute;
+    public string $relationEntityAttribute;
 
     /** @var string Имя первичного ключа связной таблицы */
-    public $foreignAttribute = 'id';
+    public string $foreignAttribute = 'id';
 
     /** @var string Имя класса связного репозитория */
-    public $foreignRepositoryClass;
+    public string $foreignRepositoryClass;
 
     /** @var array Условие для присваивания связи, иногда нужно для полиморических связей */
-    public $condition = [];
+    public array $condition = [];
 
     /** @var callable Callback-метод для пост-обработки коллекции из связной таблицы */
     public $prepareCollection;
 
-    /** @var Query Объект запроса для связного репозитория */
-    public $query;
     protected $container;
 
     public $viaRepositoryClass;
@@ -80,11 +76,6 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
             $this->viaSourceAttribute => $ids
         ];
         return $this->loadCollection($foreignRepositoryInstance, $criteria);
-    }
-
-    protected function getQuery(): Query
-    {
-        return $this->query ? $this->query : new Query;
     }
 
     protected function getRepositoryInstance(): FindAllInterface
@@ -129,8 +120,8 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
 
     protected function loadCollection(ObjectRepository $foreignRepositoryInstance, array $criteria): array
     {
-        //$query->limit(count($ids));
-        $collection = $foreignRepositoryInstance->findBy($criteria);
+        //count($ids)
+        $collection = $foreignRepositoryInstance->findBy($criteria, null, null, null, $this->relations);
         return $collection;
     }
 }
