@@ -6,12 +6,23 @@ use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
+use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 
 class OneToOneRelation extends BaseRelation implements RelationInterface
 {
 
-    /** Связующее поле */
-    public string $relationAttribute;
+    public function __construct(
+        string $relationAttribute,
+        string $relationEntityAttribute,
+        string $foreignRepositoryClass,
+        string $foreignAttribute = 'id'
+    )
+    {
+        $this->relationAttribute = $relationAttribute;
+        $this->relationEntityAttribute = $relationEntityAttribute;
+        $this->foreignRepositoryClass = $foreignRepositoryClass;
+        $this->foreignAttribute = $foreignAttribute;
+    }
 
     protected function loadRelation(array $collection): void
     {

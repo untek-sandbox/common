@@ -2,8 +2,10 @@
 
 namespace Untek\Component\Relation\Interfaces;
 
+use Untek\Component\Relation\Libs\RelationConfigurator;
+
 interface RelationConfigInterface
 {
 
-    public function relations(): array;
+    public function relations(RelationConfigurator $configurator): void;
 }

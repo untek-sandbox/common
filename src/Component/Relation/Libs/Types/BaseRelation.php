@@ -11,6 +11,9 @@ use Untek\Core\Code\Factories\PropertyAccess;
 abstract class BaseRelation implements RelationInterface
 {
 
+    /** Связующее поле */
+    public string $relationAttribute;
+
     /** @var string Имя связи, указываемое в методе with.
      * Если пустое, то берется из атрибута relationEntityAttribute
      */
@@ -41,7 +44,7 @@ abstract class BaseRelation implements RelationInterface
 
     abstract protected function loadRelation(array $collection): void;
 
-    public function __construct(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
     }

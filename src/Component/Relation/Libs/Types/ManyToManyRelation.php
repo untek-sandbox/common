@@ -13,36 +13,11 @@ use Untek\Component\Relation\Interfaces\RelationInterface;
 class ManyToManyRelation extends BaseRelation implements RelationInterface
 {
 
-    /** Связующее поле */
-    public string $relationAttribute;
-
-    /** @var string Имя связи, указываемое в методе with.
-     * Если пустое, то берется из атрибута relationEntityAttribute
-     */
-    public string $name;
-
-    /** @var string Имя поля, в которое записывать вложенную сущность */
-    public string $relationEntityAttribute;
-
-    /** @var string Имя первичного ключа связной таблицы */
-    public string $foreignAttribute = 'id';
-
-    /** @var string Имя класса связного репозитория */
-    public string $foreignRepositoryClass;
-
-    /** @var array Условие для присваивания связи, иногда нужно для полиморических связей */
-    public array $condition = [];
-
-    /** @var callable Callback-метод для пост-обработки коллекции из связной таблицы */
-    public $prepareCollection;
-
-    protected $container;
-
     public $viaRepositoryClass;
     public $viaSourceAttribute;
     public $viaTargetAttribute;
 
-    public function __construct(ContainerInterface $container)
+    /*public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -67,7 +42,7 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
             $this->foreignAttribute => $ids
         ];
         return $this->loadCollection($foreignRepositoryInstance, $criteria);
-    }
+    }*/
 
     protected function loadViaByIds(array $ids): array
     {
@@ -78,10 +53,10 @@ class ManyToManyRelation extends BaseRelation implements RelationInterface
         return $this->loadCollection($foreignRepositoryInstance, $criteria);
     }
 
-    protected function getRepositoryInstance(): FindAllInterface
+    /*protected function getRepositoryInstance(): FindAllInterface
     {
         return $this->container->get($this->foreignRepositoryClass);
-    }
+    }*/
 
     protected function getViaRepositoryInstance(): FindAllInterface
     {

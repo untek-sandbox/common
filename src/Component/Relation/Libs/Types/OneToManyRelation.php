@@ -10,8 +10,18 @@ use Untek\Core\Collection\Helpers\CollectionHelper;
 class OneToManyRelation extends BaseRelation implements RelationInterface
 {
 
-    /** Связующее поле */
-    public string $relationAttribute;
+    public function __construct(
+        string $relationAttribute,
+        string $relationEntityAttribute,
+        string $foreignRepositoryClass,
+        string $foreignAttribute
+    )
+    {
+        $this->relationAttribute = $relationAttribute;
+        $this->relationEntityAttribute = $relationEntityAttribute;
+        $this->foreignRepositoryClass = $foreignRepositoryClass;
+        $this->foreignAttribute = $foreignAttribute;
+    }
 
     protected function loadRelation(array $collection): void
     {

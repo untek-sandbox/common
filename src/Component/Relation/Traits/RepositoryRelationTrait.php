@@ -4,6 +4,7 @@ namespace Untek\Component\Relation\Traits;
 
 use Untek\Component\Relation\Interfaces\RelationConfigInterface;
 use Untek\Component\Relation\Interfaces\RelationInterface;
+use Untek\Component\Relation\Libs\RelationConfigurator;
 use Untek\Component\Relation\Libs\RelationLoader;
 use Untek\Core\Contract\Common\Exceptions\NotImplementedMethodException;
 
@@ -15,15 +16,17 @@ trait RepositoryRelationTrait
         throw new NotImplementedMethodException('Need relation class.');
     }
 
-    public function relations(): array
+    public function relations(): RelationConfigurator
     {
-        return $this->getRelation()->relations();
+        $configurator = new RelationConfigurator();
+        $this->getRelation()->relations($configurator);
+        return $configurator;
     }
 
     public function loadRelations(array $collection, array $with)
     {
         $relations = $this->relations();
-        if (empty($relations)) {
+        if ($relations->isEmpty()) {
             return;
         }
         $relationLoader = new RelationLoader();

@@ -5,6 +5,7 @@ namespace Untek\Component\Relation\Libs;
 use Doctrine\Persistence\ObjectRepository;
 use InvalidArgumentException;
 use Untek\Component\Relation\Interfaces\RelationInterface;
+use Untek\Component\Relation\Libs\Types\BaseRelation;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Container\Helpers\ContainerHelper;
 use Untek\Core\Instance\Helpers\PropertyHelper;
@@ -14,7 +15,7 @@ class RelationLoader
 {
 
     private $repository;
-    private $relations;
+    private RelationConfigurator $relations;
 
     public function getRepository(): ObjectRepository
     {
@@ -26,7 +27,7 @@ class RelationLoader
         $this->repository = $repository;
     }
 
-    public function setRelations(array $relations): void
+    public function setRelations(RelationConfigurator $relations): void
     {
         $this->relations = $relations;
     }
@@ -61,10 +62,7 @@ class RelationLoader
 
     public function loadRelations(array $collection, array $with = [])
     {
-        $relations = $this->relations;
-        $relations = $this->prepareRelations($relations);
-        $relations = ArrayHelper::index($relations, 'name');
-
+        $relations = $this->relations->toArray();
         if ($with) {
             $relationTree = $this->getRelationTree($with);
 
@@ -74,7 +72,7 @@ class RelationLoader
                 }
                 /** @var RelationInterface $relation */
                 $relation = $relations[$attribute];
-                $relation = $this->ensureRelation($relation);
+                $relation->setContainer(ContainerHelper::getContainer());
 
                 if (is_object($relation)) {
                     if ($relParts) {
@@ -84,32 +82,5 @@ class RelationLoader
                 }
             }
         }
-    }
-
-    private function prepareRelations(array $relations)
-    {
-        foreach ($relations as &$relation) {
-            if (empty($relation['name'])) {
-                $relation['name'] = $relation['relationEntityAttribute'];
-            }
-        }
-        return $relations;
-    }
-
-    private function ensureRelation($relation): RelationInterface
-    {
-        if ($relation instanceof RelationInterface) {
-
-        } elseif (is_array($relation) || is_string($relation)) {
-//            $relation = ClassHelper::createObject($relation);
-            $class = $relation['class'];
-            $relationObject = new $class(ContainerHelper::getContainer());
-            unset($relation['class']);
-            PropertyHelper::setAttributes($relationObject, $relation);
-            $relation = $relationObject;
-        } else {
-            throw new InvalidArgumentException('Definition of relation not correct!');
-        }
-        return $relation;
     }
 }
