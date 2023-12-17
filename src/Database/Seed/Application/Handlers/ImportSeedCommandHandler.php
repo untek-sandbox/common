@@ -43,8 +43,10 @@ class ImportSeedCommandHandler
         $sortedTables = $this->dependency->run($tables);
 
         foreach ($sortedTables as $seedName) {
-            $seedFile = $seedList[$seedName];
-            $this->import($seedName, $seedFile, $command->getProgressCallback());
+            if(isset($seedList[$seedName])) {
+                $seedFile = $seedList[$seedName];
+                $this->import($seedName, $seedFile, $command->getProgressCallback());
+            }
         }
         
         /*$this->connection->beginTransaction();
