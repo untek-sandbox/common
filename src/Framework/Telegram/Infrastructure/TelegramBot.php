@@ -16,6 +16,7 @@ use Untek\Framework\Telegram\Domain\Dto\SendMessageResult;
 use Untek\Framework\Telegram\Domain\Dto\SendPhotoResult;
 use Untek\Framework\Telegram\Domain\Enums\ParseModeEnum;
 use Untek\Framework\Telegram\Infrastructure\Hydrators\SendDocumentResultHydrator;
+use Untek\Framework\Telegram\Infrastructure\Hydrators\SendMessageResultHydrator;
 use Untek\Framework\Telegram\Infrastructure\Hydrators\SendPhotoResultHydrator;
 
 class TelegramBot implements TelegramBotInterface
@@ -40,7 +41,7 @@ class TelegramBot implements TelegramBotInterface
             'parse_mode' => $parseMode,
         ];
         $response = $this->sendRequest('sendMessage', $requestData);
-        return MappingHelper::restoreObject($response, SendMessageResult::class);
+        return (new SendMessageResultHydrator())->hydrate($response);
     }
 
     public function sendDocument(int $chatId, string $file, string $caption = null, string $parseMode = ''): SendDocumentResult
@@ -83,7 +84,7 @@ class TelegramBot implements TelegramBotInterface
             'parse_mode' => $parseMode,
         ];
         $response = $this->sendRequest('editMessageText', $requestData);
-        return MappingHelper::restoreObject($response, SendMessageResult::class);
+        return (new SendMessageResultHydrator())->hydrate($response);
     }
 
     private function sendRequest(string $path, array $requestData, array $options = [], string $method = 'POST'): array {
