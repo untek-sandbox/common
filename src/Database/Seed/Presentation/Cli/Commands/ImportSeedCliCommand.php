@@ -4,7 +4,9 @@ namespace Untek\Database\Seed\Presentation\Cli\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Database\Seed\Application\Commands\ImportSeedCommand;
 use Untek\Database\Seed\Application\Queries\GetTablesQuery;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
@@ -20,6 +22,18 @@ class ImportSeedCliCommand extends Command
         parent::__construct(null);
     }
 
+    protected function configure()
+    {
+        $this
+            ->addOption(
+                'withConfirm',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Your selection migrations',
+                true
+            );
+    }
+    
     public static function getDefaultName(): string
     {
         return 'seed:import';
@@ -32,14 +46,19 @@ class ImportSeedCliCommand extends Command
         $query = new GetTablesQuery();
         $tables = $this->bus->handle($query);
 
-        $question = new ChoiceQuestion(
-            'Select tables for import',
-            $tables,
-            'a'
-        );
-        $question->setMultiselect(true);
-        $selectedTables = $io->askQuestion($question);
-
+        $withConfirm = $input->getOption('withConfirm');
+        if ($withConfirm) {
+            $question = new ChoiceQuestion(
+                'Select tables for import',
+                $tables,
+                'a'
+            );
+            $question->setMultiselect(true);
+            $selectedTables = $io->askQuestion($question);
+        } else {
+            $selectedTables = $tables;
+        }
+        
         $logWidget = new LogWidgetIo($io);
         $logWidget->setPretty(true);
         $logWidget->setLineLength(64);
