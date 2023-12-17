@@ -39,9 +39,9 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         return $entity;
     }
 
-    public function find($id)
+    public function find($id, ?array $relations = null)
     {
-        return $this->findOneBy(['id' => $id]);
+        return $this->findOneBy(['id' => $id], $relations);
     }
 
     public function findAll(): array
@@ -49,9 +49,9 @@ abstract class AbstractMemoryRepository implements ObjectRepository
         return $this->findBy([]);
     }
 
-    public function findOneBy(array $criteria)
+    public function findOneBy(array $criteria, ?array $relations = null)
     {
-        $collection = $this->findBy($criteria, null, 1);
+        $collection = $this->findBy($criteria, null, 1, null, $relations);
         return $collection[0] ?? null;
     }
 

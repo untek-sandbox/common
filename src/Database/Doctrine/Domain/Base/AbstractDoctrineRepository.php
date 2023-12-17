@@ -64,9 +64,9 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
      * @return object|null
      * @throws Exception
      */
-    public function find(mixed $id): ?object
+    public function find(mixed $id, ?array $relations = null): ?object
     {
-        return $this->findOneBy(['id' => $id]);
+        return $this->findOneBy(['id' => $id], $relations);
     }
 
     /**
@@ -83,9 +83,9 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
      * @return object|null
      * @throws Exception
      */
-    public function findOneBy(array $criteria): ?object
+    public function findOneBy(array $criteria, ?array $relations = null): ?object
     {
-        $collection = $this->findBy($criteria, null, 1);
+        $collection = $this->findBy($criteria, null, 1, null, $relations);
         return $collection[0] ?? null;
     }
 

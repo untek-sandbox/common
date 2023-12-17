@@ -24,9 +24,9 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
      * @inheritdoc
      * @throws Exception
      */
-    public function findOneById(int $id): object
+    public function findOneById(int $id, ?array $relations = null): object
     {
-        $entity = $this->find($id);
+        $entity = $this->find($id, $relations);
         if (empty($entity)) {
             throw new NotFoundException('Entity not found!');
         }
