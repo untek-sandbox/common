@@ -7,6 +7,7 @@ class Chat
 
     private int $id;
     private string $firstName;
+    private string $title;
     private string $username;
     private string $type;
 
@@ -40,6 +41,22 @@ class Chat
     public function setFirstName(string $firstName): void
     {
         $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
