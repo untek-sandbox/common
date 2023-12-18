@@ -23,7 +23,7 @@ trait RepositoryRelationTrait
         return $configurator;
     }
 
-    public function loadRelations(array $collection, array $with)
+    protected function loadRelations(array $collection, array $with)
     {
         $relations = $this->relations();
         if ($relations->isEmpty()) {

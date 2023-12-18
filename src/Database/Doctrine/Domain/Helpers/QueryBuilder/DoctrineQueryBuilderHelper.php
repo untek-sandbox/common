@@ -42,18 +42,15 @@ class DoctrineQueryBuilderHelper implements QueryBuilderInterface
         foreach ($criteria as $key => $value) {
             $predicates = $queryBuilder->expr()->andX();
             if (is_array($value)) {
-                $predicates->add($queryBuilder->expr()->eq(/*'c.' . */ $key, $value));
+                $predicates->add($queryBuilder->expr()->in(/*'c.' . */ $key, $value));
                 //$queryBuilder->whereIn($key, $value);
             } else {
-                $predicates->add($queryBuilder->expr()->in(/*'c.' . */ $key, $value));
+                $predicates->add($queryBuilder->expr()->eq(/*'c.' . */ $key, $value));
                 //$queryBuilder->where($key, $value);
             }
             $queryBuilder->where($predicates);
         }
     }
-
-
-
 
 
     public static function setWhere(Query $query, QueryBuilder $queryBuilder)
