@@ -11,11 +11,9 @@ class Zip
 
     private $resource;
     private $zipArchive;
-    private $filename;
 
     public function __construct(string $zipFile)
     {
-        $this->filename = $zipFile;
         $this->zipArchive = new ZipArchive();
         if(!is_dir(dirname($zipFile))) {
             mkdir(dirname($zipFile));
@@ -26,11 +24,6 @@ class Zip
         } else {
             throw new Exception('Zip not opened!');
         }
-    }
-
-    public function getFilename(): string
-    {
-        return $this->filename;
     }
 
     public function glob(string $pattern)

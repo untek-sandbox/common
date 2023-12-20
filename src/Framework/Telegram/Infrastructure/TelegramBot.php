@@ -87,20 +87,6 @@ class TelegramBot implements TelegramBotInterface
         return (new SendMessageResultHydrator())->hydrate($response);
     }
 
-    public function forwardMessage(int $fromChatId, int $toChatId, int $messageId, string $text, string $parseMode = ''): SendMessageResult
-    {
-        EnumHelper::validate(ParseModeEnum::class, $parseMode);
-        $requestData = [
-            'from_chat_id' => $fromChatId,
-            'chat_id' => $toChatId,
-            'message_id' => $messageId,
-//            'text' => $text,
-            'parse_mode' => $parseMode,
-        ];
-        $response = $this->sendRequest('forwardMessage', $requestData);
-        return (new SendMessageResultHydrator())->hydrate($response);
-    }
-
     private function sendRequest(string $path, array $requestData, array $options = [], string $method = 'POST'): array {
         $url = $this->generateUrl($path, $requestData);
         $client = new Client();

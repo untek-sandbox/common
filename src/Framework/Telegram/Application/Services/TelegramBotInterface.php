@@ -16,6 +16,4 @@ interface TelegramBotInterface
     public function sendPhoto(int $chatId, string $file, string $caption = null, string $parseMode = ''): SendPhotoResult;
 
     public function editMessage(int $chatId, int $messageId, string $text, string $parseMode = ''): SendMessageResult;
-    
-    public function forwardMessage(int $fromChatId, int $toChatId, int $messageId, string $text, string $parseMode = ''): SendMessageResult;
 }

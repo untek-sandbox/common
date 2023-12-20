@@ -124,6 +124,10 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
     protected function executeFindQuery(QueryBuilder $queryBuilder): array
     {
         $data = $this->getConnection()->fetchAllAssociative($queryBuilder->getSQL());
+        return $this->hydrateCollection($data);
+    }
+
+    protected function hydrateCollection(array $data): array {
         foreach ($data as $key => $item) {
             $data[$key] = $this->hydrate($item);
         }

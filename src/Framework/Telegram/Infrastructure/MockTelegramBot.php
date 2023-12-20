@@ -161,27 +161,4 @@ class MockTelegramBot implements TelegramBotInterface
         ];
         return MappingHelper::restoreObject($response, SendMessageResult::class);
     }
-
-    public function forwardMessage(int $fromChatId, int $toChatId, int $messageId, string $text, string $parseMode = 'Markdown'): SendMessageResult
-    {
-        $response = [
-            'message_id' => $messageId,
-            'from' => [
-                'id' => 5826959599,
-                'is_bot' => true,
-                'first_name' => 'Qwerty bot',
-                'username' => 'qwerty_bot'
-            ],
-            'chat' => [
-                'id' => $fromChatId,
-                'first_name' => 'Qwerty',
-                'username' => 'qwerty',
-                'type' => 'private'
-            ],
-            'date' => time(),
-            'edit_date' => time(),
-            'text' => $text,
-        ];
-        return MappingHelper::restoreObject($response, SendMessageResult::class);
-    }
 }
