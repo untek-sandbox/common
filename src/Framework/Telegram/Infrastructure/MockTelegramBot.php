@@ -6,20 +6,19 @@ use RuntimeException;
 use Untek\Core\Enum\Helpers\EnumHelper;
 use Untek\Core\Instance\Helpers\MappingHelper;
 use Untek\Framework\Telegram\Application\Services\TelegramBotInterface;
+use Untek\Framework\Telegram\Domain\Dto\EditMessageResult;
+use Untek\Framework\Telegram\Domain\Dto\ForwardMessageResult;
 use Untek\Framework\Telegram\Domain\Dto\SendDocumentResult;
 use Untek\Framework\Telegram\Domain\Dto\SendMessageResult;
 use Untek\Framework\Telegram\Domain\Dto\SendPhotoResult;
 use Untek\Framework\Telegram\Domain\Enums\ParseModeEnum;
+use Untek\Framework\Telegram\Infrastructure\Hydrators\EditMessageResultHydrator;
 use Untek\Framework\Telegram\Infrastructure\Hydrators\SendDocumentResultHydrator;
 use Untek\Framework\Telegram\Infrastructure\Hydrators\SendPhotoResultHydrator;
 
 class MockTelegramBot implements TelegramBotInterface
 {
-
-    public function __construct(private $botToken)
-    {
-    }
-
+    
     /**
      * @param int $chatId
      * @param string $text
@@ -139,7 +138,7 @@ class MockTelegramBot implements TelegramBotInterface
         return (new SendPhotoResultHydrator())->hydrate($response);
     }
 
-    public function editMessage(int $chatId, int $messageId, string $text, string $parseMode = 'Markdown'): SendMessageResult
+    public function editMessage(int $chatId, int $messageId, string $text, string $parseMode = 'Markdown'): EditMessageResult
     {
         $response = [
             'message_id' => $messageId,
@@ -159,6 +158,35 @@ class MockTelegramBot implements TelegramBotInterface
             'edit_date' => time(),
             'text' => $text,
         ];
-        return MappingHelper::restoreObject($response, SendMessageResult::class);
+        return MappingHelper::restoreObject($response, EditMessageResult::class);
+    }
+
+    public function forwardMessage(int $fromChatId, int $chatId, int $messageId): ForwardMessageResult
+    {
+        $response = [
+            'message_id' => $messageId,
+            'from' => [
+                'id' => 5826959599,
+                'is_bot' => true,
+                'first_name' => 'Qwerty bot',
+                'username' => 'qwerty_bot'
+            ],
+            'chat' => [
+                'id' => $chatId,
+                'first_name' => 'Qwerty',
+                'username' => 'qwerty',
+                'type' => 'private'
+            ],
+            'date' => time(),
+            "forward_from" => [
+                "id" => $fromChatId,
+                "is_bot" => true,
+                "first_name" => "CI/CD Bot",
+                "username" => "forecast_ci_cd_bot",
+            ],
+            "forward_date" => time(),
+            'text' => '',
+        ];
+        return MappingHelper::restoreObject($response, ForwardMessageResult::class);
     }
 }

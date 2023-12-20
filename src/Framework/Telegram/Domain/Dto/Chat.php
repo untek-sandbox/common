@@ -42,6 +42,11 @@ class Chat
         $this->firstName = $firstName;
     }
 
+    public function setTitle(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
     /**
      * @return string
      */

@@ -8,8 +8,9 @@ class SendMessageResult
     private int $messageId;
     private string $text;
     private int $date;
-    private ?int $editDate = null;
+    private int $forwardDate;
     private From $from;
+    private From $forwardFrom;
     private Chat $chat;
 
     /**
@@ -63,17 +64,17 @@ class SendMessageResult
     /**
      * @return int
      */
-    public function getEditDate(): ?int
+    public function getForwardDate(): int
     {
-        return $this->editDate;
+        return $this->forwardDate;
     }
 
     /**
-     * @param int $editDate
+     * @param int $forwardDate
      */
-    public function setEditDate(?int $editDate): void
+    public function setForwardDate(int $forwardDate): void
     {
-        $this->editDate = $editDate;
+        $this->forwardDate = $forwardDate;
     }
 
     /**
@@ -90,6 +91,22 @@ class SendMessageResult
     public function setFrom(From $from): void
     {
         $this->from = $from;
+    }
+
+    /**
+     * @return From
+     */
+    public function getForwardFrom(): From
+    {
+        return $this->forwardFrom;
+    }
+
+    /**
+     * @param From $forwardFrom
+     */
+    public function setForwardFrom(From $forwardFrom): void
+    {
+        $this->forwardFrom = $forwardFrom;
     }
 
     /**

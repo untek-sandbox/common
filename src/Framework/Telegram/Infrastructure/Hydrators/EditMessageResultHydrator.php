@@ -5,9 +5,11 @@ namespace Untek\Framework\Telegram\Infrastructure\Hydrators;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Instance\Helpers\MappingHelper;
 use Untek\Database\Base\Hydrator\HydratorInterface;
+use Untek\Framework\Telegram\Domain\Dto\EditMessageResult;
+use Untek\Framework\Telegram\Domain\Dto\ForwardMessageResult;
 use Untek\Framework\Telegram\Domain\Dto\SendMessageResult;
 
-class SendMessageResultHydrator implements HydratorInterface
+class EditMessageResultHydrator implements HydratorInterface
 {
 
     public function dehydrate(object $entity): array
@@ -21,14 +23,14 @@ class SendMessageResultHydrator implements HydratorInterface
             'message_id',
             'text',
             'date',
-//            'edit_date',
+            'edit_date',
             'from',
             'chat',
 //            'forward_from',
 //            'forward_date',
         ]);
-        /** @var SendMessageResult $dto */
-        $dto = MappingHelper::restoreObject($item, SendMessageResult::class);
+        /** @var EditMessageResult $dto */
+        $dto = MappingHelper::restoreObject($item, EditMessageResult::class);
         return $dto;
     }
 }
