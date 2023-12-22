@@ -1,39 +1,36 @@
 <?php
 
-namespace Untek\Framework\Socket\Domain\Libs;
+namespace Untek\Framework\Socket\Infrastructure\Services;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Untek\Model\Entity\Helpers\EntityHelper;
+use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 use Workerman\Connection\ConnectionInterface;
 use Workerman\Worker;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Contract\User\Interfaces\Entities\IdentityEntityInterface;
-use Untek\Domain\Entity\Helpers\EntityHelper;
-use Untek\Framework\Socket\Domain\Entities\SocketEventEntity;
+use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
-use Untek\Framework\Socket\Domain\Repositories\Ram\ConnectionRepository;
+use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
 use Untek\User\Authentication\Domain\Interfaces\Services\AuthServiceInterface;
+use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
+use Untek\User\Authentication\Domain\Authentication\Token\ApiToken;
 
-//use PHPSocketIO\SocketIO;
-
-class SocketIoDaemon
+class SocketDaemon
 {
 
     private $users = [];
     private $tcpWorker;
     private $wsWorker;
     private $localUrl = 'tcp://127.0.0.1:1234';
-    private $connectionRepository;
-//    private $authService;
 
     public function __construct(
-        ConnectionRepository $connectionRepository,
-//        AuthServiceInterface $authService,
-        private UserProviderInterface $userProvider
+        private ConnectionRamStorage $connectionRepository,
+        private TokenServiceInterface $tokenService,
     )
     {
-//        $this->authService = $authService;
-        $this->connectionRepository = $connectionRepository;
         // массив для связи соединения пользователя и необходимого нам параметра
 
         // создаём ws-сервер, к которому будут подключаться все наши пользователи
@@ -42,10 +39,9 @@ class SocketIoDaemon
         $this->wsWorker->onWorkerStart = [$this, 'onWsStart'];
         $this->wsWorker->onConnect = [$this, 'onWsConnect'];
         $this->wsWorker->onClose = [$this, 'onWsClose'];
-        $this->wsWorker->onMessage = [$this, 'onWsMessage'];
     }
 
-    public function sendMessageToTcp(SocketEventEntity $eventEntity)
+    public function sendMessageToTcp(SocketEvent $eventEntity)
     {
         // соединяемся с локальным tcp-сервером
         try {
@@ -70,20 +66,11 @@ class SocketIoDaemon
 
     protected function auth($params)//: int
     {
-        /*$userId = intval($params['userId']);
-        if (!empty($userId)) {
-            return $userId;
-        }*/
-
         $credentials = $params['token'] ?? null;
-        if (!empty($credentials)) {
-            /** @var IdentityEntityInterface $identityEntity */
-//            $identityEntity = $this->authService->authenticationByToken($token);
-            $identityEntity = $this->userProvider->loadUserByIdentifier($credentials);
-            return $identityEntity->getId();
+        if (empty($credentials)) {
+            throw new AuthenticationException('Bad credentials.');
         }
-
-        throw new AuthenticationException('Empty user id');
+        return $this->tokenService->getIdentityIdByToken($credentials);
     }
 
     public function onWsConnect(ConnectionInterface $connection)
@@ -94,14 +81,18 @@ class SocketIoDaemon
             $this->connectionRepository->addConnection($userId, $connection);
             // вместо get-параметра можно также использовать параметр из cookie, например $_COOKIE['PHPSESSID']
 
-            $event = new SocketEventEntity;
-            $event->setUserId($userId);
-            $event->setName(SocketEventEnum::CONNECT);
-            $event->setData([
-                'totalConnections' => $this->connectionRepository->countByUserId($userId),
-            ]);
-            $this->sendToWebSocket($event, $connection);
+//           $this->sendConnectEventToClient($userId);
         };
+    }
+
+    protected function sendConnectEventToClient($userId) {
+        $event = new SocketEvent();
+        $event->setUserId($userId);
+        $event->setName(SocketEventEnum::CONNECT);
+        $event->setPayload([
+            'totalConnections' => $this->connectionRepository->countByUserId($userId),
+        ]);
+        $this->sendToWebSocket($event, $connection);
     }
 
     public function onWsClose(ConnectionInterface $connection)
@@ -109,29 +100,9 @@ class SocketIoDaemon
         $this->connectionRepository->remove($connection);
     }
 
-    public function onWsMessage(ConnectionInterface $connection,  $jsonMessage)
-    {
-        $data = json_decode($jsonMessage, JSON_OBJECT_AS_ARRAY);
-
-        $event = new SocketEventEntity;
-        $event->setUserId($data['toAddress']);
-        // messenger.newMessage
-        $event->setName('cryptoMessage.p2p');
-        $event->setData([
-            'document' => $data['document'],
-        ]);
-//            $event->setData($data);
-        $this->sendMessageToTcp($event);
-        
-        
-        
-//        dump($data);
-        //$this->connectionRepository->remove($connection);
-    }
-
     public function onTcpMessage(ConnectionInterface $connection, string $data)
     {
-        /** @var SocketEventEntity $eventEntity */
+        /** @var SocketEvent $eventEntity */
         $eventEntity = unserialize($data);
         $userId = $eventEntity->getUserId();
         // отправляем сообщение пользователю по userId
@@ -139,22 +110,25 @@ class SocketIoDaemon
             $userConnections = $this->connectionRepository->allByUserId($userId);
             foreach ($userConnections as $userConnection) {
                 $this->sendToWebSocket($eventEntity, $userConnection);
-                echo 'send '.hash('crc32b', $data).' to ' . $userId . PHP_EOL;
+                echo 'send ' . hash('crc32b', $data) . ' to ' . $userId . PHP_EOL;
             }
         } catch (NotFoundException $e) {
         }
     }
 
-    public function runAll()
+    public function runAll(bool $daemonize = false)
     {
-        // Run worker
+        Worker::$daemonize = $daemonize;
         Worker::runAll();
     }
 
-    private function sendToWebSocket(SocketEventEntity $socketEventEntity, ConnectionInterface $connection)
+    private function sendToWebSocket(SocketEvent $socketEvent, ConnectionInterface $connection)
     {
-        $eventArray = EntityHelper::toArray($socketEventEntity);
-        $json = json_encode($eventArray);
+        $event = EntityHelper::toArray($socketEvent);
+        $json = json_encode([
+            'name' => $socketEvent->getName(),
+            'payload' => $socketEvent->getPayload(),
+        ]);
         $connection->send($json);
     }
 }

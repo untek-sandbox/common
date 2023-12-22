@@ -1,29 +1,28 @@
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Untek\Framework\Socket\Domain\Repositories\Ram\ConnectionRepository;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Untek\Framework\Socket\Symfony4\Commands\SocketCommand;
-use Untek\Framework\Socket\Domain\Libs\SocketDaemon;
-use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
+use Untek\Framework\Socket\Infrastructure\Services\SocketDaemon;
+use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
+use Untek\Framework\Socket\Presentation\Cli\Commands\SocketCommand;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Untek\Framework\Socket\Presentation\Cli\Commands\SendMessageToSocketCommand;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set(ConnectionRepository::class, ConnectionRepository::class);
+    $services->set(ConnectionRamStorage::class, ConnectionRamStorage::class);
     $services->set(SocketDaemon::class, SocketDaemon::class)
         ->args([
-            service(ConnectionRepository::class),
-//            service(UserProviderInterface::class),
-//            service(IdentityRepositoryInterface::class),
+            service(ConnectionRamStorage::class),
             service(TokenServiceInterface::class),
-//            service(TokenStorageInterface::class),
         ]);
     $services->set(SocketCommand::class, SocketCommand::class)
-    ->args([
-        service(SocketDaemon::class),
-    ]);
+        ->args([
+            service(SocketDaemon::class),
+        ]);
+    $services->set(SendMessageToSocketCommand::class, SendMessageToSocketCommand::class)
+        ->args([
+            service(SocketDaemon::class),
+        ]);
 };

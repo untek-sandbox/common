@@ -1,15 +1,15 @@
 <?php
 
-namespace Untek\Framework\Socket\Domain\Entities;
+namespace Untek\Framework\Socket\Infrastructure\Dto;
 
 use Untek\Framework\Socket\Domain\Enums\SocketEventStatusEnum;
 
-class SocketEventEntity {
+class SocketEvent {
 
     private $userId;
     private $name;
     private $status = SocketEventStatusEnum::OK;
-    private $data;
+    private $payload;
 
     public function getUserId()//: int
     {
@@ -41,14 +41,14 @@ class SocketEventEntity {
         $this->status = $status;
     }
 
-    public function getData()
+    public function getPayload()
     {
-        return $this->data;
+        return $this->result;
     }
 
-    public function setData($data): void
+    public function setPayload($payload): void
     {
-        $this->data = $data;
+        $this->result = $payload;
     }
 
 }

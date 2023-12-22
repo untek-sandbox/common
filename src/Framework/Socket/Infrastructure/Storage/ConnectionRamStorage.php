@@ -1,11 +1,11 @@
 <?php
 
-namespace Untek\Framework\Socket\Domain\Repositories\Ram;
+namespace Untek\Framework\Socket\Infrastructure\Storage;
 
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Workerman\Connection\ConnectionInterface;
 
-class ConnectionRepository {
+class ConnectionRamStorage {
 
     // массив для связи соединения пользователя и необходимого нам параметра
     private $connectionTree = [];
