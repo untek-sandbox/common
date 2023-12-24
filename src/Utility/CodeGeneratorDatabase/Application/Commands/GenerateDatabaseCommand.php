@@ -2,7 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Application\Commands;
 
-class GenerateDatabaseCommand
+use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
+
+class GenerateDatabaseCommand extends AbstractCommand
 {
 
     private string $namespace;
