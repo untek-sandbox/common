@@ -52,7 +52,7 @@ class ControllerAccessChecker
 
     public function denyAccessUnlessAuthenticated(string $message = 'User not authenticated.'): void
     {
-        if($this->getToken() == null || $this->getUser() == null) {
+        if($this->getToken() == null || $this->getToken()->getUser() == null) {
             throw $this->createAuthenticationException($message);
         }
     }
@@ -86,24 +86,25 @@ class ControllerAccessChecker
      * Get a user from the Security Token Storage.
      *
      * @throws \LogicException If SecurityBundle is not available
+     * @throws AuthenticationException
      *
      * @see TokenInterface::getUser()
+     * 
+     * @return UserInterface
      */
-    public function getUser(): ?UserInterface
+    public function getUser(): UserInterface
     {
+        $this->denyAccessUnlessAuthenticated();
         $token = $this->getToken();
-        if (null === $token) {
-            return null;
-        }
-
         return $token->getUser();
     }
 
-    public function getToken(): ?TokenInterface {
+    protected function getToken(): ?TokenInterface {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
         }
         $token = $this->container->get('security.token_storage')->getToken();
+
         return $token;
     }
 }
