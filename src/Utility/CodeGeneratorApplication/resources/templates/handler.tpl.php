@@ -27,5 +27,9 @@ class <?= $className ?>
         $validator->validate($command);
 
         // TODO: Implement logic
+
+        return [
+            'todo' => 'implement this logic'
+        ];
     }
 }

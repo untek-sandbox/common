@@ -2,7 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 
+use Illuminate\Support\Str;
 use Untek\Core\Instance\Helpers\ClassHelper;
+use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
@@ -14,12 +16,17 @@ class ControllerGenerator
 
     public function generate(GenerateRestApiCommand $command): GenerateResult
     {
+        $commandFullClassName = $command->getCommandClass();
+//        $commandFullClassName = Str::up($command->getCommandClass());
+//        dd($commandFullClassName);
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
+        $commandClassName = Inflector::camelize($commandClassName);
+        
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
 
         $params = [
             'commandClassName' => $commandClassName,
-            'commandFullClassName' => $command->getCommandClass(),
+            'commandFullClassName' => $commandFullClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
 

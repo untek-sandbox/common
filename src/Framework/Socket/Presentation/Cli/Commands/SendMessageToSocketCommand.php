@@ -14,7 +14,7 @@ use DateTime;
 class SendMessageToSocketCommand extends Command
 {
 
-    private $socketDaemon;
+    private SocketDaemon $socketDaemon;
 
     public function __construct(SocketDaemon $socketDaemon)
     {
