@@ -36,13 +36,19 @@ class SendMessageToSocketCommand extends Command
     {
         $message = $input->getArgument('message');
 
+        // заказ создан
+        $this->sendMessageToUser(1, 'taxi.orderCreated', [
+            'orderId' => 111,
+            'points' => [],
+            'time' => (new DateTime())->format(DateTime::ISO8601),
+        ]);
+
         // водитель назначен
         $this->sendMessageToUser(1, 'taxi.driverAssigned', [
             'orderId' => 111,
             'driver' => [
                 'id' => 123,
                 'name' => 'Valera',
-                'phone' => '+779900000001'
             ],
             'car' => [
                 'id' => 456,
@@ -72,11 +78,26 @@ class SendMessageToSocketCommand extends Command
             'time' => (new DateTime())->format(DateTime::ISO8601),
         ]);
 
-        // заказ отменен
-        $this->sendMessageToUser(1, 'taxi.orderCancelled', [
+        // заказ отменен водителем
+        $this->sendMessageToUser(1, 'taxi.orderCancelledByDriver', [
             'orderId' => 111,
+            'canceledBy' => [
+                'id' => 123,
+                'name' => 'Valera',
+            ],
             'time' => (new DateTime())->format(DateTime::ISO8601),
         ]);
+
+        // заказ отменен пассажиром
+        $this->sendMessageToUser(1, 'taxi.orderCancelledByPassenger', [
+            'orderId' => 111,
+            'canceledBy' => [
+                'id' => 333,
+                'name' => 'Maria',
+            ],
+            'time' => (new DateTime())->format(DateTime::ISO8601),
+        ]);
+
         return Command::SUCCESS;
     }
 
