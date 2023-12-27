@@ -39,6 +39,9 @@ class SendMessageToSocketCommand extends Command
         // заказ создан
         $this->sendMessageToUser(1, 'taxi.orderCreated', [
             'orderId' => 111,
+            'passenger' => [
+                'name' => 'Maria',
+            ],
             'points' => [],
             'time' => (new DateTime())->format(DateTime::ISO8601),
         ]);
@@ -47,11 +50,11 @@ class SendMessageToSocketCommand extends Command
         $this->sendMessageToUser(1, 'taxi.driverAssigned', [
             'orderId' => 111,
             'driver' => [
-                'id' => 123,
+//                'id' => 123,
                 'name' => 'Valera',
             ],
             'car' => [
-                'id' => 456,
+//                'id' => 456,
                 'brand' => 'Toyota',
                 'model' => 'Camry',
                 'number' => 'A123BWM09',
@@ -81,20 +84,20 @@ class SendMessageToSocketCommand extends Command
         // заказ отменен водителем
         $this->sendMessageToUser(1, 'taxi.orderCancelledByDriver', [
             'orderId' => 111,
-            'canceledBy' => [
+            /*'canceledBy' => [
                 'id' => 123,
                 'name' => 'Valera',
-            ],
+            ],*/
             'time' => (new DateTime())->format(DateTime::ISO8601),
         ]);
 
         // заказ отменен пассажиром
         $this->sendMessageToUser(1, 'taxi.orderCancelledByPassenger', [
             'orderId' => 111,
-            'canceledBy' => [
+            /*'canceledBy' => [
                 'id' => 333,
                 'name' => 'Maria',
-            ],
+            ],*/
             'time' => (new DateTime())->format(DateTime::ISO8601),
         ]);
 
