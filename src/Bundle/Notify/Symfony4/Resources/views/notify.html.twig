@@ -1,0 +1,14 @@
+{{ style('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css') }}
+{#{{ script('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js') }}#}
+
+{% for type, messages in app.flashes %}
+    {% for message in messages %}
+        {% block javascripts %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    toastr.{{ type }}('{{ message }}');
+                });
+            </script>
+        {% endblock %}
+    {% endfor %}
+{% endfor %}
