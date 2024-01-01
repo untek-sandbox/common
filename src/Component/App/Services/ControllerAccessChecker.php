@@ -99,7 +99,7 @@ class ControllerAccessChecker
         return $token->getUser();
     }
 
-    protected function getToken(): ?TokenInterface {
+    public function getToken(): ?TokenInterface {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
         }
