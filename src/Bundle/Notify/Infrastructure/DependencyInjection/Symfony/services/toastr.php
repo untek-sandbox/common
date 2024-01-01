@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(ToastrRepositoryInterface::class, ToastrRepository::class)
         ->args(
             [
-                service(EntityManagerInterface::class),
+//                service(EntityManagerInterface::class),
                 service(SessionInterface::class),
             ]
         );

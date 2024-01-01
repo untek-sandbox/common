@@ -40,7 +40,14 @@ abstract class BaseWidget2 implements WidgetInterface2
     {
         $config['class'] = get_called_class();
         /** @var self $instance */
+
         $instance = ClassHelper::createObject($config);
+        /*try {
+
+        } catch (\Exception $exception) {
+            dd(static::class);
+        }*/
+
         return $instance->run();
     }
 

@@ -3,7 +3,10 @@
 namespace Untek\Bundle\Notify\Infrastructure;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Kernel\Bundle\BaseBundle;
+
+DeprecateHelper::hardThrow();
 
 class ToastrWidgetBundle extends BaseBundle
 {
