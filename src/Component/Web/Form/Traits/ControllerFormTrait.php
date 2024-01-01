@@ -14,6 +14,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Model\Validator\Entities\ValidationErrorEntity;
+use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Model\Validator\Exceptions\UnprocessibleEntityException;
 use Untek\Model\Validator\Helpers\ValidationHelper;
 use Untek\Component\Web\Form\Interfaces\BuildFormInterface;
@@ -84,8 +85,9 @@ trait ControllerFormTrait
         return new FormRender($buildForm->createView(), $this->getTokenManager());
     }
 
-    public function buildForm(BuildFormInterface $form, Request $request): FormInterface
+    public function buildForm(object $form, Request $request): FormInterface
     {
+        /** @var BuildFormInterface $form */
         $formBuilder = $this->createFormBuilder($form);
         /*if ($form instanceof BuildFormInterface) {
             $form->buildForm($formBuilder);
@@ -93,10 +95,10 @@ trait ControllerFormTrait
         return $this->formBuilderToForm($formBuilder, $request);
     }
 
-    public function setUnprocessableErrorsToForm(FormInterface $buildForm, UnprocessibleEntityException $e): void
+    public function setUnprocessableErrorsToForm(FormInterface $buildForm, UnprocessableEntityException $e): void
     {
-        foreach ($e->getErrorCollection() as $errorEntity) {
-            $this->setErrorToForm($buildForm, $errorEntity->getField(), $errorEntity->getMessage());
+        foreach ($e->getViolations() as $errorEntity) {
+            $this->setErrorToForm($buildForm, $errorEntity->getPropertyPath(), $errorEntity->getMessage());
         }
     }
 

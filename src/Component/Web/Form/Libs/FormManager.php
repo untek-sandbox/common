@@ -13,6 +13,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Untek\Component\Web\Form\Interfaces\BuildFormInterface;
+use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Model\Validator\Exceptions\UnprocessibleEntityException;
 use Untek\Model\Validator\Helpers\ValidationHelper;
 
@@ -52,7 +53,14 @@ class FormManager
         return new FormError($message, null, [], null, $violation);
     }
 
-    public function setUnprocessableErrorsToForm(FormInterface $buildForm, UnprocessibleEntityException $e): void
+    public function setUnprocessableErrorsToForm(FormInterface $buildForm, UnprocessableEntityException $e): void
+    {
+        foreach ($e->getViolations() as $errorEntity) {
+            $this->setErrorToForm($buildForm, $errorEntity->getPropertyPath(), $errorEntity->getMessage());
+        }
+    }
+    
+    /*public function setUnprocessableErrorsToForm(FormInterface $buildForm, UnprocessibleEntityException $e): void
     {
         foreach ($e->getErrorCollection() as $errorEntity) {
             $formError = $this->createFormError($errorEntity->getField(), $errorEntity->getMessage());
@@ -60,7 +68,7 @@ class FormManager
 //            $formError = new FormError($errorEntity->getMessage(), null, [], null, $violation);
             $buildForm->addError($formError);
         }
-    }
+    }*/
 
     protected function formBuilderToForm(FormBuilderInterface $formBuilder, Request $request)
     {
