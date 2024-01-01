@@ -6,7 +6,7 @@ use Untek\Core\Collection\Libs\Collection;
 use Untek\Crypt\Pki\JsonDSig\Domain\Libs\Encoders\HexEncoder;
 use Untek\Crypt\Pki\JsonDSig\Domain\Libs\Encoders\JsonEncoder;
 use Untek\Crypt\Pki\JsonDSig\Domain\Libs\Encoders\SortEncoder;
-use Untek\Lib\Components\Format\Encoders\ChainEncoder;
+use Untek\Component\Encoder\Encoders\ChainEncoder;
 
 class C14n
 {
