@@ -82,7 +82,7 @@ class DirectoryKeyLoader
     public function save(string $name, KeyEntity $keyEntity): void
     {
         $directory = $this->directory . '/' . $name;
-        $data = EntityHelper::toArray($keyEntity);
+        $data = PropertyHelper::toArray($keyEntity);
         unset($data['name']);
         foreach ($data as $attributeName => $value) {
             if (!empty($value)) {
