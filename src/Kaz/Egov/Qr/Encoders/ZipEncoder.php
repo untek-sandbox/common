@@ -52,7 +52,7 @@ class ZipEncoder implements EncoderInterface
 
     private static function getTmpDirectory(): string
     {
-        $tmpDir = __DIR__ . '/../../../../../../var/tmp/qrZip/' . Uuid::v4()->toRfc4122();
+        $tmpDir = getenv('VAR_DIRECTORY') . '/tmp/qrZip/' . Uuid::v4()->toRfc4122();
         FileHelper::createDirectory($tmpDir);
         return realpath($tmpDir);
     }
