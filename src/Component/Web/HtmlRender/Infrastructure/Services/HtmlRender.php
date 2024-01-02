@@ -7,10 +7,12 @@ use Untek\Component\Web\HtmlRender\Application\Services\CssResourceInterface;
 use Untek\Component\Web\HtmlRender\Application\Services\HtmlRenderInterface;
 use Untek\Component\Web\HtmlRender\Application\Services\JsResourceInterface;
 use Untek\Component\Web\HtmlRender\Infrastructure\Helpers\RenderHelper;
+use Untek\Core\Arr\Helpers\ArrayHelper;
 
 class HtmlRender implements HtmlRenderInterface
 {
 
+    protected array $params = [];
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private JsResourceInterface $js,
@@ -19,6 +21,14 @@ class HtmlRender implements HtmlRenderInterface
     {
     }
 
+    public function setParam(string $name, mixed $value):void {
+        $this->params[$name] = $value;
+    }
+
+    /*public function getParams():array {
+        return $this->params;
+    }*/
+    
     public function getJs(): JsResourceInterface
     {
         return $this->js;
@@ -35,6 +45,7 @@ class HtmlRender implements HtmlRenderInterface
         ob_start();
         ob_implicit_flush(false);
         try {
+            $params = ArrayHelper::merge($this->params, $params);
             $this->includeRender($viewFile, $params);
             // after render wirte in $out
         } catch (\Exception $e) {
@@ -47,8 +58,8 @@ class HtmlRender implements HtmlRenderInterface
         return ob_get_clean() . $out;
     }
 
-    protected function includeRender(string $__viewFile, array $__params = []): void
+    protected function includeRender(string $viewFile, array $params = []): void
     {
-        RenderHelper::includeRender($__viewFile, $__params + ['view' => $this]);
+        RenderHelper::includeRender($viewFile, $params + ['view' => $this]);
     }
 }
