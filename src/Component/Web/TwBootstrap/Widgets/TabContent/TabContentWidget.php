@@ -15,12 +15,11 @@ class TabContentWidget extends BaseWidget2
     {
         $hasActive = false;
         foreach ($this->items as &$item) {
-            if (empty($item['name'])) {
-                $item['name'] = hash('crc32b', $item['title']);
-            }
-            if (empty($item['title'])) {
-                $item['title'] = Inflector::titleize($item['name']);
-            }
+            $item['name'] = hash('crc32b', $item['title']);
+            /*if (empty($item['title'])) {
+                $name = preg_replace('/(\d+)/i', ' $1 ', $item['name']);
+                $item['title'] = Inflector::titleize($name);
+            }*/
             $item['is_active'] = $item['is_active'] ?? false;
         }
         if (!$hasActive) {
