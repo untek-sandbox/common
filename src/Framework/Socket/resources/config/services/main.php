@@ -16,6 +16,8 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(ConnectionRamStorage::class),
             service(TokenServiceInterface::class),
+            getenv('WEB_SOCKET_LOCAL_URL'),
+            getenv('WEB_SOCKET_CLIENT_URL'),
         ]);
     $services->set(SocketCommand::class, SocketCommand::class)
         ->args([
