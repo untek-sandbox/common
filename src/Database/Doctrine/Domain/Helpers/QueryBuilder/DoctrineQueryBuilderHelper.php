@@ -3,6 +3,7 @@
 namespace Untek\Database\Doctrine\Domain\Helpers\QueryBuilder;
 
 use Illuminate\Database\Query\Builder;
+use Untek\Core\Text\Helpers\Inflector;
 use Untek\Database\Base\Domain\Helpers\DbHelper;
 use Untek\Database\Base\Domain\Interfaces\QueryBuilderInterface;
 use Untek\Model\Query\Enums\OperatorEnum;
@@ -40,6 +41,7 @@ class DoctrineQueryBuilderHelper implements QueryBuilderInterface
     public static function addWhere(array $criteria, QueryBuilder $queryBuilder): void
     {
         foreach ($criteria as $key => $value) {
+            $key = Inflector::underscore($key);
             $predicates = $queryBuilder->expr()->andX();
             if (is_array($value)) {
                 $predicates->add($queryBuilder->expr()->in(/*'c.' . */ $key, $value));

@@ -43,12 +43,12 @@ class ImportSeedCommandHandler
         $sortedTables = $this->dependency->run($tables);
 
         foreach ($sortedTables as $seedName) {
-            if(isset($seedList[$seedName])) {
+            if (isset($seedList[$seedName])) {
                 $seedFile = $seedList[$seedName];
                 $this->import($seedName, $seedFile, $command->getProgressCallback());
             }
         }
-        
+
         /*$this->connection->beginTransaction();
         try {
             $this->connection->query('SET FOREIGN_KEY_CHECKS=0');
@@ -58,7 +58,7 @@ class ImportSeedCommandHandler
         } catch (\Exception $e) {
             $this->connection->rollback();
         }*/
-        
+
     }
 
     private function import(string $tableName, string $seedFile, $cb)
@@ -67,10 +67,53 @@ class ImportSeedCommandHandler
         $data = $store->load();
 
         $this->connection->query('DELETE FROM ' . $tableName);
-        foreach ($data as $row) {
+
+        $this->insert($tableName, $data);
+
+        /*foreach ($data as $row) {
             $this->connection->insert($tableName, $row);
+        }*/
+
+        call_user_func($cb, $tableName . ' (' . count($data) . ')');
+    }
+
+    public function insert(string $table, array $list)
+    {
+        if (empty($list)) {
+            return $this->connection->executeStatement('INSERT INTO ' . $table . ' () VALUES ()');
         }
 
-        call_user_func($cb, $tableName);
+        $columnSql = $this->generateColumnSql($list);
+        $valuesSql = $this->generateValuesSql($list);
+
+        $sql =
+            'INSERT INTO ' . $table . $columnSql .
+            ' VALUES ' . $valuesSql;
+
+        return $this->connection->executeStatement($sql);
+    }
+
+    private function generateColumnSql(array $list): string {
+        $columns = [];
+        foreach ($list[0] as $columnName => $value) {
+            $columns[] = $columnName;
+        }
+        return ' (' . implode(', ', $columns) . ')';
+    }
+
+    private function generateValuesSql(array $list): string {
+        $valuesList = [];
+        foreach ($list as $row) {
+            $quotedValues = [];
+            foreach ($row as $columnName => $value) {
+                if(!is_null($value)) {
+                    $quotedValues[] = $this->connection->quote($value);
+                } else {
+                    $quotedValues[] = 'null';
+                }
+            }
+            $valuesList[] = '(' . implode(', ', $quotedValues) . ')';
+        }
+        return implode(', ', $valuesList);
     }
 }
