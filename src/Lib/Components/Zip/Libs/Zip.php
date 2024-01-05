@@ -4,6 +4,7 @@ namespace Untek\Lib\Components\Zip\Libs;
 
 use App\Common\Base\BaseController;
 use Exception;
+use Untek\Core\FileSystem\Helpers\FileStorageHelper;
 use ZipArchive;
 
 class Zip
@@ -15,9 +16,10 @@ class Zip
     public function __construct(string $zipFile)
     {
         $this->zipArchive = new ZipArchive();
-        if(!is_dir(dirname($zipFile))) {
+        FileStorageHelper::touchDirectory(dirname($zipFile));
+        /*if(!is_dir(dirname($zipFile))) {
             mkdir(dirname($zipFile));
-        }
+        }*/
         $this->resource = $this->zipArchive->open($zipFile, ZipArchive::CREATE);
         if ($this->resource === TRUE) {
 
