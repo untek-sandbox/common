@@ -13,6 +13,10 @@ namespace Untek\Utility\CodeGenerator\Presentation\Libs;
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
+use Untek\Framework\Console\Infrastructure\Validators\BooleanValidator;
+use Untek\Framework\Console\Infrastructure\Validators\IsNumericValidator;
+use Untek\Framework\Console\Infrastructure\Validators\LengthValidator;
+use Untek\Framework\Console\Infrastructure\Validators\NotBlankValidator;
 use Untek\Utility\CodeGenerator\Presentation\Libs\Exception\RuntimeCommandException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -83,36 +87,17 @@ final class Validator
 
     public static function isNumeric(string|int $value = null): string
     {
-        if (!is_numeric($value)) {
-            throw new RuntimeCommandException('This value is not english.');
-        }
-        return $value;
+        return IsNumericValidator::validate($value);
     }
 
     public static function notBlank(string $value = null): string
     {
-        if (null === $value || '' === $value) {
-            throw new RuntimeCommandException('This value cannot be blank.');
-        }
-
-        return $value;
+        return NotBlankValidator::validate($value);
     }
 
     public static function validateLength($length)
     {
-        if (!$length) {
-            return $length;
-        }
-
-        $result = filter_var($length, \FILTER_VALIDATE_INT, [
-            'options' => ['min_range' => 1],
-        ]);
-
-        if (false === $result) {
-            throw new RuntimeCommandException(sprintf('Invalid length "%s".', $length));
-        }
-
-        return $result;
+        return LengthValidator::validate($length);
     }
 
     public static function validatePrecision($precision)
@@ -151,19 +136,7 @@ final class Validator
 
     public static function validateBoolean($value)
     {
-        if ('yes' == $value) {
-            return true;
-        }
-
-        if ('no' == $value) {
-            return false;
-        }
-
-        if (null === $valueAsBool = filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE)) {
-            throw new RuntimeCommandException(sprintf('Invalid bool value "%s".', $value));
-        }
-
-        return $valueAsBool;
+        return BooleanValidator::validate($value);
     }
 
     public static function validatePropertyName(string $name): string
