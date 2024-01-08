@@ -8,7 +8,7 @@ use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Utility\CodeGenerator\Presentation\Libs\Exception\RuntimeCommandException;
+use Untek\Framework\Console\Infrastructure\Exceptions\RuntimeCommandException;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;

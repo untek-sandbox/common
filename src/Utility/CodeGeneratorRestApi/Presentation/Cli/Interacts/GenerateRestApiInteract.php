@@ -10,7 +10,7 @@ use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Utility\CodeGenerator\Presentation\Libs\Exception\RuntimeCommandException;
+use Untek\Framework\Console\Infrastructure\Exceptions\RuntimeCommandException;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;

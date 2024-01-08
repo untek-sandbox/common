@@ -120,7 +120,7 @@ final class Str
         return sprintf('on%s', self::asClassName($eventName));
     }
 
-    public static function getShortClassName(string $fullClassName): string
+    /*public static function getShortClassName(string $fullClassName): string
     {
         if (empty(self::getNamespace($fullClassName))) {
             return $fullClassName;
@@ -132,7 +132,7 @@ final class Str
     public static function getNamespace(string $fullClassName): string
     {
         return substr($fullClassName, 0, strrpos($fullClassName, '\\'));
-    }
+    }*/
 
     public static function asFilePath(string $value): string
     {
@@ -188,19 +188,7 @@ final class Str
         return sprintf('%s %s', $adjectives[array_rand($adjectives)], $nouns[array_rand($nouns)]);
     }
 
-    /**
-     * Checks if the given name is a valid PHP variable name.
-     *
-     * @see http://php.net/manual/en/language.variables.basics.php
-     *
-     * @param $name string
-     *
-     * @return bool
-     */
-    public static function isValidPhpVariableName($name)
-    {
-        return (bool) preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $name, $matches);
-    }
+    
 
     /**
      * @return bool

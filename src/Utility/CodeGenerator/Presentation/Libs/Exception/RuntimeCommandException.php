@@ -12,6 +12,9 @@
 namespace Untek\Utility\CodeGenerator\Presentation\Libs\Exception;
 
 use Symfony\Component\Console\Exception\ExceptionInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
 
 /**
  * An exception whose output is displayed as a clean error.
