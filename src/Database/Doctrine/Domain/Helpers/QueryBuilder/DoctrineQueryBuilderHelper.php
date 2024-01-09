@@ -42,18 +42,31 @@ class DoctrineQueryBuilderHelper implements QueryBuilderInterface
     {
         foreach ($criteria as $key => $value) {
             $key = Inflector::underscore($key);
-            $predicates = $queryBuilder->expr()->andX();
             if (is_array($value)) {
-                $predicates->add($queryBuilder->expr()->in(/*'c.' . */ $key, $value));
-                //$queryBuilder->whereIn($key, $value);
+                $expression = $queryBuilder->expr()->in($key, self::fixArrayStringExpression($value));
             } else {
-                $predicates->add($queryBuilder->expr()->eq(/*'c.' . */ $key, $value));
-                //$queryBuilder->where($key, $value);
+                $expression = $queryBuilder->expr()->eq($key, self::fixStringExpression($value));
             }
+            $predicates = $queryBuilder->expr()->andX();
+            $predicates->add($expression);
             $queryBuilder->where($predicates);
         }
     }
 
+    protected static function fixArrayStringExpression(array $values): array {
+        $newValue = [];
+        foreach ($values as $item) {
+            $newValue[] = self::fixStringExpression($item);
+        }
+        return $newValue;
+    }
+
+    protected static function fixStringExpression(mixed $value): mixed {
+        if(is_string($value)) {
+            $value = "'$value'";
+        }
+        return $value;
+    }
 
     public static function setWhere(Query $query, QueryBuilder $queryBuilder)
     {
