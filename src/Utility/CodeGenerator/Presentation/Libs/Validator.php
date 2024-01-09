@@ -86,18 +86,12 @@ final class Validator
         return EmailValidator::validate($email);
     }
 
-    public static function existsOrNull(string $className = null, array $entities = []): ?string
+    public static function existsOrNull(string $className = null): ?string
     {
         if (null !== $className) {
             self::validateClassName($className);
-
-            if (str_starts_with($className, '\\')) {
-                self::classExists($className);
-            } else {
-                self::entityExists($className, $entities);
-            }
+            self::classExists($className);
         }
-
         return $className;
     }
 
