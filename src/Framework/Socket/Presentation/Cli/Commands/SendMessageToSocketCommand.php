@@ -29,77 +29,16 @@ class SendMessageToSocketCommand extends Command
 
     protected function configure()
     {
+        $this->addArgument('userId', InputArgument::REQUIRED);
         $this->addArgument('message', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $userId = $input->getArgument('userId');
         $message = $input->getArgument('message');
 
-        // заказ создан
-        $this->sendMessageToUser(1, 'taxi.orderCreated', [
-            'orderId' => 111,
-            'passenger' => [
-                'name' => 'Maria',
-            ],
-            'points' => [],
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // водитель назначен
-        $this->sendMessageToUser(1, 'taxi.driverAssigned', [
-            'orderId' => 111,
-            'driver' => [
-//                'id' => 123,
-                'name' => 'Valera',
-            ],
-            'car' => [
-//                'id' => 456,
-                'brand' => 'Toyota',
-                'model' => 'Camry',
-                'number' => 'A123BWM09',
-                'color' => 'yellow',
-            ],
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // водитель приехал к точке А
-        $this->sendMessageToUser(1, 'taxi.driverArrived', [
-            'orderId' => 111,
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // вы в пути
-        $this->sendMessageToUser(1, 'taxi.youStarted', [
-            'orderId' => 111,
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // вы приехали
-        $this->sendMessageToUser(1, 'taxi.youFinished', [
-            'orderId' => 111,
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // заказ отменен водителем
-        $this->sendMessageToUser(1, 'taxi.orderCancelledByDriver', [
-            'orderId' => 111,
-            /*'canceledBy' => [
-                'id' => 123,
-                'name' => 'Valera',
-            ],*/
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
-
-        // заказ отменен пассажиром
-        $this->sendMessageToUser(1, 'taxi.orderCancelledByPassenger', [
-            'orderId' => 111,
-            /*'canceledBy' => [
-                'id' => 333,
-                'name' => 'Maria',
-            ],*/
-            'time' => (new DateTime())->format(DateTime::ISO8601),
-        ]);
+        $this->sendMessageToUser($userId, 'taxi.orderCreated', $message);
 
         return Command::SUCCESS;
     }
