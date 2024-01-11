@@ -43,12 +43,12 @@ class SocketEvent {
 
     public function getPayload()
     {
-        return $this->result;
+        return $this->payload;
     }
 
     public function setPayload($payload): void
     {
-        $this->result = $payload;
+        $this->payload = $payload;
     }
 
 }
