@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $configurator): void {
 //                service(UserProviderInterface::class),
                 service(TokenStorageInterface::class),
 //                service(AuthorizationCheckerInterface::class),
-                'Authorization-Token',
+//                'Authorization-Token',
             ]
         );
 };
