@@ -27,7 +27,7 @@ class UserCredentialRepository extends AbstractDoctrineCrudRepository implements
             'credential' => $credential,
         ];
         if($types) {
-            $criteria['type'] = $types;
+//            $criteria['type'] = $types;
         }
         return new Collection($this->findBy($criteria));
     }
