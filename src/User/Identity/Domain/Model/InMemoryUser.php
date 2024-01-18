@@ -18,6 +18,7 @@ final class InMemoryUser implements
     private string $username;
     private bool $enabled;
     private array $roles;
+    private array $assignments;
 
     public function __construct(int $id, ?string $username, array $roles = [], bool $enabled = true)
     {
@@ -42,6 +43,11 @@ final class InMemoryUser implements
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 
     public function getRoles(): array
@@ -91,5 +97,14 @@ final class InMemoryUser implements
     public function eraseCredentials(): void
     {
     }
-}
 
+    public function getAssignments(): array
+    {
+        return $this->assignments;
+    }
+
+    public function setAssignments(array $assignments): void
+    {
+        $this->assignments = $assignments;
+    }
+}
