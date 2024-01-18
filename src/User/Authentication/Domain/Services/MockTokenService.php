@@ -15,7 +15,10 @@ class MockTokenService implements TokenServiceInterface
 {
     private array $tokens;
 
-    public function __construct(private InMemoryUserProvider $inMemoryUserProvider, array $tokens)
+    public function __construct(
+//        private InMemoryUserProvider $inMemoryUserProvider,
+        array $tokens
+    )
     {
         $this->tokens = $tokens;
     }
@@ -39,7 +42,7 @@ class MockTokenService implements TokenServiceInterface
         throw new NotFoundException('Token not found.');
     }
 
-    public function findUserByToken(string $token): UserInterface
+    /*public function findUserByToken(string $token): UserInterface
     {
         try {
             $tokenEntity = TokenHelper::parseToken($token);
@@ -55,7 +58,7 @@ class MockTokenService implements TokenServiceInterface
             }
         }
         throw new UserNotFoundException();
-    }
+    }*/
 
     protected function generateToken(UserInterface $identityEntity): string
     {

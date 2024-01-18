@@ -117,7 +117,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args(
             [
                 [
-                    service(InMemoryUserProvider::class),
+//                    service(InMemoryUserProvider::class),
                     service(MockApiTokenUserProvider::class),
                 ]
             ]
