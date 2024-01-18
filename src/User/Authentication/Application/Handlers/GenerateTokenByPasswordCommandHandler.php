@@ -88,7 +88,7 @@ class GenerateTokenByPasswordCommandHandler
 //        $this->getEventDispatcher()->dispatch($authEvent, AuthEventEnum::BEFORE_AUTH);
 
         /** @var CredentialEntity[] $credentials */
-        $credentials = $this->credentialService->findAll($command->getLogin(), $this->credentialTypes);
+        $credentials = $this->credentialService->findByCredential($command->getLogin(), $this->credentialTypes);
 
         if($credentials->isEmpty()) {
             throw new UserNotFoundException('User not found.');

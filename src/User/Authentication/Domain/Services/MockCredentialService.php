@@ -13,7 +13,7 @@ class MockCredentialService implements CredentialServiceInterface
     {
     }
 
-    public function findAll(string $credential, array $types = null): Enumerable
+    public function findByCredential(string $credential, array $types = null): Enumerable
     {
         $types = $types ?: $this->credentialTypes;
         $credentialsCollection = new Collection();
