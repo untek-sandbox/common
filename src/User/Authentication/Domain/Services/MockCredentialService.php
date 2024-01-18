@@ -13,10 +13,10 @@ class MockCredentialService implements CredentialServiceInterface
     {
     }
 
-    public function findByCredential(string $credential, array $types = null): Enumerable
+    public function findByCredential(string $credential, array $types = null): array
     {
         $types = $types ?: $this->credentialTypes;
-        $credentialsCollection = new Collection();
+        $credentialsCollection = [];
         foreach ($this->items as $item) {
             foreach ($types as $type) {
                 if ($item['credential'] == $credential && $item['type'] == $type) {
@@ -25,7 +25,7 @@ class MockCredentialService implements CredentialServiceInterface
                     $credentialEntity->setCredential($item['credential']);
                     $credentialEntity->setType($item['type']);
                     $credentialEntity->setValidation($item['validation']);
-                    $credentialsCollection->add($credentialEntity);
+                    $credentialsCollection[] = $credentialEntity;
                 }
             }
         }

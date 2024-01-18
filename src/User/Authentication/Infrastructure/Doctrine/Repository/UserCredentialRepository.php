@@ -21,7 +21,7 @@ class UserCredentialRepository extends AbstractDoctrineCrudRepository implements
         return CredentialEntity::class;
     }
 
-    public function findByCredential(string $credential, array $types = null): Enumerable
+    public function findByCredential(string $credential, array $types = null): array
     {
         $criteria = [
             'credential' => $credential,
@@ -29,7 +29,7 @@ class UserCredentialRepository extends AbstractDoctrineCrudRepository implements
         if($types) {
 //            $criteria['type'] = $types;
         }
-        return new Collection($this->findBy($criteria));
+        return $this->findBy($criteria);
     }
 
     protected function hydrate(array $item): object

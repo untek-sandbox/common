@@ -22,7 +22,7 @@ class CredentialsPasswordValidator
         $this->setEventDispatcher($eventDispatcher);
     }
 
-    public function isValidPassword(Enumerable $credentials, string $password): CredentialEntity
+    public function isValidPassword(array $credentials, string $password): CredentialEntity
     {
         foreach ($credentials as $credentialEntity) {
             $isValid = $this->isValidPasswordByCredential($credentialEntity, $password);
