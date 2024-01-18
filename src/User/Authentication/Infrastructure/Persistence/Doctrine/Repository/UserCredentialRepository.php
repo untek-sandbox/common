@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Infrastructure\Doctrine\Repository;
+namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;

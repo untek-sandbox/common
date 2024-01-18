@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Infrastructure\Doctrine\Repository;
+namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectRepository;
@@ -10,7 +10,7 @@ use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\User\Authentication\Application\Services\UserAssignedRolesRepositoryInterface;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
-use Untek\User\Authentication\Infrastructure\Relation\IdentityRelation;
+use Untek\User\Authentication\Infrastructure\Persistence\Relation\IdentityRelation;
 use Untek\User\Identity\Domain\Model\InMemoryUser;
 
 class IdentityRepository extends AbstractDoctrineCrudRepository implements IdentityRepositoryInterface, ObjectRepository

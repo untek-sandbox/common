@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Infrastructure\Doctrine\Repository;
+namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\User\Authentication\Application\Services\UserAssignedRolesRepositoryInterface;

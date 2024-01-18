@@ -5,6 +5,7 @@ namespace Untek\User\Authentication\Domain\Model;
 class Token
 {
 
+    private ?int $id;
     private ?int $identityId;
     private string $value;
     private string $type;
@@ -16,6 +17,16 @@ class Token
         $this->value = $value;
         $this->type = $type;
         $this->token = $type . ' ' . $value;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getIdentityId(): int

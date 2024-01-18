@@ -109,6 +109,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args(
             [
                 service(TokenServiceInterface::class),
+                service(IdentityRepositoryInterface::class),
             ]
         );
 

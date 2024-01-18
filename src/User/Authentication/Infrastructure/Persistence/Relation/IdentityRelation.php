@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Infrastructure\Relation;
+namespace Untek\User\Authentication\Infrastructure\Persistence\Relation;
 
 use Untek\Component\Relation\Interfaces\RelationConfigInterface;
 use Untek\Component\Relation\Libs\RelationConfigurator;
