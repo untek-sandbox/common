@@ -74,7 +74,9 @@ class ImportSeedCommandHandler
             $this->connection->insert($tableName, $row);
         }*/
 
-        call_user_func($cb, $tableName . ' (' . count($data) . ')');
+        if($cb) {
+            call_user_func($cb, $tableName . ' (' . count($data) . ')');
+        }
     }
 
     public function insert(string $table, array $list)
