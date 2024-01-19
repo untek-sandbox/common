@@ -49,6 +49,16 @@ class IdentityRepository extends AbstractDoctrineCrudRepository implements Ident
         return new InMemoryUser($item['id'], $item['username'], [], $item['status_id'] == 100);
     }
 
+    protected function dehydrate(object $entity): array
+    {
+        /** @var InMemoryUser $entity */
+        return [
+            'username' => $entity->getUsername(),
+            'status_id' => $entity->isEnabled() ? 100 : 0,
+            'created_at' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601),
+        ];
+    }
+
     private function getRolesById(int $id): array {
         $assignments = $this->assignedRolesRepository->findByUserId($id);
         $roles = [];

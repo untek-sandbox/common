@@ -37,4 +37,13 @@ class UserCredentialRepository extends AbstractDoctrineCrudRepository implements
         $item['identity_id'] = $item['user_id'];
         return parent::hydrate($item);
     }
+
+    protected function dehydrate(object $entity): array
+    {
+        $item = parent::dehydrate($entity);
+        $item['user_id'] = $item['identity_id'];
+        unset($item['identity_id']);
+        $item['created_at'] = (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601);
+        return $item;
+    }
 }

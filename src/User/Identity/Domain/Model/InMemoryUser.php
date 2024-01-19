@@ -14,13 +14,13 @@ final class InMemoryUser implements
     \Stringable
 {
 
-    private int $id;
+    private ?int $id;
     private string $username;
     private bool $enabled;
     private array $roles;
     private array $assignments;
 
-    public function __construct(int $id, ?string $username, array $roles = [], bool $enabled = true)
+    public function __construct(?int $id, ?string $username, array $roles = [], bool $enabled = true)
     {
         if ('' === $username || null === $username) {
             throw new \InvalidArgumentException('The username cannot be empty.');
@@ -37,12 +37,13 @@ final class InMemoryUser implements
         return $this->getUserIdentifier();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void {
+        $this->id = $id;
     }
 
     public function setRoles(array $roles): void
