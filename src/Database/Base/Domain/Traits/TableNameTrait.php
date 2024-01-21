@@ -2,6 +2,7 @@
 
 namespace Untek\Database\Base\Domain\Traits;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\DotEnv\Domain\Libs\DotEnv;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use Untek\Database\Base\Domain\Libs\TableAlias;
@@ -17,17 +18,23 @@ trait TableNameTrait
     {
         return $this
             ->getCapsule()
-            ->getConnectionNameByTableName($this->tableName());
+            ->getConnectionNameByTableName($this->getTableName());
     }
 
     public function tableName(): string
+    {
+        DeprecateHelper::hardThrow();
+        return $this->tableName;
+    }
+
+    public function getTableName(): string
     {
         return $this->tableName;
     }
 
     public function tableNameAlias(): string
     {
-        return $this->encodeTableName($this->tableName());
+        return $this->encodeTableName($this->getTableName());
     }
 
     protected function getAlias(): TableAlias

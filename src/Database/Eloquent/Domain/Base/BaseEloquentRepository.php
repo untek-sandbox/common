@@ -44,7 +44,7 @@ abstract class BaseEloquentRepository implements GetEntityClassInterface
 
     protected function getQueryBuilder(): QueryBuilder
     {
-        return $this->getQueryBuilderByTableName($this->tableName());
+        return $this->getQueryBuilderByTableName($this->getTableName());
     }
 
     protected function findBy(Query $query = null): Enumerable

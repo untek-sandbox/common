@@ -86,7 +86,7 @@ class HistoryRepository extends BaseEloquentRepository
     {
         $migration = $this->createMigrationClass($class);
 
-        $tableName = $migration->tableName();
+        $tableName = $migration->getTableName();
         $schema = $this->getCapsule()->getSchemaByTableName($tableName);
 
         //$connection = $migration->getConnection();
@@ -109,7 +109,7 @@ class HistoryRepository extends BaseEloquentRepository
         $migration = $this->createMigrationClass($class);
         //$schema = $this->getSchema();
 
-        $tableName = $migration->tableName();
+        $tableName = $migration->getTableName();
         $schema = $this->getCapsule()->getSchemaByTableName($tableName);
 
         $connection = $schema->getConnection();

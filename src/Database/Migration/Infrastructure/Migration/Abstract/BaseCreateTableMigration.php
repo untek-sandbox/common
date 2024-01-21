@@ -38,7 +38,7 @@ abstract class BaseCreateTableMigration extends BaseMigration implements Migrati
 
     public function isInOneDatabase(string $tableName): bool
     {
-        return $this->getCapsule()->isInOneDatabase($this->tableName(), $tableName);
+        return $this->getCapsule()->isInOneDatabase($this->getTableName(), $tableName);
     }
 
     public function addForeign(Blueprint $table, string $foreignColumns, string $onTable, string $referencesColumns = 'id', string $onDelete = ForeignActionEnum::CASCADE, string $onUpdate = ForeignActionEnum::CASCADE)

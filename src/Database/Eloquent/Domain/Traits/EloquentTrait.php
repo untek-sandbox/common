@@ -6,12 +6,11 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
-use Untek\Database\Base\Domain\Libs\TableAlias;
 
 trait EloquentTrait
 {
 
-    private $capsule;
+    private Manager $capsule;
 
     abstract public function connectionName();
 
