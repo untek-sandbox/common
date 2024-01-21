@@ -42,12 +42,16 @@ class ImportSeedCommandHandler
 
         $sortedTables = $this->dependency->run($tables);
 
+
+
         foreach ($sortedTables as $seedName) {
             if (isset($seedList[$seedName])) {
                 $seedFile = $seedList[$seedName];
                 $this->import($seedName, $seedFile, $command->getProgressCallback());
             }
         }
+
+
 
         /*$this->connection->beginTransaction();
         try {
@@ -66,16 +70,55 @@ class ImportSeedCommandHandler
         $store = new StoreFile($seedFile);
         $data = $store->load();
 
-        $this->connection->query('DELETE FROM ' . $tableName);
-
+        $this->truncate($tableName);
         $this->insert($tableName, $data);
 
         /*foreach ($data as $row) {
             $this->connection->insert($tableName, $row);
         }*/
 
-        if($cb) {
+        if ($cb) {
             call_user_func($cb, $tableName . ' (' . count($data) . ')');
+        }
+    }
+
+    private function truncate(string $tableName)
+    {
+        $this->connection->query("DELETE FROM {$tableName}");
+        $this->resetAutoIncrement($tableName);
+    }
+
+    protected function hasAutoincrement(string $tableName): bool
+    {
+        $columns = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        foreach ($columns as $column) {
+            if ($column->getAutoincrement()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function resetAutoIncrement(string $tableName)
+    {
+        $hasAutoincrement = $this->hasAutoincrement($tableName);
+        if (!$hasAutoincrement) {
+            return;
+        }
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $driverClass = get_class($this->connection->getDriver());
+        if ($driverClass == 'Doctrine\DBAL\Driver\PDO\SQLite\Driver') {
+            $this->connection->query("DELETE FROM SQLITE_SEQUENCE WHERE name='$tableName';");
+        } elseif ($driverClass == 'Doctrine\DBAL\Driver\PDO\PgSQL\Driver') {
+            $maxResult = $this->connection->fetchAllAssociative("SELECT MAX(id) FROM $tableName");
+            $max = $maxResult[0]['max'] ?? null;
+//            $max = $queryBuilder->max('id');
+            if ($max) {
+                $pkName = 'id';
+                $sql = 'SELECT setval(\'' . $targetTableName . '_' . $pkName . '_seq\', ' . ($max) . ')';
+                $connection = $queryBuilder->getConnection();
+                $connection->statement($sql);
+            }
         }
     }
 
@@ -95,7 +138,8 @@ class ImportSeedCommandHandler
         return $this->connection->executeStatement($sql);
     }
 
-    private function generateColumnSql(array $list): string {
+    private function generateColumnSql(array $list): string
+    {
         $columns = [];
         foreach ($list[0] as $columnName => $value) {
             $columns[] = $columnName;
@@ -103,12 +147,13 @@ class ImportSeedCommandHandler
         return ' (' . implode(', ', $columns) . ')';
     }
 
-    private function generateValuesSql(array $list): string {
+    private function generateValuesSql(array $list): string
+    {
         $valuesList = [];
         foreach ($list as $row) {
             $quotedValues = [];
             foreach ($row as $columnName => $value) {
-                if(!is_null($value)) {
+                if (!is_null($value)) {
                     $quotedValues[] = $this->connection->quote($value);
                 } else {
                     $quotedValues[] = 'null';
