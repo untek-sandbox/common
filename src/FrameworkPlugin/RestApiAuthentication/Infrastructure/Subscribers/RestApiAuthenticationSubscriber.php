@@ -7,14 +7,11 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
+use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\User\Authentication\Domain\Authentication\Token\ApiToken;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
-use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 
 class RestApiAuthenticationSubscriber implements EventSubscriberInterface
@@ -22,9 +19,7 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
     public function __construct(
         private IdentityRepositoryInterface $identityRepository,
         private TokenServiceInterface $tokenService,
-//        private UserProviderInterface $userProvider,
         private TokenStorageInterface $tokenStorage,
-//        private AuthorizationCheckerInterface $authorizationChecker,
         private string $headerKeyName = 'Authorization'
     )
     {
@@ -52,7 +47,7 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
             $identity = $this->identityRepository->getUserById($userId);
             $token = new ApiToken($identity, 'main', $identity->getRoles(), $credentials);
             $this->tokenStorage->setToken($token);
-        } catch (UserNotFoundException $e) {
+        } catch (UserNotFoundException | NotFoundException $e) {
             throw new AuthenticationException('Bad token');
         }
     }
