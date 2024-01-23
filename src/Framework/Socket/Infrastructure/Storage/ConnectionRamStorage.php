@@ -9,6 +9,11 @@ class ConnectionRamStorage {
 
     // массив для связи соединения пользователя и необходимого нам параметра
     private $connectionTree = [];
+    private $reversedConnectionTree = [];
+
+    public function userIdByConnection(ConnectionInterface $connection) {
+        return $this->reversedConnectionTree[md5(json_encode($connection))];
+    }
 
     public function allByUserId(/*int*/ $userId) {
         if(!$this->isOnlineByUserId($userId)) {
@@ -30,6 +35,7 @@ class ConnectionRamStorage {
 
     public function addConnection(/*int*/ $userId, ConnectionInterface $connection) {
         $this->connectionTree[$userId][] = $connection;
+        $this->reversedConnectionTree[md5(json_encode($connection))] = $userId;
         echo 'online ' . $this->formatMessage($userId) . PHP_EOL;
     }
     

@@ -17,6 +17,7 @@ use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
 use Untek\User\Authentication\Domain\Interfaces\Services\AuthServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Untek\User\Authentication\Domain\Authentication\Token\ApiToken;
+use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
 
 class SocketDaemon
 {
@@ -28,8 +29,10 @@ class SocketDaemon
     public function __construct(
         private ConnectionRamStorage $connectionRepository,
         private TokenServiceInterface $tokenService,
+        private ClientMessageHandlerInterface $clientMessageHanler,
         private string $localUrl,
-        private string $clientUrl
+        private string $clientUrl,
+        private ?string $mode = null
     )
     {
         // массив для связи соединения пользователя и необходимого нам параметра
@@ -40,6 +43,7 @@ class SocketDaemon
         $this->wsWorker->onWorkerStart = [$this, 'onWsStart'];
         $this->wsWorker->onConnect = [$this, 'onWsConnect'];
         $this->wsWorker->onClose = [$this, 'onWsClose'];
+        $this->wsWorker->onMessage = [$this, 'onMessage'];
     }
 
     public function sendMessageToTcp(SocketEvent $eventEntity)
@@ -84,6 +88,29 @@ class SocketDaemon
 
 //           $this->sendConnectEventToClient($userId);
         };
+    }
+
+    public function onMessage(ConnectionInterface $connection, $data) 
+    {
+        $userId = $this->connectionRepository->userIdByConnection($connection);
+        //print_r(['$userId' , $userId]);
+        //echo "Received message: $data  \n";
+        $decoded = json_decode($data, true);
+        $decoded['userId'] = $userId;
+
+        $message = $this->clientMessageHanler->onMessage($decoded);
+
+        if ($message || $this->mode == 'dev') {
+            $event = new SocketEvent();
+            $event->setUserId($userId);
+            $event->setName(SocketEventEnum::CLIENT_MESSAGE_RECEIVED);
+            $event->setPayload([
+                'data' => $data,
+            ]);
+    
+            $this->sendToWebSocket($event, $connection);
+        }
+
     }
 
     protected function sendConnectEventToClient($userId) {
