@@ -9,15 +9,16 @@ use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
+use Untek\Database\Base\Hydrator\Traits\HydratorTrait;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
 {
 
     use RepositoryRelationTrait;
+    use HydratorTrait;
 
     private Connection $connection;
-    protected HydratorInterface $mapper;
 
     abstract public function getTableName(): string;
 
@@ -27,26 +28,6 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
         if ($mapper != null) {
             $this->mapper = $mapper;
         }
-    }
-
-    protected function getHydrator(): HydratorInterface
-    {
-        if (isset($this->mapper)) {
-            return $this->mapper;
-        }
-        return new DefaultHydrator($this->getClassName());
-    }
-
-    protected function dehydrate(object $entity): array
-    {
-        $data = $this->getHydrator()->dehydrate($entity);
-        return $data;
-    }
-
-    protected function hydrate(array $item): object
-    {
-        $entity = $this->getHydrator()->hydrate($item);
-        return $entity;
     }
 
     protected function getConnection(): Connection
@@ -125,13 +106,6 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
     {
         $data = $this->getConnection()->fetchAllAssociative($queryBuilder->getSQL());
         return $this->hydrateCollection($data);
-    }
-
-    protected function hydrateCollection(array $data): array {
-        foreach ($data as $key => $item) {
-            $data[$key] = $this->hydrate($item);
-        }
-        return $data;
     }
 
     private function makeFindQueryBuilder(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder

@@ -11,6 +11,7 @@ use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Database\Base\Domain\Traits\TableNameTrait;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
+use Untek\Database\Base\Hydrator\Traits\HydratorTrait;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use Untek\Database\Eloquent\Domain\Traits\EloquentTrait;
@@ -22,43 +23,15 @@ abstract class AbstractEloquentRepository implements ObjectRepository
     use RepositoryRelationTrait;
     use EloquentTrait;
     use TableNameTrait;
+    use HydratorTrait;
 
     private Connection $connection;
-    protected HydratorInterface $mapper;
 
     abstract public function getTableName(): string;
 
     public function __construct(Manager $capsule)
     {
         $this->setCapsule($capsule);
-    }
-
-    /*public function __construct(Connection $connection, HydratorInterface $mapper = null)
-    {
-        $this->connection = $connection;
-        if ($mapper != null) {
-            $this->mapper = $mapper;
-        }
-    }*/
-
-    protected function getHydrator(): HydratorInterface
-    {
-        if (isset($this->mapper)) {
-            return $this->mapper;
-        }
-        return new DefaultHydrator($this->getClassName());
-    }
-
-    protected function dehydrate(object $entity): array
-    {
-        $data = $this->getHydrator()->dehydrate($entity);
-        return $data;
-    }
-
-    protected function hydrate(array $item): object
-    {
-        $entity = $this->getHydrator()->hydrate($item);
-        return $entity;
     }
 
     protected function getConnection(): Connection
@@ -134,13 +107,6 @@ abstract class AbstractEloquentRepository implements ObjectRepository
     {
         $data = $queryBuilder->get()->toArray();
         return $this->hydrateCollection($data);
-    }
-
-    protected function hydrateCollection(array $data): array {
-        foreach ($data as $key => $item) {
-            $data[$key] = $this->hydrate((array) $item);
-        }
-        return $data;
     }
 
     private function makeFindQueryBuilder(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): Builder
