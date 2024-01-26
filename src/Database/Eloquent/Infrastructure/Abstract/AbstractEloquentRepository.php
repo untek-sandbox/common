@@ -8,6 +8,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 use Illuminate\Database\Query\Builder;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Database\Base\Domain\Traits\TableNameTrait;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
@@ -36,6 +37,7 @@ abstract class AbstractEloquentRepository implements ObjectRepository
 
     protected function getConnection(): Connection
     {
+        DeprecateHelper::hardThrow();
         return $this->connection;
     }
 
