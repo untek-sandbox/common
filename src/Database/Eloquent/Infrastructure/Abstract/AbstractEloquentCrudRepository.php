@@ -66,9 +66,9 @@ abstract class AbstractEloquentCrudRepository extends AbstractEloquentRepository
      */
     public function update(object $entity): void
     {
-        $entity = $this->findOneById($entity->getId());
+        $existEntity = $this->findOneById($entity->getId());
         $queryBuilder = $this->createQueryBuilder();
-        $queryBuilder->where('id', OperatorEnum::EQUAL, $entity->getId());
+        $queryBuilder->where('id', OperatorEnum::EQUAL, $existEntity->getId());
         $data = $this->dehydrate($entity);
         $queryBuilder->update($data);
     }
