@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Untek\Core\Text\Helpers\Inflector;
 
 class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterface
 {
@@ -29,7 +30,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
-        $data = $this->denormalizeTime($data);
+        $data = $this->denormalizeTime($data, $type);
         $serializer = $this->getSerializer();
         return $serializer->denormalize($data, $type, $format, $context);
     }
@@ -39,10 +40,13 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return [];
     }
 
-    protected function denormalizeTime($data): array
+    protected function denormalizeTime($data, string $type): array
     {
         foreach ($data as $key => &$value) {
-            if ($value && is_string($value)) {
+//            $r = new \ReflectionMethod("$type::get".Inflector::camelize($key));
+//            $isTime = is_subclass_of($r->getReturnType(), \DateTimeInterface::class);
+            $isTime = $value && is_string($value);
+            if ($isTime) {
                 $denormalized = DateTime::createFromFormat(DateTime::RFC3339, $value);
                 if ($denormalized) {
                     $value = $denormalized;
