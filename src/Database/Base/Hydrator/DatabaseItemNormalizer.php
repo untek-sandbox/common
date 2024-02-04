@@ -3,6 +3,7 @@
 namespace Untek\Database\Base\Hydrator;
 
 use ArrayObject;
+use DateTimeImmutable;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -41,7 +42,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
     {
         foreach ($data as $key => &$value) {
             if ($value && strtotime($value)) {
-                $value = new \DateTime($value);
+                $value = new DateTimeImmutable($value);
             }
         }
         return $data;

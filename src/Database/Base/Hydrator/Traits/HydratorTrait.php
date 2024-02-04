@@ -10,13 +10,8 @@ use Untek\Database\Base\Hydrator\HydratorInterface;
 trait HydratorTrait
 {
 
-    private HydratorInterface $hydrator;
-
     protected function getHydrator(): HydratorInterface
     {
-        if (isset($this->hydrator)) {
-            return $this->hydrator;
-        }
         return new DefaultHydrator($this->getClassName());
     }
 
@@ -25,7 +20,7 @@ trait HydratorTrait
      */
     protected function getNormalizer()//: null|NormalizerInterface|DenormalizerInterface
     {
-        return null;
+        return null; //new DatabaseItemNormalizer();
     }
 
     protected function dehydrate(object $entity): array

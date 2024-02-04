@@ -2,10 +2,7 @@
 
 namespace Untek\Database\Base\Hydrator;
 
-use Untek\Core\Instance\Helpers\PropertyHelper;
-use Untek\Model\Entity\Helpers\EntityHelper;
-
-class DefaultHydrator implements HydratorInterface
+class DefaultHydrator extends AbstractHydrator implements HydratorInterface
 {
 
     public function __construct(private string $entityClass)
@@ -14,17 +11,11 @@ class DefaultHydrator implements HydratorInterface
 
     public function dehydrate(object $entity): array
     {
-        $data = EntityHelper::toArrayForTablize($entity);
-        return $data;
+        return $this->getNormalizer()->normalize($entity);
     }
 
     public function hydrate(array $item, object $entity = null): object
     {
-        if($entity == null) {
-            $entityClass = $this->entityClass;
-            $entity = new $entityClass;
-        }
-        PropertyHelper::setAttributes($entity, $item);
-        return $entity;
+        return $this->getNormalizer()->denormalize($item, $this->entityClass);
     }
 }
