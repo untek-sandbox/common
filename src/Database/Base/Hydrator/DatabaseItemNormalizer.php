@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DatabaseSerializer implements DenormalizerInterface, NormalizerInterface
+class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterface
 {
 
     protected function getSerializer(): SerializerInterface
@@ -30,6 +30,11 @@ class DatabaseSerializer implements DenormalizerInterface, NormalizerInterface
         $data = $this->denormalizeTime($data);
         $serializer = $this->getSerializer();
         return $serializer->denormalize($data, $type, $format, $context);
+    }
+
+    protected function relationFields(): array
+    {
+        return [];
     }
 
     protected function denormalizeTime($data): array
@@ -51,7 +56,19 @@ class DatabaseSerializer implements DenormalizerInterface, NormalizerInterface
     public function normalize(mixed $object, string $format = null, array $context = []): float|array|ArrayObject|bool|int|string|null
     {
         $serializer = $this->getSerializer();
-        return $serializer->normalize($object, $format, $context);
+        $normalized = $serializer->normalize($object, $format, $context);
+        $normalized = $this->removeRelationFields($normalized);
+        return $normalized;
+    }
+
+    protected function removeRelationFields(array $normalized): array
+    {
+        if ($this->relationFields()) {
+            foreach ($this->relationFields() as $field) {
+                unset($normalized[$field]);
+            }
+        }
+        return $normalized;
     }
 
     public function supportsNormalization(mixed $data, string $format = null): bool

@@ -10,6 +10,6 @@ abstract class AbstractHydrator implements HydratorInterface
 
     public function getNormalizer(): NormalizerInterface|DenormalizerInterface
     {
-        return new DatabaseSerializer();
+        return new DatabaseItemNormalizer();
     }
 }
