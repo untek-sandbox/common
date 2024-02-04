@@ -4,6 +4,7 @@ namespace Untek\Database\Base\Hydrator\Traits;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Untek\Database\Base\Hydrator\DatabaseItemNormalizer;
 use Untek\Database\Base\Hydrator\DefaultHydrator;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 
@@ -20,7 +21,7 @@ trait HydratorTrait
      */
     protected function getNormalizer()//: null|NormalizerInterface|DenormalizerInterface
     {
-        return null; //new DatabaseItemNormalizer();
+        return null; // new DatabaseItemNormalizer();
     }
 
     protected function dehydrate(object $entity): array
