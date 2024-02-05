@@ -71,7 +71,10 @@ class ImportSeedCommandHandler
         $data = $store->load();
 
         $this->truncate($tableName);
-        $this->insert($tableName, $data);
+
+        if(!empty($data)) {
+            $this->insert($tableName, $data);
+        }
 
         /*foreach ($data as $row) {
             $this->connection->insert($tableName, $row);

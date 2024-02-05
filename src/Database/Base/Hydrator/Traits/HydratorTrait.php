@@ -16,12 +16,9 @@ trait HydratorTrait
         return new DefaultHydrator($this->getClassName());
     }
 
-    /**
-     * @return NormalizerInterface|DenormalizerInterface|null
-     */
-    protected function getNormalizer()//: null|NormalizerInterface|DenormalizerInterface
+    protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
     {
-        return null; // new DatabaseItemNormalizer();
+        return new DatabaseItemNormalizer();
     }
 
     protected function dehydrate(object $entity): array
