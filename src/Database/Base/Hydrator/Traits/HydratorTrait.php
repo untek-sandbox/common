@@ -11,6 +11,8 @@ use Untek\Database\Base\Hydrator\HydratorInterface;
 trait HydratorTrait
 {
 
+    abstract public function getClassName(): string;
+
     protected function getHydrator(): HydratorInterface
     {
         return new DefaultHydrator($this->getClassName());

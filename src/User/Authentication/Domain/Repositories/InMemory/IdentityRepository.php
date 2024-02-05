@@ -18,7 +18,7 @@ class IdentityRepository extends AbstractMemoryCrudRepository implements Identit
     {
     }
 
-    public function getClassName()
+    public function getClassName(): string
     {
         return InMemoryUser::class;
     }

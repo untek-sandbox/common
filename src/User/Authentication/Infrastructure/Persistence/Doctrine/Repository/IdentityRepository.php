@@ -26,7 +26,7 @@ class IdentityRepository extends AbstractDoctrineCrudRepository implements Ident
         return 'user_identity';
     }
 
-    public function getClassName()
+    public function getClassName(): string
     {
         return InMemoryUser::class;
     }
