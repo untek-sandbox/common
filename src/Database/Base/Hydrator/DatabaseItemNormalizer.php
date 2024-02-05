@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Untek\Core\Text\Helpers\Inflector;
 
+/**
+ * @method array getSupportedTypes(?string $format)
+ */
 class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterface
 {
 
