@@ -25,21 +25,19 @@ trait HydratorTrait
 
     protected function dehydrate(object $entity): array
     {
-        if ($this->getNormalizer()) {
-            return $this->getNormalizer()->normalize($entity);
+        if(!($this->getHydrator() instanceof DefaultHydrator)) {
+            return $this->getHydrator()->dehydrate($entity);
         } else {
-            $data = $this->getHydrator()->dehydrate($entity);
-            return $data;
+            return $this->getNormalizer()->normalize($entity);
         }
     }
 
     protected function hydrate(array $item): object
     {
-        if ($this->getNormalizer()) {
-            return $this->getNormalizer()->denormalize($item, $this->getClassName());
+        if(!($this->getHydrator() instanceof DefaultHydrator)) {
+            return $this->getHydrator()->hydrate($item);
         } else {
-            $entity = $this->getHydrator()->hydrate($item);
-            return $entity;
+            return $this->getNormalizer()->denormalize($item, $this->getClassName());
         }
     }
 
