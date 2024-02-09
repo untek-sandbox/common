@@ -27,6 +27,10 @@ class GenerateDatabaseCommandValidator extends AbstractObjectValidator
                     new Assert\NotBlank(),
                     new Assert\Type('array'),
                 ],
+                'repositoryDriver' => [
+                    new Assert\NotBlank(),
+                    new Assert\Type('string'),
+                ],
             ]
         ]);
     }

@@ -12,11 +12,11 @@ class ContainerConfigGenerator
 
     public function generate(GenerateDatabaseCommand $command): GenerateResult
     {
-        $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command);
+        $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
         $repositoryInterfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
 
         $args = [
-            'service(\Doctrine\DBAL\Connection::class)'
+            'service(\Illuminate\Database\Capsule\Manager::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
         $fileName = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);

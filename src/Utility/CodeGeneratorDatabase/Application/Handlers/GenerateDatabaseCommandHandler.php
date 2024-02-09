@@ -20,8 +20,11 @@ use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\DoctrineRepositoryGenerator;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\EloquentRepositoryGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\MigrationGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\ModelGenerator;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\NormalizerGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryInterfaceGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
@@ -43,8 +46,11 @@ class GenerateDatabaseCommandHandler
 
         $result = (new RepositoryInterfaceGenerator())->generate($command);
         $files[] = $result->getFileName();
+
+        $result = (new NormalizerGenerator())->generate($command);
+        $files[] = $result->getFileName();
         
-        $result = (new RepositoryGenerator())->generate($command);
+        $result = (new EloquentRepositoryGenerator())->generate($command);
         $files[] = $result->getFileName();
         
         $result = (new ModelGenerator())->generate($command);

@@ -4,26 +4,28 @@ namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
 
-class RepositoryGenerator
+class EloquentRepositoryGenerator
 {
 
     public function generate(GenerateDatabaseCommand $command): GenerateResult
     {
+        $repositoryDriver = $command->getRepositoryDriver();
         $modelClassName = ApplicationPathHelper::getModelClass($command);
-        $className = ApplicationPathHelper::getRepositoryClass($command);
+        $className = ApplicationPathHelper::getRepositoryClass($command, $repositoryDriver);
+        $normalizerClassName = ApplicationPathHelper::getNormalizerClass($command);
         $interfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
 
         $params = [
             'tableName' => $command->getTableName(),
             'interfaceClassName' => $interfaceClassName,
             'modelClassName' => $modelClassName,
+            'normalizerClassName' => $normalizerClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/repository.php';
+        $template = __DIR__ . '/../../resources/templates/' . $repositoryDriver . '-repository.php';
 
         $fileGenerator = new FileGenerator();
         $fileName = $fileGenerator->generatePhpClass($className, $template, $params);

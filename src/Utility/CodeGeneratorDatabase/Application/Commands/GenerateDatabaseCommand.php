@@ -10,6 +10,7 @@ class GenerateDatabaseCommand extends AbstractCommand
     private string $namespace;
     private string $tableName;
     private array $properties;
+    private string $repositoryDriver = 'eloquent';
 
     public function getNamespace(): string
     {
@@ -39,6 +40,16 @@ class GenerateDatabaseCommand extends AbstractCommand
     public function setProperties(array $properties): void
     {
         $this->properties = $properties;
+    }
+
+    public function getRepositoryDriver(): string
+    {
+        return $this->repositoryDriver;
+    }
+
+    public function setRepositoryDriver(string $repositoryDriver): void
+    {
+        $this->repositoryDriver = $repositoryDriver;
     }
 
 }

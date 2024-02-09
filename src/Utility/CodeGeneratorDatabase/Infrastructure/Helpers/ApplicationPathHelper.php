@@ -8,15 +8,24 @@ use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCom
 class ApplicationPathHelper
 {
 
-    public static function getInterfaceClassName(GenerateDatabaseCommand $command): string {
+    public static function getInterfaceClassName(GenerateDatabaseCommand $command): string
+    {
         return $command->getNamespace() . '\\Application\\Services\\' . Inflector::camelize($command->getTableName()) . 'RepositoryInterface';
     }
 
-    public static function getModelClass(GenerateDatabaseCommand $command): string {
+    public static function getModelClass(GenerateDatabaseCommand $command): string
+    {
         return $command->getNamespace() . '\\Domain\\Model\\' . Inflector::camelize($command->getTableName());
     }
 
-    public static function getRepositoryClass(GenerateDatabaseCommand $command): string {
-        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Doctrine\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
+    public static function getNormalizerClass(GenerateDatabaseCommand $command): string
+    {
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Normalizer\\' . Inflector::camelize($command->getTableName()) . 'Normalizer';
+    }
+
+    public static function getRepositoryClass(GenerateDatabaseCommand $command, string $driver): string
+    {
+        $driverName = Inflector::camelize($driver);
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\' . $driverName . '\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
     }
 }

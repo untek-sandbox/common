@@ -13,7 +13,7 @@ class ContainerConfigGenerator
 
     public function generate(string $abstractClassName, string $concreteClassName, array $args = null): string {
         $codeForAppend =
-            '    $services->set(\\' . $abstractClassName . '::class, \\' . $abstractClassName . '::class)';
+            '    $services->set(\\' . $abstractClassName . '::class, \\' . $concreteClassName . '::class)';
 
         if($args) {
             $argsCode = implode(',' . PHP_EOL . "\t\t", $args);
