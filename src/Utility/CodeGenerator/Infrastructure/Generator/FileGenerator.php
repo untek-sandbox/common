@@ -42,6 +42,7 @@ class FileGenerator
         $codeLines[] = '';
         $codeLines[] = $codeForAppend;
         $codeLines[] = $lastLine;
+        $codeLines[] = '';
         $code = implode(PHP_EOL, $codeLines);
         $fs->dumpFile($fileName, $code);
     }

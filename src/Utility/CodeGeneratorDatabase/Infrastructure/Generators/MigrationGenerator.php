@@ -29,6 +29,8 @@ class MigrationGenerator
         $fileGenerator = new FileGenerator();
         $fileGenerator->generatePhpFile($fileName, $template, $params);
 
+        (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
+
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         $generateResult = new GenerateResult();
