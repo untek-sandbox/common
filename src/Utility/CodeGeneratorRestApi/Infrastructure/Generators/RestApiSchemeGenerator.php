@@ -11,7 +11,7 @@ use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
 
-class ControllerGenerator
+class RestApiSchemeGenerator
 {
 
     public function generate(GenerateRestApiCommand $command): GenerateResult
@@ -22,18 +22,17 @@ class ControllerGenerator
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
         
-        $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
         $schemaClassName = ApplicationPathHelper::getRestApiSchemaClassName($command);
+//dd($schemaClassName);
 
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
-            'schemaClassName' => $schemaClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
+        $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
 
         $fileGenerator = new FileGenerator();
-        $fileName = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
+        $fileName = $fileGenerator->generatePhpClass($schemaClassName, $template, $params);
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 

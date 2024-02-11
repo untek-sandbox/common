@@ -10,6 +10,15 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 class ApplicationPathHelper
 {
 
+    public static function getRestApiSchemaClassName(GenerateRestApiCommand $command): string
+    {
+        $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
+        $commandClassName = Inflector::camelize($commandClassName);
+        $endCommandClassName = CommandHelper::getType($command->getCommandClass());
+        $pureCommandClassName = substr($commandClassName, 0, 0 - strlen($endCommandClassName));
+        return $command->getNamespace() . '\\Presentation\\Http\\RestApi\\Schema\\' . $pureCommandClassName . 'Schema';
+    }
+
     public static function getControllerClassName(GenerateRestApiCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());

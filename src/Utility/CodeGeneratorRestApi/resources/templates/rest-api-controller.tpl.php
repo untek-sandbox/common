@@ -17,12 +17,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Untek\Framework\RestApi\Presentation\Http\Symfony\Controllers\AbstractRestApiController;
 use <?= $commandFullClassName ?>;
+use <?= $schemaClassName ?>;
 
 class <?= $className ?> extends AbstractRestApiController
 {
 
     public function __construct(private CommandBusInterface $bus, private UrlGeneratorInterface $urlGenerator)
     {
+        $this->schema = new <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($schemaClassName) ?>();
     }
 
     /**
@@ -34,6 +36,7 @@ class <?= $className ?> extends AbstractRestApiController
         /** @var <?= $commandClassName ?> $command */
         $command = $this->createForm($request, <?= $commandClassName ?>::class);
         $result =$this->bus->handle($command);
-        return $this->serialize($result);
+        $data = $this->encodeObject($result);
+        return $this->serialize($data);
     }
 }

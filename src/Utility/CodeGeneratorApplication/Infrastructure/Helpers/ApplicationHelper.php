@@ -11,7 +11,7 @@ use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicat
 class ApplicationHelper
 {
 
-    public static function prepareProperties(AbstractCommand $command): array {
+    public static function prepareProperties($command): array {
         $properties = [];
         foreach ($command->getProperties() as &$commandAttribute) {
             $name = Inflector::variablize($commandAttribute['name']);

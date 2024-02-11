@@ -8,6 +8,7 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCom
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ContainerConfigGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ControllerGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ControllerTestGenerator;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RestApiSchemeGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RoutConfigGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RoutConfigImportGenerator;
 
@@ -26,6 +27,9 @@ class GenerateRestApiCommandHandler
         $validator->validate($command);
 
         $result = (new ControllerGenerator())->generate($command);
+        $files[] = $result->getFileName();
+
+        $result = (new RestApiSchemeGenerator())->generate($command);
         $files[] = $result->getFileName();
 
         $result = (new ControllerTestGenerator())->generate($command);
