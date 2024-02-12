@@ -6,6 +6,7 @@ class GenerateResult
 {
 
     private string $fileName;
+    private string $content;
 
     public function getFileName(): string
     {
@@ -16,5 +17,14 @@ class GenerateResult
     {
         $this->fileName = $fileName;
     }
-    
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
 }

@@ -25,11 +25,28 @@ class FileGenerator
 
     public function generatePhpFile(string $fileName, string $template, array $parameters = [])
     {
-        $render = new Render();
-        $code = $render->renderFile($template, $parameters);
+//        $render = new Render();
+//        $code = $render->renderFile($template, $parameters);
+        $code = $this->generateCode($template, $parameters);
         $code = '<?php' . PHP_EOL . PHP_EOL . trim($code);
         $fileSystem = new Filesystem();
         $fileSystem->dumpFile($fileName, $code);
+    }
+
+
+
+    public function generateFile(string $fileName, string $template, array $parameters = [])
+    {
+        $code = $this->generateCode($template, $parameters);
+        $fileSystem = new Filesystem();
+        $fileSystem->dumpFile($fileName, $code);
+    }
+
+    public function generateCode(string $template, array $parameters = []): string
+    {
+        $render = new Render();
+        $code = $render->renderFile($template, $parameters);
+        return $code;
     }
 
     public function appendCodeInFile(string $fileName, string $codeForAppend): void
