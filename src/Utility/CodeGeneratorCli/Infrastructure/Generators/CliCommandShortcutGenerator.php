@@ -2,17 +2,25 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
-use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
-use Untek\Core\Instance\Helpers\ClassHelper;
-use Untek\Core\Text\Helpers\Inflector;
+use Symfony\Component\Filesystem\Filesystem;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
-use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
+use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 
 class CliCommandShortcutGenerator
 {
+
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
+    public function __construct()
+    {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
+    }
 
     public function generate(GenerateCliCommand $command): GenerateResult
     {
@@ -22,24 +30,27 @@ class CliCommandShortcutGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
 
-        $fileGenerator = new FileGenerator();
-        $fileGenerator->generateFile($fileName, $template, $params);
+        $code = $this->codeGenerator->generateCode($template, $params);
+        return $this->dump($fileName, $code);
+    }
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
+    protected function dump(string $fileName, string $code): GenerateResult
+    {
+        $this->fs->dumpFile($fileName, $code);
+        $generateResult = new GenerateResult($fileName, $code);
         return $generateResult;
     }
 
-    private function getShortcutFileName(GenerateCliCommand $command): string {
-        $lowerModuleName = mb_strtolower($command->getModuleName());
+    private function getShortcutFileName(GenerateCliCommand $command): string
+    {
+//        $lowerModuleName = mb_strtolower($command->getModuleName());
         $commandSections = explode(':', $command->getCliCommand());
         $moduleName = array_splice($commandSections, 0, 1)[0];
         $actionName = implode('-', $commandSections);
-//        dd($moduleName, $actionName);
 
         $shortcutFileName = str_replace(':', '-', $command->getCliCommand());
         $binDirectory = realpath(__DIR__ . '/../../../../../../../../bin');
-        $fileName = $binDirectory . '/' . $lowerModuleName . '/' . $actionName . '.sh';
+        $fileName = $binDirectory . '/' . $moduleName . '/' . $actionName . '.sh';
         return $fileName;
     }
 }

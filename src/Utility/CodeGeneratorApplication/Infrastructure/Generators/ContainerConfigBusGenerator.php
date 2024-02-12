@@ -2,7 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
@@ -14,6 +16,17 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusGenerator
 {
 
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
+    public function __construct()
+    {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
+    }
+
     public function generate(GenerateApplicationCommand $command): GenerateResult
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
@@ -23,16 +36,29 @@ class ContainerConfigBusGenerator
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($fileName, $templateFile);
 
+        $code = null;
         if(!$configGenerator->hasCode($handlerClassName)) {
             $controllerDefinition =
                 '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';
-            $configGenerator->appendCode($controllerDefinition);
+            $code = $configGenerator->appendCode($controllerDefinition);
         }
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
+//        $generateResult = new GenerateResult();
+//        $generateResult->setFileName($fileName);
+//        return $generateResult;
+
+        return $this->dump($fileName, $code);
+    }
+
+    protected function dump(string $fileName, ?string $code): GenerateResult
+    {
+        if($code) {
+            $this->fs->dumpFile($fileName, $code);
+        }
+        $generateResult = new GenerateResult($fileName, $code);
         return $generateResult;
     }
+
 }

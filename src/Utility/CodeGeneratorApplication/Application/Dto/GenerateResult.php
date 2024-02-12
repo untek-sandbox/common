@@ -5,8 +5,21 @@ namespace Untek\Utility\CodeGeneratorApplication\Application\Dto;
 class GenerateResult
 {
 
-    private string $fileName;
-    private string $content;
+    private ?string $fileName = null;
+    private ?string $code = null;
+    private string $type;
+    private bool $hasChanges;
+
+    public function __construct(
+        string $fileName = null,
+        string $code = null,
+        string $type = 'text',
+    )
+    {
+        $this->fileName = $fileName;
+        $this->code = $code;
+        $this->type = $type;
+    }
 
     public function getFileName(): string
     {
@@ -18,13 +31,34 @@ class GenerateResult
         $this->fileName = $fileName;
     }
 
-    public function getContent(): string
+    public function getCode(): string
     {
         return $this->content;
     }
 
-    public function setContent(string $content): void
+    public function setCode(string $code): void
     {
-        $this->content = $content;
+        $this->content = $code;
     }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function isHasChanges(): bool
+    {
+        return $this->hasChanges;
+    }
+
+    public function setHasChanges(bool $hasChanges): void
+    {
+        $this->hasChanges = $hasChanges;
+    }
+
 }

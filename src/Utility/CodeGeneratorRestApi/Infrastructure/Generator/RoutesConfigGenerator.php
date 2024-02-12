@@ -2,15 +2,26 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 
 class RoutesConfigGenerator
 {
 
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
     public function __construct()
     {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
     }
 
     public function generate(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): string {
@@ -23,8 +34,17 @@ class RoutesConfigGenerator
         ->add(\'' . $routeName . '\', \'/' . $command->getUri() . '\')
         ->controller(\\' . $controllerClassName . '::class)
         ->methods([\'' . $command->getHttpMethod() . '\']);';
-            $configGenerator->appendCode($controllerDefinition);
+            $code = $configGenerator->appendCode($controllerDefinition);
+            $this->dump($configFile, $code);
         }
         return $configFile;
     }
+
+    protected function dump(string $fileName, string $code): GenerateResult
+    {
+        $this->fs->dumpFile($fileName, $code);
+        $generateResult = new GenerateResult($fileName, $code);
+        return $generateResult;
+    }
+
 }

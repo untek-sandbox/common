@@ -10,16 +10,29 @@ use Untek\Core\Instance\Helpers\ClassHelper;
 class FileGenerator
 {
 
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+
     public function __construct()
     {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+    }
+
+    public function generatePhpClassFileName(string $className): string
+    {
+        $fileName = PackageHelper::pathByNamespace($className) . '.php';
+        return $fileName;
     }
 
     public function generatePhpClass(string $className, string $template, array $parameters = []): string
     {
-        $parameters['namespace'] = ClassHelper::getNamespace($className);
-        $parameters['className'] = ClassHelper::getClassOfClassName($className);
+        $code = $this->codeGenerator->generatePhpClassCode($className, $template, $parameters);
+//        $parameters['namespace'] = ClassHelper::getNamespace($className);
+//        $parameters['className'] = ClassHelper::getClassOfClassName($className);
         $fileName = PackageHelper::pathByNamespace($className) . '.php';
-        $this->generatePhpFile($fileName, $template, $parameters);
+//        $this->generatePhpFile($fileName, $template, $parameters);
+        $this->fs->dumpFile($fileName, $code);
         return $fileName;
     }
 
@@ -27,40 +40,21 @@ class FileGenerator
     {
 //        $render = new Render();
 //        $code = $render->renderFile($template, $parameters);
-        $code = $this->generateCode($template, $parameters);
-        $code = '<?php' . PHP_EOL . PHP_EOL . trim($code);
-        $fileSystem = new Filesystem();
-        $fileSystem->dumpFile($fileName, $code);
+//        $code = $this->codeGenerator->generateCode($template, $parameters);
+//        $code = '<?php' . PHP_EOL . PHP_EOL . trim($code);
+        $code = $this->codeGenerator->generatePhpCode($template, $parameters);
+        $this->fs->dumpFile($fileName, $code);
     }
-
-
 
     public function generateFile(string $fileName, string $template, array $parameters = [])
     {
-        $code = $this->generateCode($template, $parameters);
-        $fileSystem = new Filesystem();
-        $fileSystem->dumpFile($fileName, $code);
-    }
-
-    public function generateCode(string $template, array $parameters = []): string
-    {
-        $render = new Render();
-        $code = $render->renderFile($template, $parameters);
-        return $code;
+        $code = $this->codeGenerator->generateCode($template, $parameters);
+        $this->fs->dumpFile($fileName, $code);
     }
 
     public function appendCodeInFile(string $fileName, string $codeForAppend): void
     {
-        $fs = new Filesystem();
-        $code = file_get_contents($fileName);
-        $code = trim($code);
-        $codeLines = explode(PHP_EOL, $code);
-        $lastLine = array_pop($codeLines);
-        $codeLines[] = '';
-        $codeLines[] = $codeForAppend;
-        $codeLines[] = $lastLine;
-        $codeLines[] = '';
-        $code = implode(PHP_EOL, $codeLines);
+        $code = $this->codeGenerator->appendCodeInFile($fileName, $codeForAppend);
         $fs->dumpFile($fileName, $code);
     }
 

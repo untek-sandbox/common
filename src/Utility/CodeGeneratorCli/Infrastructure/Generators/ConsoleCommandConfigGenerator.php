@@ -2,6 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 use Symfony\Component\Filesystem\Filesystem;
@@ -15,6 +17,17 @@ use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 class ConsoleCommandConfigGenerator
 {
 
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
+    public function __construct()
+    {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
+    }
+
     public function generate(GenerateCliCommand $command): GenerateResult
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
@@ -25,7 +38,8 @@ class ConsoleCommandConfigGenerator
         $concreteCode = '\\'.$cliCommandClassName.'';
         $codeForAppend = '  $commandConfigurator->registerCommandClass('.$concreteCode.'::class);';
         if(!$configGenerator->hasCode($concreteCode)) {
-            $configGenerator->appendCode($codeForAppend);
+            $code = $configGenerator->appendCode($codeForAppend);
+            $this->dump($cliCommandConfigFileName, $code);
         }
         $this->addImport($cliCommandConfigFileName);
 
@@ -36,14 +50,23 @@ class ConsoleCommandConfigGenerator
 
     private function addImport($cliCommandConfigFileName) {
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator(__DIR__ . '/../../../../../../../../context/console/config/commands.php', $templateFile);
+        $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
+        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
         $shareCliCommandConfigFileName = (new Filesystem())->makePathRelative($cliCommandConfigFileName, realpath(__DIR__ . '/../../../../../../../..'));
         $shareCliCommandConfigFileName = rtrim($shareCliCommandConfigFileName, '/');
 
         $concreteCode = $shareCliCommandConfigFileName;
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../'.$shareCliCommandConfigFileName.'\');';
         if(!$configGenerator->hasCode($concreteCode)) {
-            $configGenerator->appendCode($codeForAppend);
+            $code = $configGenerator->appendCode($codeForAppend);
+            $this->dump($configFile, $code);
         }
+    }
+
+    protected function dump(string $fileName, string $code): GenerateResult
+    {
+        $this->fs->dumpFile($fileName, $code);
+        $generateResult = new GenerateResult($fileName, $code);
+        return $generateResult;
     }
 }

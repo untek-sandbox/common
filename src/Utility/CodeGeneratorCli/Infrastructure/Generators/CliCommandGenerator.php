@@ -2,6 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
@@ -13,6 +15,17 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHel
 
 class CliCommandGenerator
 {
+
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
+    public function __construct()
+    {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
+    }
 
     public function generate(GenerateCliCommand $command): GenerateResult
     {
@@ -30,13 +43,16 @@ class CliCommandGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command.tpl.php';
 
-        $fileGenerator = new FileGenerator();
-        $fileName = $fileGenerator->generatePhpClass($cliCommandClassName, $template, $params);
+        $fileName = $this->fileGenerator->generatePhpClassFileName($cliCommandClassName);
+        $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
+        return $this->dump($fileName, $code);
+    }
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
-
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
+    protected function dump(string $fileName, string $code): GenerateResult
+    {
+        $this->fs->dumpFile($fileName, $code);
+        $generateResult = new GenerateResult($fileName, $code);
         return $generateResult;
     }
+
 }

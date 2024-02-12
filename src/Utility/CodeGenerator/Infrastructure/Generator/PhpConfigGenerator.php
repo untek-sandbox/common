@@ -9,25 +9,29 @@ class PhpConfigGenerator
 {
 
     private FileGenerator $fileGenerator;
+    private CodeGenerator $codeGenerator;
 
     public function __construct(private string $configFile, private string $template)
     {
         $this->fileGenerator = new FileGenerator();
+        $this->codeGenerator = new CodeGenerator();
     }
 
-    public function appendCode(string $code/*, string $hasCode*/): void
+    public function appendCode(string $code/*, string $hasCode*/): string
     {
-        $fileGenerator = $this->fileGenerator;
         $fs = new Filesystem();
         $configFile = $this->configFile;
         if (!$fs->exists($configFile)) {
-            $configFileTemplate = $this->template;
-            $fileGenerator->generatePhpFile($configFile, $configFileTemplate);
+            $this->fileGenerator->generatePhpFile($configFile, $this->template);
         }
+//        $this->fileGenerator->appendCodeInFile($configFile, $code);
+        $code = $this->codeGenerator->appendCodeInFile($configFile, $code);
+        return $code;
+    }
 
-//        if (!$fileGenerator->hasCode($configFile, $hasCode)) {
-            $fileGenerator->appendCodeInFile($configFile, $code);
-//        }
+    public function generateCode(string $code): string
+    {
+
     }
 
     public function hasCode(string $code): bool {
