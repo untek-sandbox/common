@@ -36,6 +36,7 @@ class ContainerConfigGenerator
         $configFile = ComposerHelper::getPsr4Path($this->namespace) . '/resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+//        dd($concreteClassName);
         if(!$configGenerator->hasCode($concreteClassName)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->dump($configFile, $code);

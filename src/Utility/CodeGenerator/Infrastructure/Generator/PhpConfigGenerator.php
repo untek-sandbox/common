@@ -8,33 +8,42 @@ use Untek\Core\Code\Helpers\ComposerHelper;
 class PhpConfigGenerator
 {
 
-    private FileGenerator $fileGenerator;
     private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
 
     public function __construct(private string $configFile, private string $template)
     {
-        $this->fileGenerator = new FileGenerator();
         $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
     }
 
-    public function appendCode(string $code/*, string $hasCode*/): string
+    public function appendCode(string $codeForAppend): string
     {
         $fs = new Filesystem();
-        $configFile = $this->configFile;
-        if (!$fs->exists($configFile)) {
-            $this->fileGenerator->generatePhpFile($configFile, $this->template);
+        if (!$fs->exists($this->configFile)) {
+            $code = $this->codeGenerator->generatePhpCode($this->template);
+        } else {
+            $code = file_get_contents($this->configFile);
         }
-//        $this->fileGenerator->appendCodeInFile($configFile, $code);
-        $code = $this->codeGenerator->appendCodeInFile($configFile, $code);
+
+        $code = $this->codeGenerator->appendCode($code, $codeForAppend);
+
         return $code;
     }
 
-    public function generateCode(string $code): string
-    {
-
+    public function hasCode(string $code): bool {
+        return $this->hasCodeInFile($this->configFile, $code);
     }
 
-    public function hasCode(string $code): bool {
-        return $this->fileGenerator->hasCode($this->configFile, $code);
+
+    public function hasCodeInFile(string $fileName, string $needle): bool
+    {
+        if(!is_file($fileName)) {
+            return false;
+        }
+        $code = file_get_contents($fileName);
+        return str_contains($code, $needle);
     }
 }

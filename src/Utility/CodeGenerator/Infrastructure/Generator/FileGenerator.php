@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
 use Untek\Component\Render\Infrastructure\Services\Render;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Instance\Helpers\ClassHelper;
@@ -36,8 +37,15 @@ class FileGenerator
         return $fileName;
     }
 
+    /**
+     * @param string $fileName
+     * @param string $template
+     * @param array $parameters
+     * @deprecated
+     */
     public function generatePhpFile(string $fileName, string $template, array $parameters = [])
     {
+        DeprecateHelper::hardThrow();
 //        $render = new Render();
 //        $code = $render->renderFile($template, $parameters);
 //        $code = $this->codeGenerator->generateCode($template, $parameters);
@@ -48,18 +56,14 @@ class FileGenerator
 
     public function generateFile(string $fileName, string $template, array $parameters = [])
     {
+        DeprecateHelper::hardThrow();
         $code = $this->codeGenerator->generateCode($template, $parameters);
         $this->fs->dumpFile($fileName, $code);
     }
 
-    public function appendCodeInFile(string $fileName, string $codeForAppend): void
-    {
-        $code = $this->codeGenerator->appendCodeInFile($fileName, $codeForAppend);
-        $fs->dumpFile($fileName, $code);
-    }
-
     public function hasCode(string $fileName, string $needle): bool
     {
+        DeprecateHelper::hardThrow();
         if(!is_file($fileName)) {
             return false;
         }

@@ -19,6 +19,7 @@ class ContainerConfigGenerator
             'service(\Illuminate\Database\Capsule\Manager::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
+
         $fileName = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);

@@ -2,7 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
@@ -12,6 +14,17 @@ use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCom
 
 class MigrationGenerator
 {
+
+    private CodeGenerator $codeGenerator;
+    private Filesystem $fs;
+    private FileGenerator $fileGenerator;
+
+    public function __construct()
+    {
+        $this->codeGenerator = new CodeGenerator();
+        $this->fs = new Filesystem();
+        $this->fileGenerator = new FileGenerator();
+    }
 
     public function generate(GenerateDatabaseCommand $command): GenerateResult
     {
@@ -26,8 +39,10 @@ class MigrationGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
 
-        $fileGenerator = new FileGenerator();
-        $fileGenerator->generatePhpFile($fileName, $template, $params);
+//        $fileGenerator = new FileGenerator();
+//        $fileGenerator->generatePhpFile($fileName, $template, $params);
+        $code = $this->codeGenerator->generatePhpCode($template, $params);
+        $this->fs->dumpFile($fileName, $code);
 
         (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
 

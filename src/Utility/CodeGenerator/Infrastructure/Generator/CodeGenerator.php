@@ -2,9 +2,7 @@
 
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Component\Render\Infrastructure\Services\Render;
-use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 
 class CodeGenerator
@@ -21,7 +19,6 @@ class CodeGenerator
     {
         $parameters['namespace'] = ClassHelper::getNamespace($className);
         $parameters['className'] = ClassHelper::getClassOfClassName($className);
-//        $fileName = PackageHelper::pathByNamespace($className) . '.php';
         $code = $this->generatePhpCode($template, $parameters);
         return $code;
     }
@@ -33,10 +30,8 @@ class CodeGenerator
         return $code;
     }
 
-    public function appendCodeInFile(string $fileName, string $codeForAppend): string
+    public function appendCode(string $code, string $codeForAppend): string
     {
-        $fs = new Filesystem();
-        $code = file_get_contents($fileName);
         $code = trim($code);
         $codeLines = explode(PHP_EOL, $code);
         $lastLine = array_pop($codeLines);
