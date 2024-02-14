@@ -14,13 +14,13 @@ class ControllerTestGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(GenerateRestApiCommand $command): GenerateResult
@@ -31,9 +31,6 @@ class ControllerTestGenerator
             'method' => $command->getHttpMethod(),
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
-
-//        $fileGenerator = new FileGenerator();
-//        $fileName = $fileGenerator->generatePhpClass($controllerTestClassName, $template, $params);
 
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);

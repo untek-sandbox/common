@@ -14,13 +14,13 @@ class NormalizerGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(GenerateDatabaseCommand $command): GenerateResult
@@ -36,9 +36,6 @@ class NormalizerGenerator
 //            'modelClassName' => $modelClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/normalizer.php';
-
-//        $fileGenerator = new FileGenerator();
-//        $fileName = $fileGenerator->generatePhpClass($className, $template, $params);
 
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);

@@ -14,13 +14,13 @@ class CommandHandlerGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(GenerateApplicationCommand $command): GenerateResult
@@ -35,18 +35,12 @@ class CommandHandlerGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
 
-//        $fileGenerator = new FileGenerator();
-//        $fileName = $fileGenerator->generatePhpClass($handlerClassName, $template, $params);
-
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
         $this->fs->dumpFile($fileName, $code);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-
-        return $generateResult;
+        return new GenerateResult($fileName, $code);
     }
 }

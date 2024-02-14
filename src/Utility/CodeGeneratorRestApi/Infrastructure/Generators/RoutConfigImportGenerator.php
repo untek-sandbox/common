@@ -16,13 +16,13 @@ class RoutConfigImportGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(GenerateRestApiCommand $command): GenerateResult

@@ -11,13 +11,13 @@ class ContainerConfigGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct(private string $namespace)
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(string $abstractClassName, string $concreteClassName, array $args = null): string {

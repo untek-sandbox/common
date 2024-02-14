@@ -17,13 +17,13 @@ class ControllerGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
+
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(GenerateRestApiCommand $command): GenerateResult
@@ -43,9 +43,6 @@ class ControllerGenerator
             'schemaClassName' => $schemaClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
-
-//        $fileGenerator = new FileGenerator();
-//        $fileName = $fileGenerator->generatePhpClass($controllerClassName, $template, $params);
 
         $code = $this->codeGenerator->generatePhpClassCode($controllerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerClassName);

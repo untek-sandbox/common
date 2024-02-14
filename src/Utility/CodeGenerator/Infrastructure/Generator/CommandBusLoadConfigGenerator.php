@@ -4,20 +4,23 @@ namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+
+DeprecateHelper::hardThrow();
 
 class CommandBusLoadConfigGenerator
 {
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-//    private FileGenerator $fileGenerator;
 
-    public function __construct(private string $namespace)
+
+    public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-//        $this->fileGenerator = new FileGenerator();
+
     }
 
     public function generate(string $modulePath): string {
