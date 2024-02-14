@@ -4,12 +4,18 @@ namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 
+/**
+ * Class RoutesConfigGenerator
+ * @package Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator
+ * @deprecated
+ */
 class RoutesConfigGenerator
 {
 
@@ -19,6 +25,7 @@ class RoutesConfigGenerator
 
     public function __construct()
     {
+        DeprecateHelper::hardThrow();
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
         $this->fileGenerator = new FileGenerator();
