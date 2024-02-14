@@ -13,6 +13,8 @@ use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
 class GenerateCodeCommand extends Command
 {
@@ -89,13 +91,20 @@ class GenerateCodeCommand extends Command
 
     protected function handleCommands(array $commands): array
     {
-        $result = [];
+        $files = [];
+        $collection = new GenerateResultCollection();
         foreach ($commands as $command) {
-            $handleResult = $this->bus->handle($command);
-            if ($handleResult) {
-                $result = ArrayHelper::merge($result, $handleResult);
+            $resultCollection = $this->bus->handle($command);
+            $collection->merge($resultCollection);
+        }
+
+        foreach ($collection->getAll() as $result) {
+            if(realpath($result->getFileName())) {
+                $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
+            } else {
+                $files[] = $result->getFileName();
             }
         }
-        return $result;
+        return $files;
     }
 }

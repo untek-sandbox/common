@@ -21,26 +21,20 @@ class GenerateApplicationCommandHandler
     {
         $collection = new GenerateResultCollection();
 
-        $resultCollection = (new CommandGenerator())->generate($command);
-        $collection->merge($resultCollection);
+        $generators = [
+            new CommandGenerator(),
+            new CommandHandlerGenerator(),
+            new CommandValidatorGenerator(),
+            new ContainerConfigGenerator(),
+            new ContainerConfigImportGenerator(),
+            new ContainerConfigBusGenerator(),
+            new ContainerConfigBusImportGenerator(),
+        ];
 
-        $resultCollection = (new CommandHandlerGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new CommandValidatorGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new ContainerConfigImportGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new ContainerConfigBusGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new ContainerConfigBusImportGenerator())->generate($command);
-        $collection->merge($resultCollection);
+        foreach ($generators as $generator) {
+            $resultCollection = $generator->generate($command);
+            $collection->merge($resultCollection);
+        }
 
         $files = [];
         $fs = new Filesystem();
@@ -48,6 +42,6 @@ class GenerateApplicationCommandHandler
             $fs->dumpFile($result->getFileName(), $result->getCode());
             $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
         }
-        return $files;
+        return $collection;
     }
 }

@@ -4,7 +4,7 @@ namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
-use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
@@ -29,33 +29,28 @@ class GenerateRestApiCommandHandler
 
         $collection = new GenerateResultCollection();
 
-        $resultCollection = (new ControllerGenerator())->generate($command);
-        $collection->merge($resultCollection);
+        $generators = [
+            new ControllerGenerator(),
+            new RestApiSchemeGenerator(),
+            new ControllerTestGenerator(),
+            new ContainerConfigGenerator(),
+            new RoutConfigGenerator(),
+            new RoutConfigImportGenerator(),
+        ];
 
-        $resultCollection = (new RestApiSchemeGenerator())->generate($command);
-        $collection->merge($resultCollection);
+        foreach ($generators as $generator) {
+            $resultCollection = $generator->generate($command);
+            $collection->merge($resultCollection);
+        }
 
-        $resultCollection = (new ControllerTestGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new RoutConfigGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $resultCollection = (new RoutConfigImportGenerator())->generate($command);
-        $collection->merge($resultCollection);
-
-        $files = [];
         $fs = new Filesystem();
         foreach ($collection->getAll() as $result) {
             $fs->dumpFile($result->getFileName(), $result->getCode());
-            $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
         }
 
-        $files[] = 'Endpoint: ' . $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();
+        $endpoint = 'Endpoint: ' . $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();
+        $collection->add(new GenerateResult($endpoint, ''));
 
-        return $files;
+        return $collection;
     }
 }
