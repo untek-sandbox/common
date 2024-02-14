@@ -21,10 +21,9 @@ class ContainerConfigBusImportGenerator
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
 
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
-        $fs = new Filesystem();
-        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
+        $relative = GeneratorFileHelper::fileNameTotoRelative($path);
 
-        $modulePath = $relative.'resources/config/command-bus.php';
+        $modulePath = $relative.'/resources/config/command-bus.php';
 
 //        $consoleLoadConfigGenerator = new CommandBusLoadConfigGenerator($command->getNamespace());
 //        $fileName = $consoleLoadConfigGenerator->generate($modulePath);

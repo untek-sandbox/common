@@ -18,10 +18,9 @@ class RoutConfigImportGenerator
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
-        $fs = new Filesystem();
-        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
+        $relative = GeneratorFileHelper::fileNameTotoRelative($path);
 
-        $modulePath = $relative . 'resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
+        $modulePath = $relative . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
 
 //        $consoleLoadConfigGenerator = new RoutesLoadConfigGenerator($command->getNamespace());
 //        $fileName = $consoleLoadConfigGenerator->generate($modulePath, '/v' . $command->getVersion());
