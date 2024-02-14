@@ -5,6 +5,7 @@ namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
 class ContainerConfigGenerator
 {
@@ -20,7 +21,7 @@ class ContainerConfigGenerator
 
     }
 
-    public function generate(string $abstractClassName, string $concreteClassName, array $args = null): string {
+    public function generate(string $abstractClassName, string $concreteClassName, array $args = null): GenerateResultCollection {
         $codeForAppend =
             '    $services->set(\\' . $abstractClassName . '::class, \\' . $concreteClassName . '::class)';
 
@@ -41,7 +42,10 @@ class ContainerConfigGenerator
             $code = $configGenerator->appendCode($codeForAppend);
             $this->fs->dumpFile($configFile, $code);
         }
-        return $configFile;
+
+        return new GenerateResultCollection([
+            new GenerateResult($configFile, $code)
+        ]);
     }
 
 }

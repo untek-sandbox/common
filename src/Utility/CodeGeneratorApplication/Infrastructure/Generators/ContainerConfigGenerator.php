@@ -15,12 +15,12 @@ class ContainerConfigGenerator
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
-        $fileName = $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
+        return $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
+        /*return new GenerateResultCollection([
             new GenerateResult($fileName)
-        ]);
+        ]);*/
     }
 }

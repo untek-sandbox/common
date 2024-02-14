@@ -10,7 +10,7 @@ use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollect
 
 DeprecateHelper::hardThrow();
 
-class CommandBusLoadConfigGenerator
+/*class CommandBusLoadConfigGenerator
 {
 
     private CodeGenerator $codeGenerator;
@@ -35,4 +35,4 @@ class CommandBusLoadConfigGenerator
         }
         return $configFile;
     }
-}
+}*/

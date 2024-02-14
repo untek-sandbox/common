@@ -21,12 +21,12 @@ class ContainerConfigGenerator
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
 
-        $fileName = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
+        return $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
+        /*return new GenerateResultCollection([
             new GenerateResult($fileName)
-        ]);
+        ]);*/
     }
 }

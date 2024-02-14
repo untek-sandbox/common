@@ -22,12 +22,12 @@ class ContainerConfigGenerator
             'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
-        $fileName = $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
+        return $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
+        /*return new GenerateResultCollection([
             new GenerateResult($fileName)
-        ]);
+        ]);*/
     }
 }

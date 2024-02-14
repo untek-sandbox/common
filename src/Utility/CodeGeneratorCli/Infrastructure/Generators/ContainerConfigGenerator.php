@@ -33,12 +33,12 @@ class ContainerConfigGenerator
             'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
-        $fileName = $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
+        return $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
+        /*return new GenerateResultCollection([
             new GenerateResult($fileName)
-        ]);
+        ]);*/
     }
 }
