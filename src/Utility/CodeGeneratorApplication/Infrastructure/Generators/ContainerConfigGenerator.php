@@ -18,8 +18,6 @@ class ContainerConfigGenerator
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResult($fileName);
     }
 }

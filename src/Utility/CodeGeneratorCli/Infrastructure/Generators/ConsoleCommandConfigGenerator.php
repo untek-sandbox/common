@@ -42,9 +42,7 @@ class ConsoleCommandConfigGenerator
         }
         $this->addImport($cliCommandConfigFileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($cliCommandConfigFileName);
-        return $generateResult;
+        return new GenerateResult($cliCommandConfigFileName, $code);
     }
 
     private function addImport($cliCommandConfigFileName) {
