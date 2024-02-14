@@ -38,9 +38,6 @@ class RoutConfigImportGenerator
 //        $fileName = $consoleLoadConfigGenerator->generate($modulePath, '/v' . $command->getVersion());
         $resultCollection = $this->generateConfig($modulePath, '/v' . $command->getVersion());
 
-        foreach ($resultCollection->getAll() as $result) {
-            $this->fs->dumpFile($result->getFileName(), $result->getCode());
-        }
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return $resultCollection;

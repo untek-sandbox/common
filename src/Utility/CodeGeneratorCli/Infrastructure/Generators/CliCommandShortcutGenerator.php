@@ -32,8 +32,6 @@ class CliCommandShortcutGenerator
 
         $code = $this->codeGenerator->generateCode($template, $params);
 
-        $this->fs->dumpFile($fileName, $code);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);

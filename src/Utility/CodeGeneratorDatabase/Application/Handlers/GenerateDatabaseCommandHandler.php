@@ -63,8 +63,10 @@ class GenerateDatabaseCommandHandler
         $collection->merge($resultCollection);
 
         $files = [];
+        $fs = new Filesystem();
         foreach ($collection->getAll() as $result) {
-            $files[] = GeneratorFileHelper::fileNameTotoRelative($result->getFileName());
+            $fs->dumpFile($result->getFileName(), $result->getCode());
+            $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
         }
 
         return $files;

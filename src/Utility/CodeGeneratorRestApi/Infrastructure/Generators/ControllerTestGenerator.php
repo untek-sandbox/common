@@ -35,7 +35,6 @@ class ControllerTestGenerator
 
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);
-        $this->fs->dumpFile($fileName, $code);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 

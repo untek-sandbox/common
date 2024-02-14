@@ -48,9 +48,6 @@ class MigrationGenerator
         $importResultCollection = (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
         $resultCollection->merge($importResultCollection);
 
-        foreach ($resultCollection->getAll() as $result) {
-            $this->fs->dumpFile($result->getFileName(), $result->getCode());
-        }
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return $resultCollection;

@@ -38,7 +38,6 @@ class MigrationConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->fs->dumpFile($configFile, $code);
             $resultCollection->add(new GenerateResult($configFile, $code));
         }
 

@@ -38,7 +38,6 @@ class CommandHandlerGenerator
 
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
-        $this->fs->dumpFile($fileName, $code);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 

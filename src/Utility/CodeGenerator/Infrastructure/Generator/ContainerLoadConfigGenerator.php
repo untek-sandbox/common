@@ -28,7 +28,6 @@ class ContainerLoadConfigGenerator
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
         if(!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend . PHP_EOL);
-            $this->fs->dumpFile($configFile, $code);
         }
         return new GenerateResultCollection([
             new GenerateResult($configFile, $code)

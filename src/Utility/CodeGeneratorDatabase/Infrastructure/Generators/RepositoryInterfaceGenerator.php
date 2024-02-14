@@ -36,7 +36,6 @@ class RepositoryInterfaceGenerator
 
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
-        $this->fs->dumpFile($fileName, $code);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 

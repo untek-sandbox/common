@@ -42,16 +42,17 @@ class ContainerConfigBusImportGenerator
         $fileName = __DIR__ . '/../../../../../../../../config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($fileName, $templateFile);
+
+        $resultCollection = new GenerateResultCollection();
+
         if(!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->fs->dumpFile($fileName, $code);
+            $resultCollection->add(new GenerateResult($fileName, $code));
         }
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
-        ]);
+        return $resultCollection;
     }
 
 }

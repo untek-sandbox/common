@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Core\FileSystem\Helpers\FilePathHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerLoadConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
@@ -21,9 +22,16 @@ class ContainerConfigImportGenerator
 
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $fs = new Filesystem();
-        $relative = $fs->makePathRelative($path, getenv('ROOT_DIRECTORY'));
 
-        $modulePath = $relative.'resources/config/services/main.php';
+        if(realpath($path) === false) {
+            $up = FilePathHelper::up($path);
+            $basename = basename($path);
+            $path = $up . '/' . $basename;
+        }
+
+        $relative = GeneratorFileHelper::fileNameTotoRelative($path);
+
+        $modulePath = $relative.'/resources/config/services/main.php';
 
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($command->getNamespace());
         return $consoleLoadConfigGenerator->generate($modulePath);

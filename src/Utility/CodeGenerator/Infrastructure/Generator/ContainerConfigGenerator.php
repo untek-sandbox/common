@@ -40,7 +40,6 @@ class ContainerConfigGenerator
 //        dd($concreteClassName);
         if(!$configGenerator->hasCode($concreteClassName)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->fs->dumpFile($configFile, $code);
         }
 
         return new GenerateResultCollection([

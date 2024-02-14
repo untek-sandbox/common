@@ -17,7 +17,11 @@ class GeneratorFileHelper
     public static function fileNameTotoRelative(string $filename): string
     {
         $fs = new Filesystem();
-        $fileName = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
-        return rtrim($fileName, '/');
+        if($fs->isAbsolutePath($filename)) {
+            $filename = str_replace(getenv('ROOT_DIRECTORY'), '', $filename);
+//            dd($filename);
+        }
+//        $filename = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
+        return rtrim($filename, '/');
     }
 }

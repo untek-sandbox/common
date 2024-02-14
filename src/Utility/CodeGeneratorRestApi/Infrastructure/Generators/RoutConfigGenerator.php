@@ -40,7 +40,6 @@ class RoutConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if($code) {
             $resultCollection->add(new GenerateResult($fileName, $code));
-            $this->fs->dumpFile($fileName, $code);
         }
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);

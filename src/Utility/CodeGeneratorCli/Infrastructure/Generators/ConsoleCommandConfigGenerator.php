@@ -37,16 +37,17 @@ class ConsoleCommandConfigGenerator
         $configGenerator = new PhpConfigGenerator($cliCommandConfigFileName, $templateFile);
         $concreteCode = '\\'.$cliCommandClassName.'';
         $codeForAppend = '  $commandConfigurator->registerCommandClass('.$concreteCode.'::class);';
+
+        $resultCollection = new GenerateResultCollection();
+
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->fs->dumpFile($cliCommandConfigFileName, $code);
+            $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
         }
 
         $importResult = $this->addImport($cliCommandConfigFileName);
 
-        $resultCollection = new GenerateResultCollection();
         if($importResult) {
-            $this->fs->dumpFile($importResult->getFileName(), $importResult->getCode());
             $resultCollection->add($importResult);
         }
         $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));

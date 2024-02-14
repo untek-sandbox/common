@@ -50,7 +50,6 @@ class ContainerConfigBusGenerator
 //        return $generateResult;
         $resultCollection = new GenerateResultCollection();
         if($code) {
-            $this->fs->dumpFile($fileName, $code);
             $resultCollection->add(new GenerateResult($fileName, $code));
         }
 
