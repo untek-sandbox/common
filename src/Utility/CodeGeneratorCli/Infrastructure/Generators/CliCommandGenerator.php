@@ -44,14 +44,10 @@ class CliCommandGenerator
 
         $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
-        return $this->dump($fileName, $code);
-    }
 
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
         $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
+        return new GenerateResult($fileName, $code);
+
     }
 
 }

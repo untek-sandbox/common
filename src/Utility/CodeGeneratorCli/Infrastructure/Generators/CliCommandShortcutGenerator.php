@@ -30,14 +30,9 @@ class CliCommandShortcutGenerator
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
 
         $code = $this->codeGenerator->generateCode($template, $params);
-        return $this->dump($fileName, $code);
-    }
 
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
         $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
+        return new GenerateResult($fileName, $code);
     }
 
     private function getShortcutFileName(GenerateCliCommand $command): string

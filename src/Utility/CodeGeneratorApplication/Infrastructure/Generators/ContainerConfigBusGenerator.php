@@ -48,16 +48,11 @@ class ContainerConfigBusGenerator
 //        $generateResult->setFileName($fileName);
 //        return $generateResult;
 
-        return $this->dump($fileName, $code);
-    }
-
-    protected function dump(string $fileName, ?string $code): GenerateResult
-    {
         if($code) {
             $this->fs->dumpFile($fileName, $code);
         }
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
+
+        return new GenerateResult($fileName, $code);
     }
 
 }

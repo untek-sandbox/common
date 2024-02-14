@@ -38,9 +38,9 @@ class ConsoleCommandConfigGenerator
         $codeForAppend = '  $commandConfigurator->registerCommandClass('.$concreteCode.'::class);';
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->dump($cliCommandConfigFileName, $code);
+            $this->fs->dumpFile($cliCommandConfigFileName, $code);
         }
-        $this->addImport($cliCommandConfigFileName);
+        $importResult = $this->addImport($cliCommandConfigFileName);
 
         return new GenerateResult($cliCommandConfigFileName, $code);
     }
@@ -56,14 +56,10 @@ class ConsoleCommandConfigGenerator
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../'.$shareCliCommandConfigFileName.'\');';
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->dump($configFile, $code);
+
+            $this->fs->dumpFile($configFile, $code);
+            return new GenerateResult($configFile, $code);
         }
     }
 
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
-        $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
-    }
 }

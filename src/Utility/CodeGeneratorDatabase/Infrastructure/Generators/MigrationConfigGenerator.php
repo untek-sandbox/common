@@ -15,15 +15,13 @@ class MigrationConfigGenerator
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
 
-
     public function __construct(private string $namespace, private string $migrationConfigFile)
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-
     }
 
-    public function generate(): string {
+    public function generate(): ?GenerateResult {
         $fileName = PackageHelper::pathByNamespace($this->namespace) . '/resources/migrations';
         $fileName = (new Filesystem())->makePathRelative($fileName, realpath(__DIR__ . '/../../../../../../../..'));
         $fileName = rtrim($fileName, '/');
@@ -36,16 +34,9 @@ class MigrationConfigGenerator
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->dump($configFile, $code);
+            $this->fs->dumpFile($configFile, $code);
+            return new GenerateResult($configFile, $code);
         }
-        return $configFile;
-    }
-
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
-        $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
     }
 
 }

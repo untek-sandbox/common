@@ -43,7 +43,7 @@ class ContainerConfigBusImportGenerator
         $configGenerator = new PhpConfigGenerator($fileName, $templateFile);
         if(!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->dump($fileName, $code);
+            $this->fs->dumpFile($fileName, $code);
         }
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
@@ -51,10 +51,4 @@ class ContainerConfigBusImportGenerator
         return new GenerateResult($fileName, $code);
     }
 
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
-        $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
-    }
 }

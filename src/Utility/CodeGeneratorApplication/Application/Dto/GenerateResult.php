@@ -12,7 +12,7 @@ class GenerateResult
 
     public function __construct(
         string $fileName = null,
-        string $code = null,
+        ?string $code = null,
         string $type = 'text',
     )
     {
