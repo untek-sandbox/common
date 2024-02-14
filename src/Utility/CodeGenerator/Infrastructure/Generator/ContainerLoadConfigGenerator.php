@@ -26,12 +26,13 @@ class ContainerLoadConfigGenerator
         $configFile = __DIR__ . '/../../../../../../../../config/container.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        $resultCollection = new GenerateResultCollection();
         if(!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend . PHP_EOL);
+            $resultCollection->add(new GenerateResult($configFile, $code));
         }
-        return new GenerateResultCollection([
-            new GenerateResult($configFile, $code)
-        ]);
+        return $resultCollection;
     }
 
 }
