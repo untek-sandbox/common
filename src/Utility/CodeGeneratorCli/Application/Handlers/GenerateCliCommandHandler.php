@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Application\Handlers;
 
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Application\Validators\GenerateCliCommandValidator;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\CliCommandGenerator;
@@ -22,25 +23,22 @@ class GenerateCliCommandHandler
         $validator = new GenerateCliCommandValidator();
         $validator->validate($command);
 
-        $files = [];
+        $collection = new GenerateResultCollection();
 
         $resultCollection = (new CliCommandGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ConsoleCommandConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new CliCommandShortcutGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
+        $collection->merge($resultCollection);
+
+        $files = [];
+        foreach ($collection->getAll() as $result) {
             $files[] = $result->getFileName();
         }
 

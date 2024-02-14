@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ContainerConfigGenerator;
@@ -21,38 +22,31 @@ class GenerateRestApiCommandHandler
      */
     public function __invoke(GenerateRestApiCommand $command)
     {
-        $files = [];
-
         $validator = new GenerateRestApiCommandValidator();
         $validator->validate($command);
 
+        $collection = new GenerateResultCollection();
+
         $resultCollection = (new ControllerGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new RestApiSchemeGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ControllerTestGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new RoutConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new RoutConfigImportGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
+        $collection->merge($resultCollection);
+
+        $files = [];
+        foreach ($collection->getAll() as $result) {
             $files[] = $result->getFileName();
         }
 

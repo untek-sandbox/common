@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandHandlerGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandValidatorGenerator;
@@ -16,43 +17,33 @@ class GenerateApplicationCommandHandler
 
     public function __invoke(GenerateApplicationCommand $command)
     {
-        $files = [];
+        $collection = new GenerateResultCollection();
 
         $resultCollection = (new CommandGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new CommandHandlerGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new CommandValidatorGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigImportGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigBusGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigBusImportGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
+        $collection->merge($resultCollection);
+
+        $files = [];
+        foreach ($collection->getAll() as $result) {
             $files[] = $result->getFileName();
         }
-
         return $files;
     }
 }

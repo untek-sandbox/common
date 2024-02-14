@@ -8,6 +8,7 @@ use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
@@ -38,47 +39,33 @@ class GenerateDatabaseCommandHandler
      */
     public function __invoke(GenerateDatabaseCommand $command)
     {
-        $files = [];
-
         $validator = new GenerateDatabaseCommandValidator();
         $validator->validate($command);
 
+        $collection = new GenerateResultCollection();
+
         $resultCollection = (new RepositoryInterfaceGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new NormalizerGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new EloquentRepositoryGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ModelGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new ContainerConfigGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
-            $files[] = $result->getFileName();
-        }
+        $collection->merge($resultCollection);
 
         $resultCollection = (new MigrationGenerator())->generate($command);
-        foreach ($resultCollection->getAll() as $result) {
+        $collection->merge($resultCollection);
+
+        $files = [];
+        foreach ($collection->getAll() as $result) {
             $files[] = $result->getFileName();
         }
-        
-        
-//        $files[] = $this->generateRepositoryInterface($command);
-//        $files[] = $this->generateModelClass($command);
-//        $files[] = $this->generateRepository($command);
-//        $files[] = $this->generateContainerConfig($command);
-//        $files[] = $this->generateMigration($command);
 
         return $files;
     }

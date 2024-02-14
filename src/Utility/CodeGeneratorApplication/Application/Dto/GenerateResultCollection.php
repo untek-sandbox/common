@@ -10,15 +10,30 @@ class GenerateResultCollection
 
     public function __construct(array $items = [])
     {
-        if($items) {
-            foreach ($items as $item) {
-                $this->add($item);
-            }
-        }
+        $this->fill($items);
     }
 
-    public function add(GenerateResult $result) {
+    public function merge(GenerateResultCollection $collection): self
+    {
+        $this->fill($collection->getAll());
+        return $this;
+    }
+
+    protected function fill(array $items): self
+    {
+        if (empty($items)) {
+            return $this;
+        }
+        foreach ($items as $item) {
+            $this->add($item);
+        }
+        return $this;
+    }
+
+    public function add(GenerateResult $result): self
+    {
         $this->items[] = $result;
+        return $this;
     }
 
     /**
