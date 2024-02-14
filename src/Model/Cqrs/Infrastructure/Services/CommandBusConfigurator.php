@@ -18,7 +18,7 @@ class CommandBusConfigurator implements CommandBusConfiguratorInterface
     public function getHandlerByCommandClass(string $commandClass): string
     {
         if (!isset($this->definitions[$commandClass])) {
-            throw new RuntimeException('Not found handler for command!');
+            throw new RuntimeException('Not found handler for command "' . $commandClass . '".');
         }
         return $this->definitions[$commandClass];
     }
