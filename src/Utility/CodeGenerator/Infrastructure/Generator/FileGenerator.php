@@ -9,33 +9,35 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 
+DeprecateHelper::hardThrow();
+
 class FileGenerator
 {
 
-    private CodeGenerator $codeGenerator;
+//    private CodeGenerator $codeGenerator;
     private Filesystem $fs;
 
     public function __construct()
     {
-        $this->codeGenerator = new CodeGenerator();
+//        $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
     }
 
-    public function generatePhpClassFileName(string $className): string
+    /*public function generatePhpClassFileName(string $className): string
     {
         DeprecateHelper::hardThrow();
         $fileName = PackageHelper::pathByNamespace($className) . '.php';
         return $fileName;
-    }
+    }*/
 
-    public function generatePhpClass(string $className, string $template, array $parameters = []): string
+    /*public function generatePhpClass(string $className, string $template, array $parameters = []): string
     {
         DeprecateHelper::hardThrow();
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $parameters);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->fs->dumpFile($fileName, $code);
         return $fileName;
-    }
+    }*/
 
     /**
      * @param string $fileName

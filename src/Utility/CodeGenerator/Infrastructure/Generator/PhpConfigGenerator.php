@@ -10,13 +10,13 @@ class PhpConfigGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-    private FileGenerator $fileGenerator;
+//    private FileGenerator $fileGenerator;
 
     public function __construct(private string $configFile, private string $template)
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-        $this->fileGenerator = new FileGenerator();
+//        $this->fileGenerator = new FileGenerator();
     }
 
     public function appendCode(string $codeForAppend): string

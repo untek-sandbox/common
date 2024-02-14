@@ -15,13 +15,13 @@ class MigrationConfigGenerator
 
     private CodeGenerator $codeGenerator;
     private Filesystem $fs;
-    private FileGenerator $fileGenerator;
+//    private FileGenerator $fileGenerator;
 
     public function __construct(private string $namespace, private string $migrationConfigFile)
     {
         $this->codeGenerator = new CodeGenerator();
         $this->fs = new Filesystem();
-        $this->fileGenerator = new FileGenerator();
+//        $this->fileGenerator = new FileGenerator();
     }
 
     public function generate(): string {
