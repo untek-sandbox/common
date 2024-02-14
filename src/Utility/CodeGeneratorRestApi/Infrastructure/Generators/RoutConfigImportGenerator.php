@@ -15,17 +15,6 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfig
 class RoutConfigImportGenerator
 {
 
-    private CodeGenerator $codeGenerator;
-    private Filesystem $fs;
-
-
-    public function __construct()
-    {
-        $this->codeGenerator = new CodeGenerator();
-        $this->fs = new Filesystem();
-
-    }
-
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $path = ComposerHelper::getPsr4Path($command->getNamespace());

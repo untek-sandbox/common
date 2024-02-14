@@ -10,15 +10,8 @@ use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollect
 class ContainerLoadConfigGenerator
 {
 
-    private CodeGenerator $codeGenerator;
-    private Filesystem $fs;
-
-
     public function __construct(private string $namespace)
     {
-        $this->codeGenerator = new CodeGenerator();
-        $this->fs = new Filesystem();
-
     }
 
     public function generate(string $modulePath): GenerateResultCollection {

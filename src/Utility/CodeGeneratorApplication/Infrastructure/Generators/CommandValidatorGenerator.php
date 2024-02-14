@@ -15,14 +15,10 @@ class CommandValidatorGenerator
 {
 
     private CodeGenerator $codeGenerator;
-    private Filesystem $fs;
-
 
     public function __construct()
     {
         $this->codeGenerator = new CodeGenerator();
-        $this->fs = new Filesystem();
-
     }
 
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection

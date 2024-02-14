@@ -16,15 +16,6 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusImportGenerator
 {
 
-    private CodeGenerator $codeGenerator;
-    private Filesystem $fs;
-
-    public function __construct()
-    {
-        $this->codeGenerator = new CodeGenerator();
-        $this->fs = new Filesystem();
-    }
-
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);

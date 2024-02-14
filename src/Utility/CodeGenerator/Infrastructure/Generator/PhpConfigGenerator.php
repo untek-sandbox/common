@@ -9,13 +9,11 @@ class PhpConfigGenerator
 {
 
     private CodeGenerator $codeGenerator;
-    private Filesystem $fs;
 
 
     public function __construct(private string $configFile, private string $template)
     {
         $this->codeGenerator = new CodeGenerator();
-        $this->fs = new Filesystem();
 
     }
 
