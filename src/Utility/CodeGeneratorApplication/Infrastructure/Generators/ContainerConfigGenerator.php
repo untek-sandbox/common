@@ -17,7 +17,7 @@ class ContainerConfigGenerator
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
         $fileName = $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return new GenerateResultCollection([
             new GenerateResult($fileName)

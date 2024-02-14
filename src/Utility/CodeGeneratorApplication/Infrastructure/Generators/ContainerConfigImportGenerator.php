@@ -28,7 +28,7 @@ class ContainerConfigImportGenerator
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($command->getNamespace());
         $fileName = $consoleLoadConfigGenerator->generate($modulePath);
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return new GenerateResultCollection([
             new GenerateResult($fileName)

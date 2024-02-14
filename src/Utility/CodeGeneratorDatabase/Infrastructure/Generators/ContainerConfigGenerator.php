@@ -23,7 +23,7 @@ class ContainerConfigGenerator
 
         $fileName = $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return new GenerateResultCollection([
             new GenerateResult($fileName)
