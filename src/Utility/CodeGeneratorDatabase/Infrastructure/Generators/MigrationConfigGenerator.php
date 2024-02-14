@@ -6,7 +6,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 

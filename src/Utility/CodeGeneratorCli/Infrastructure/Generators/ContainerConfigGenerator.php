@@ -4,7 +4,6 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;

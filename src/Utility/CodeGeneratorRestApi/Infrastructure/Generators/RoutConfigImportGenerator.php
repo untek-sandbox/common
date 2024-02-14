@@ -5,7 +5,6 @@ namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;

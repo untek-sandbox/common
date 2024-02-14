@@ -7,7 +7,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;

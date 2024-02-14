@@ -2,7 +2,6 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;

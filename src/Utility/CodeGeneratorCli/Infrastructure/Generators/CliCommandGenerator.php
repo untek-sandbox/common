@@ -7,7 +7,6 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;

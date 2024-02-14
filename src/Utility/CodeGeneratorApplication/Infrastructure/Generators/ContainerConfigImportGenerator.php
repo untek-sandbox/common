@@ -5,7 +5,6 @@ namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerLoadConfigGenerator;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\FileGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
