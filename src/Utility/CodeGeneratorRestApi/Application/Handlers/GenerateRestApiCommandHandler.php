@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
@@ -47,7 +48,7 @@ class GenerateRestApiCommandHandler
 
         $files = [];
         foreach ($collection->getAll() as $result) {
-            $files[] = $result->getFileName();
+            $files[] = GeneratorFileHelper::fileNameTotoRelative($result->getFileName());
         }
 
         $files[] = 'Endpoint: ' . $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();

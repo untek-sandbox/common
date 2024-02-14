@@ -30,6 +30,15 @@ class GenerateResultCollection
         return $this;
     }
 
+    public function addResult(
+        string $fileName = null,
+        ?string $code = null,
+        string $type = 'file',
+    )
+    {
+        $this->add(new GenerateResult($fileName, $code, $type));
+    }
+
     public function add(GenerateResult $result): self
     {
         $this->items[] = $result;

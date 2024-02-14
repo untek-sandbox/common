@@ -64,7 +64,7 @@ class GenerateDatabaseCommandHandler
 
         $files = [];
         foreach ($collection->getAll() as $result) {
-            $files[] = $result->getFileName();
+            $files[] = GeneratorFileHelper::fileNameTotoRelative($result->getFileName());
         }
 
         return $files;
@@ -84,8 +84,6 @@ class GenerateDatabaseCommandHandler
 
     private function generateContainerConfig(GenerateDatabaseCommand $command): string
     {
-        
-
         return GeneratorFileHelper::fileNameTotoRelative($configFile);
     }
 

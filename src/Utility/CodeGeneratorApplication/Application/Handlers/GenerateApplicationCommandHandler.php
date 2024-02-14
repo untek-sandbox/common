@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
@@ -42,7 +43,7 @@ class GenerateApplicationCommandHandler
 
         $files = [];
         foreach ($collection->getAll() as $result) {
-            $files[] = $result->getFileName();
+            $files[] = GeneratorFileHelper::fileNameTotoRelative($result->getFileName());
         }
         return $files;
     }
