@@ -48,14 +48,13 @@ class ContainerConfigBusGenerator
 //        $generateResult = new GenerateResult();
 //        $generateResult->setFileName($fileName);
 //        return $generateResult;
-
+        $resultCollection = new GenerateResultCollection();
         if($code) {
             $this->fs->dumpFile($fileName, $code);
+            $resultCollection->add(new GenerateResult($fileName, $code));
         }
 
-        return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
-        ]);
+        return $resultCollection;
     }
 
 }

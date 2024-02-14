@@ -46,13 +46,14 @@ class ConsoleCommandConfigGenerator
 
         $resultCollection = new GenerateResultCollection();
         if($importResult) {
+            $this->fs->dumpFile($importResult->getFileName(), $importResult->getCode());
             $resultCollection->add($importResult);
         }
         $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
         return $resultCollection;
     }
 
-    private function addImport($cliCommandConfigFileName) {
+    private function addImport($cliCommandConfigFileName): ?GenerateResult {
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
         $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
@@ -64,8 +65,6 @@ class ConsoleCommandConfigGenerator
 
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-
-            $this->fs->dumpFile($configFile, $code);
             return new GenerateResult($configFile, $code);
         }
     }

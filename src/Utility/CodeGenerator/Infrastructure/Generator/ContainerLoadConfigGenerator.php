@@ -5,6 +5,7 @@ namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
 class ContainerLoadConfigGenerator
 {
@@ -20,7 +21,7 @@ class ContainerLoadConfigGenerator
 
     }
 
-    public function generate(string $modulePath): string {
+    public function generate(string $modulePath): GenerateResultCollection {
         $codeForAppend = '$loader->load(__DIR__ . \'/../'.$modulePath.'\');';
         $configFile = __DIR__ . '/../../../../../../../../config/container.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-load-config.tpl.php';
@@ -29,7 +30,9 @@ class ContainerLoadConfigGenerator
             $code = $configGenerator->appendCode($codeForAppend . PHP_EOL);
             $this->fs->dumpFile($configFile, $code);
         }
-        return $configFile;
+        return new GenerateResultCollection([
+            new GenerateResult($configFile, $code)
+        ]);
     }
 
 }

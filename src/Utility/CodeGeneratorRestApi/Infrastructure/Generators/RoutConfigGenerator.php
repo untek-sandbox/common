@@ -36,15 +36,16 @@ class RoutConfigGenerator
 //        $consoleLoadConfigGenerator = new RoutesConfigGenerator();
 //        $consoleLoadConfigGenerator->generate($fileName, $controllerClassName, $command);
         $code = $this->generateConfig($fileName, $controllerClassName, $command);
+
+        $resultCollection = new GenerateResultCollection();
         if($code) {
+            $resultCollection->add(new GenerateResult($fileName, $code));
             $this->fs->dumpFile($fileName, $code);
         }
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
-        ]);
+        return $resultCollection;
     }
 
     protected function generateConfig(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): ?string {

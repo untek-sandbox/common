@@ -26,12 +26,12 @@ class ContainerConfigImportGenerator
         $modulePath = $relative.'resources/config/services/main.php';
 
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($command->getNamespace());
-        $fileName = $consoleLoadConfigGenerator->generate($modulePath);
+        return $consoleLoadConfigGenerator->generate($modulePath);
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResultCollection([
+        /*return new GenerateResultCollection([
             new GenerateResult($fileName)
-        ]);
+        ]);*/
     }
 }

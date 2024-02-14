@@ -45,7 +45,7 @@ class DoctrineRepositoryGenerator
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
         return new GenerateResultCollection([
-            new GenerateResult($fileName)
+            new GenerateResult($fileName, $code)
         ]);
     }
 }
