@@ -4,13 +4,14 @@ namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
 
 class ContainerConfigGenerator
 {
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResult
+    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
     {
         $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
         $repositoryInterfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
@@ -24,8 +25,8 @@ class ContainerConfigGenerator
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName)
+        ]);
     }
 }

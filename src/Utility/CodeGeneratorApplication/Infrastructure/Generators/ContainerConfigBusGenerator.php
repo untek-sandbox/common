@@ -9,6 +9,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -26,7 +27,7 @@ class ContainerConfigBusGenerator
 
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResult
+    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
@@ -52,7 +53,9 @@ class ContainerConfigBusGenerator
             $this->fs->dumpFile($fileName, $code);
         }
 
-        return new GenerateResult($fileName, $code);
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 
 }

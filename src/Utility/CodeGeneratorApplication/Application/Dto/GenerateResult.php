@@ -31,14 +31,14 @@ class GenerateResult
         $this->fileName = $fileName;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
-        return $this->content;
+        return $this->code;
     }
 
     public function setCode(string $code): void
     {
-        $this->content = $code;
+        $this->code = $code;
     }
 
     public function getType(): string

@@ -26,23 +26,35 @@ class GenerateRestApiCommandHandler
         $validator = new GenerateRestApiCommandValidator();
         $validator->validate($command);
 
-        $result = (new ControllerGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ControllerGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new RestApiSchemeGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new RestApiSchemeGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ControllerTestGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ControllerTestGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new RoutConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new RoutConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new RoutConfigImportGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new RoutConfigImportGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
         $files[] = 'Endpoint: ' . $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();
 

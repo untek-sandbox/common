@@ -8,6 +8,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesConfigGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
@@ -26,7 +27,7 @@ class RoutConfigGenerator
 
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResult
+    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
 
@@ -34,18 +35,22 @@ class RoutConfigGenerator
 
 //        $consoleLoadConfigGenerator = new RoutesConfigGenerator();
 //        $consoleLoadConfigGenerator->generate($fileName, $controllerClassName, $command);
-        $this->generateConfig($fileName, $controllerClassName, $command);
+        $code = $this->generateConfig($fileName, $controllerClassName, $command);
+        if($code) {
+            $this->fs->dumpFile($fileName, $code);
+        }
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 
-    protected function generateConfig(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): string {
+    protected function generateConfig(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): ?string {
         $templateFile = __DIR__ . '/../../resources/templates/route-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+        $code = null;
         if(!$configGenerator->hasCode($controllerClassName)) {
             $routeName = $command->getHttpMethod() . '_' . $command->getUri();
             $controllerDefinition =
@@ -54,8 +59,7 @@ class RoutConfigGenerator
         ->controller(\\' . $controllerClassName . '::class)
         ->methods([\'' . $command->getHttpMethod() . '\']);';
             $code = $configGenerator->appendCode($controllerDefinition);
-            $this->fs->dumpFile($configFile, $code);
         }
-        return $configFile;
+        return $code;
     }
 }

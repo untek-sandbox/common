@@ -8,6 +8,7 @@ use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
 class MigrationConfigGenerator
 {
@@ -21,7 +22,8 @@ class MigrationConfigGenerator
         $this->fs = new Filesystem();
     }
 
-    public function generate(): ?GenerateResult {
+    public function generate(): GenerateResultCollection
+    {
         $fileName = PackageHelper::pathByNamespace($this->namespace) . '/resources/migrations';
         $fileName = (new Filesystem())->makePathRelative($fileName, realpath(__DIR__ . '/../../../../../../../..'));
         $fileName = rtrim($fileName, '/');
@@ -32,11 +34,14 @@ class MigrationConfigGenerator
         $configFile = $this->migrationConfigFile;
         $templateFile = __DIR__ . '/../../resources/templates/migration-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        $resultCollection = new GenerateResultCollection();
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->fs->dumpFile($configFile, $code);
-            return new GenerateResult($configFile, $code);
+            $resultCollection->add(new GenerateResult($configFile, $code));
         }
-    }
 
+        return $resultCollection;
+    }
 }

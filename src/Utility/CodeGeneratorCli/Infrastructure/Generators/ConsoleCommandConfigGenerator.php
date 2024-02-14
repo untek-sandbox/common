@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,7 +28,7 @@ class ConsoleCommandConfigGenerator
 
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResult
+    public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
         $cliCommandConfigFileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/config/commands.php';
@@ -40,9 +41,15 @@ class ConsoleCommandConfigGenerator
             $code = $configGenerator->appendCode($codeForAppend);
             $this->fs->dumpFile($cliCommandConfigFileName, $code);
         }
+
         $importResult = $this->addImport($cliCommandConfigFileName);
 
-        return new GenerateResult($cliCommandConfigFileName, $code);
+        $resultCollection = new GenerateResultCollection();
+        if($importResult) {
+            $resultCollection->add($importResult);
+        }
+        $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
+        return $resultCollection;
     }
 
     private function addImport($cliCommandConfigFileName) {
@@ -54,6 +61,7 @@ class ConsoleCommandConfigGenerator
 
         $concreteCode = $shareCliCommandConfigFileName;
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../'.$shareCliCommandConfigFileName.'\');';
+
         if(!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
 
@@ -61,5 +69,4 @@ class ConsoleCommandConfigGenerator
             return new GenerateResult($configFile, $code);
         }
     }
-
 }

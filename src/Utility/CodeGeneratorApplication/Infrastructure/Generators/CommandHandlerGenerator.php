@@ -7,6 +7,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 
 class CommandHandlerGenerator
@@ -23,7 +24,7 @@ class CommandHandlerGenerator
 
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResult
+    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
@@ -41,6 +42,8 @@ class CommandHandlerGenerator
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResult($fileName, $code);
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 }

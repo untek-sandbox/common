@@ -8,6 +8,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 
@@ -25,7 +26,7 @@ class MigrationGenerator
 
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResult
+    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
     {
         $time = date('Y_m_d_His');
         $className = 'm_' . $time . '_create_' . $command->getTableName() . '_table';
@@ -41,12 +42,12 @@ class MigrationGenerator
         $code = $this->codeGenerator->generatePhpCode($template, $params);
         $this->fs->dumpFile($fileName, $code);
 
-        (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
+        $resultCollection = (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+        $resultCollection->add(new GenerateResult($fileName, $code));
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+
+        return $resultCollection;
     }
 }

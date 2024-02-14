@@ -8,6 +8,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfigGenerator;
 
@@ -25,7 +26,7 @@ class RoutConfigImportGenerator
 
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResult
+    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $fs = new Filesystem();
@@ -35,26 +36,32 @@ class RoutConfigImportGenerator
 
 //        $consoleLoadConfigGenerator = new RoutesLoadConfigGenerator($command->getNamespace());
 //        $fileName = $consoleLoadConfigGenerator->generate($modulePath, '/v' . $command->getVersion());
-        $fileName = $this->generateConfig($modulePath, '/v' . $command->getVersion());
+        $resultCollection = $this->generateConfig($modulePath, '/v' . $command->getVersion());
 
-        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
+        foreach ($resultCollection->getAll() as $result) {
+            $this->fs->dumpFile($result->getFileName(), $result->getCode());
+        }
+//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return $resultCollection;
     }
 
-    protected function generateConfig(string $modulePath, string $prefix = null): string {
+    protected function generateConfig(string $modulePath, string $prefix = null): GenerateResultCollection {
         $codeForAppend = '    $routes
         ->import(__DIR__ . \'/../../../'.$modulePath.'\')
         ->prefix(\''.$prefix.'\');';
         $configFile = __DIR__ . '/../../../../../../../../context/rest-api/config/routes.php';
         $templateFile = __DIR__ . '/../../resources/templates/routes-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+
+        $resultCollection = new GenerateResultCollection();
+
         if(!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $this->fs->dumpFile($configFile, $code);
+
+            $resultCollection->add(new GenerateResult($configFile, $code));
         }
-        return $configFile;
+
+        return $resultCollection;
     }
 }

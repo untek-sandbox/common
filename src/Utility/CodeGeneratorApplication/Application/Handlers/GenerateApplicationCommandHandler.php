@@ -18,26 +18,40 @@ class GenerateApplicationCommandHandler
     {
         $files = [];
 
-        $result = (new CommandGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new CommandGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new CommandHandlerGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new CommandHandlerGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new CommandValidatorGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new CommandValidatorGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigImportGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigImportGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigBusGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigBusGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigBusImportGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigBusImportGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
         return $files;
     }

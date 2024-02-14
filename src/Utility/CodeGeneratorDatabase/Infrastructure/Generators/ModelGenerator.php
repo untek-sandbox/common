@@ -7,6 +7,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
@@ -25,7 +26,7 @@ class ModelGenerator
 
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResult
+    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
     {
         $className = ApplicationPathHelper::getModelClass($command);
 
@@ -40,8 +41,8 @@ class ModelGenerator
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 }

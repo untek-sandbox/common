@@ -43,23 +43,35 @@ class GenerateDatabaseCommandHandler
         $validator = new GenerateDatabaseCommandValidator();
         $validator->validate($command);
 
-        $result = (new RepositoryInterfaceGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new RepositoryInterfaceGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new NormalizerGenerator())->generate($command);
-        $files[] = $result->getFileName();
-        
-        $result = (new EloquentRepositoryGenerator())->generate($command);
-        $files[] = $result->getFileName();
-        
-        $result = (new ModelGenerator())->generate($command);
-        $files[] = $result->getFileName();
-        
-        $result = (new ContainerConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
-        
-        $result = (new MigrationGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new NormalizerGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
+
+        $resultCollection = (new EloquentRepositoryGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
+
+        $resultCollection = (new ModelGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
+
+        $resultCollection = (new ContainerConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
+
+        $resultCollection = (new MigrationGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
         
         
 //        $files[] = $this->generateRepositoryInterface($command);

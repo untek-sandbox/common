@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
@@ -23,7 +24,7 @@ class ContainerConfigGenerator
 
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResult
+    public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
 
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
@@ -36,13 +37,8 @@ class ContainerConfigGenerator
 
         $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        return new GenerateResult($fileName);
-    }
-
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
-        $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName)
+        ]);
     }
 }

@@ -6,6 +6,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -23,7 +24,7 @@ class ControllerTestGenerator
 
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResult
+    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $controllerTestClassName = ApplicationPathHelper::getControllerTestClassName($command);
         $params = [
@@ -38,8 +39,8 @@ class ControllerTestGenerator
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 }

@@ -24,17 +24,25 @@ class GenerateCliCommandHandler
 
         $files = [];
 
-        $result = (new CliCommandGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new CliCommandGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ConsoleCommandConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ConsoleCommandConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new ContainerConfigGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new ContainerConfigGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
-        $result = (new CliCommandShortcutGenerator())->generate($command);
-        $files[] = $result->getFileName();
+        $resultCollection = (new CliCommandShortcutGenerator())->generate($command);
+        foreach ($resultCollection->getAll() as $result) {
+            $files[] = $result->getFileName();
+        }
 
         return $files;
     }

@@ -6,6 +6,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -23,7 +24,7 @@ class DoctrineRepositoryGenerator
 
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResult
+    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
     {
         $repositoryDriver = 'doctrine';
         $modelClassName = ApplicationPathHelper::getModelClass($command);
@@ -43,8 +44,8 @@ class DoctrineRepositoryGenerator
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName)
+        ]);
     }
 }

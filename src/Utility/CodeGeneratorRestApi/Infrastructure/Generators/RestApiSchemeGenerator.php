@@ -9,6 +9,7 @@ use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -26,7 +27,7 @@ class RestApiSchemeGenerator
 
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResult
+    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $commandFullClassName = $command->getCommandClass();
 //        $commandFullClassName = Str::up($command->getCommandClass());
@@ -49,8 +50,8 @@ class RestApiSchemeGenerator
 
 //        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
 
-        $generateResult = new GenerateResult();
-        $generateResult->setFileName($fileName);
-        return $generateResult;
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 }

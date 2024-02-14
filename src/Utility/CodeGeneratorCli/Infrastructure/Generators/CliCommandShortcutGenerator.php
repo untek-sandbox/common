@@ -5,6 +5,7 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 
 class CliCommandShortcutGenerator
@@ -21,7 +22,7 @@ class CliCommandShortcutGenerator
 
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResult
+    public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
         $fileName = $this->getShortcutFileName($command);
         $params = [
@@ -32,7 +33,10 @@ class CliCommandShortcutGenerator
         $code = $this->codeGenerator->generateCode($template, $params);
 
         $this->fs->dumpFile($fileName, $code);
-        return new GenerateResult($fileName, $code);
+
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
     }
 
     private function getShortcutFileName(GenerateCliCommand $command): string

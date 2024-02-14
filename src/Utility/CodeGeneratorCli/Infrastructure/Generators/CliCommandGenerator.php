@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
@@ -26,7 +27,7 @@ class CliCommandGenerator
 
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResult
+    public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
@@ -46,7 +47,10 @@ class CliCommandGenerator
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
 
         $this->fs->dumpFile($fileName, $code);
-        return new GenerateResult($fileName, $code);
+
+        return new GenerateResultCollection([
+            new GenerateResult($fileName, $code)
+        ]);
 
     }
 
