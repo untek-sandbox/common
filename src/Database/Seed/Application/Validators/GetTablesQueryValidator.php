@@ -12,8 +12,7 @@ class GetTablesQueryValidator extends AbstractObjectValidator
     public function getConstraint(): Constraint
     {
         return new Assert\Collection([
-            'fields' => [
-            ]
+
         ]);
     }
 }
