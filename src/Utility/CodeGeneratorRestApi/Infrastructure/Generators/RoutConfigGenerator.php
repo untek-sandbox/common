@@ -55,15 +55,8 @@ class RoutConfigGenerator
         ->controller(\\' . $controllerClassName . '::class)
         ->methods([\'' . $command->getHttpMethod() . '\']);';
             $code = $configGenerator->appendCode($controllerDefinition);
-            $this->dump($configFile, $code);
+            $this->fs->dumpFile($configFile, $code);
         }
         return $configFile;
-    }
-
-    protected function dump(string $fileName, string $code): GenerateResult
-    {
-        $this->fs->dumpFile($fileName, $code);
-        $generateResult = new GenerateResult($fileName, $code);
-        return $generateResult;
     }
 }

@@ -7,6 +7,7 @@ use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Instance\Helpers\ClassHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 
 class FileGenerator
 {
@@ -22,6 +23,7 @@ class FileGenerator
 
     public function generatePhpClassFileName(string $className): string
     {
+        DeprecateHelper::hardThrow();
         $fileName = PackageHelper::pathByNamespace($className) . '.php';
         return $fileName;
     }
@@ -29,10 +31,7 @@ class FileGenerator
     public function generatePhpClass(string $className, string $template, array $parameters = []): string
     {
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $parameters);
-//        $parameters['namespace'] = ClassHelper::getNamespace($className);
-//        $parameters['className'] = ClassHelper::getClassOfClassName($className);
-        $fileName = PackageHelper::pathByNamespace($className) . '.php';
-//        $this->generatePhpFile($fileName, $template, $parameters);
+        $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->fs->dumpFile($fileName, $code);
         return $fileName;
     }
@@ -43,7 +42,7 @@ class FileGenerator
      * @param array $parameters
      * @deprecated
      */
-    public function generatePhpFile(string $fileName, string $template, array $parameters = [])
+    /*public function generatePhpFile(string $fileName, string $template, array $parameters = [])
     {
         DeprecateHelper::hardThrow();
 //        $render = new Render();
@@ -52,16 +51,16 @@ class FileGenerator
 //        $code = '<?php' . PHP_EOL . PHP_EOL . trim($code);
         $code = $this->codeGenerator->generatePhpCode($template, $parameters);
         $this->fs->dumpFile($fileName, $code);
-    }
+    }*/
 
-    public function generateFile(string $fileName, string $template, array $parameters = [])
+    /*public function generateFile(string $fileName, string $template, array $parameters = [])
     {
         DeprecateHelper::hardThrow();
         $code = $this->codeGenerator->generateCode($template, $parameters);
         $this->fs->dumpFile($fileName, $code);
-    }
+    }*/
 
-    public function hasCode(string $fileName, string $needle): bool
+    /*public function hasCode(string $fileName, string $needle): bool
     {
         DeprecateHelper::hardThrow();
         if(!is_file($fileName)) {
@@ -69,5 +68,5 @@ class FileGenerator
         }
         $code = file_get_contents($fileName);
         return str_contains($code, $needle);
-    }
+    }*/
 }

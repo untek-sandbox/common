@@ -43,7 +43,7 @@ class CliCommandGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command.tpl.php';
 
-        $fileName = $this->fileGenerator->generatePhpClassFileName($cliCommandClassName);
+        $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
         return $this->dump($fileName, $code);
     }
