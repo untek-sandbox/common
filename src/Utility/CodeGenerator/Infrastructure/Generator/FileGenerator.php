@@ -30,6 +30,7 @@ class FileGenerator
 
     public function generatePhpClass(string $className, string $template, array $parameters = []): string
     {
+        DeprecateHelper::hardThrow();
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $parameters);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->fs->dumpFile($fileName, $code);
