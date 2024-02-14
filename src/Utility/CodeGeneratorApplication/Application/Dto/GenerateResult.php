@@ -9,22 +9,16 @@ class GenerateResult
     const TYPE_OTHER = 'other';
 
     private ?string $fileName = null;
-    private ?string $code = null;
-    private string $type;
-    private bool $hasChanges;
+    private string $code;
 
     public function __construct(
         string $fileName,
-        ?string $code = null,
-        string $type = self::TYPE_FILE,
+        string $code,
     )
     {
-        if ($type == self::TYPE_FILE) {
-            $fileName = $this->normalizeFileName($fileName);
-        }
+        $fileName = $this->normalizeFileName($fileName);
         $this->fileName = $fileName;
         $this->code = $code;
-        $this->type = $type;
     }
 
     public function getFileName(): string
@@ -32,39 +26,9 @@ class GenerateResult
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName): void
-    {
-        $this->fileName = $fileName;
-    }
-
-    public function getCode(): ?string
+    public function getCode(): string
     {
         return $this->code;
-    }
-
-    public function setCode(string $code): void
-    {
-        $this->code = $code;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function isHasChanges(): bool
-    {
-        return $this->hasChanges;
-    }
-
-    public function setHasChanges(bool $hasChanges): void
-    {
-        $this->hasChanges = $hasChanges;
     }
 
     private function normalizeFileName(string $fileName): string
