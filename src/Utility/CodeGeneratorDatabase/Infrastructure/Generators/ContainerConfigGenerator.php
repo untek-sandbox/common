@@ -13,7 +13,7 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
+    public function generate(GenerateDatabaseCommand $command): void
     {
         $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
         $repositoryInterfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
@@ -21,6 +21,6 @@ class ContainerConfigGenerator
             'service(\Illuminate\Database\Capsule\Manager::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
-        return $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
+        $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
     }
 }

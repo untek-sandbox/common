@@ -17,22 +17,20 @@ class RoutConfigGenerator
     {
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
+    public function generate(GenerateRestApiCommand $command): void
     {
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
         $code = $this->generateConfig($fileName, $controllerClassName, $command);
-        $resultCollection = new GenerateResultCollection();
         if ($code) {
             $this->collection->add(new FileResult($fileName, $code));
         }
-        return $resultCollection;
     }
 
     protected function generateConfig(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): ?string
     {
         $templateFile = __DIR__ . '/../../resources/templates/route-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         $code = null;
         if (!$configGenerator->hasCode($controllerClassName)) {
             $routeName = $command->getHttpMethod() . '_' . $command->getUri();

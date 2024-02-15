@@ -20,7 +20,7 @@ class CommandGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $params = [
@@ -30,8 +30,5 @@ class CommandGenerator
         $code = $this->codeGenerator->generatePhpClassCode($commandClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($commandClassName);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

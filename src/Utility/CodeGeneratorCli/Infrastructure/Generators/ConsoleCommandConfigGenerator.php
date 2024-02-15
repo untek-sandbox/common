@@ -17,15 +17,14 @@ class ConsoleCommandConfigGenerator
     {
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResultCollection
+    public function generate(GenerateCliCommand $command): void
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
         $cliCommandConfigFileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/config/commands.php';
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($cliCommandConfigFileName, $templateFile);
+        $configGenerator = new PhpConfigGenerator($this->collection, $cliCommandConfigFileName, $templateFile);
         $concreteCode = '\\' . $cliCommandClassName . '';
         $codeForAppend = '  $commandConfigurator->registerCommandClass(' . $concreteCode . '::class);';
-        $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($cliCommandConfigFileName, $code));
@@ -35,14 +34,13 @@ class ConsoleCommandConfigGenerator
             $this->collection->add($importResult);
         }
         $this->collection->add(new FileResult($cliCommandConfigFileName, $code));
-        return $resultCollection;
     }
 
     private function addImport($cliCommandConfigFileName): ?FileResult
     {
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
         $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         $shareCliCommandConfigFileName = (new Filesystem())->makePathRelative($cliCommandConfigFileName, realpath(__DIR__ . '/../../../../../../../..'));
         $shareCliCommandConfigFileName = rtrim($shareCliCommandConfigFileName, '/');
         $concreteCode = $shareCliCommandConfigFileName;

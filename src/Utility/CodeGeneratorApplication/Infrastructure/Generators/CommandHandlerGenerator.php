@@ -19,7 +19,7 @@ class CommandHandlerGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
@@ -32,8 +32,5 @@ class CommandHandlerGenerator
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

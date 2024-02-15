@@ -36,12 +36,10 @@ class GenerateCliCommandHandler
             new CliCommandShortcutGenerator($this->collection),
         ];
 
-        $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($this->collection);
+        GeneratorHelper::generate($generators, $command);
+//        GeneratorHelper::dump($this->collection);
 
         $cliCommand = $command->getCliCommand();
         $this->collection->add(new InfoResult('CLI command', 'php bin/console ' . $cliCommand));
-
-        return $collection;
     }
 }

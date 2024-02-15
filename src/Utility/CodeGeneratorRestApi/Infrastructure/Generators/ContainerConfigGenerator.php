@@ -13,7 +13,7 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
+    public function generate(GenerateRestApiCommand $command): void
     {
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
         $args = [
@@ -21,6 +21,6 @@ class ContainerConfigGenerator
             'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
-        return $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
+        $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
     }
 }

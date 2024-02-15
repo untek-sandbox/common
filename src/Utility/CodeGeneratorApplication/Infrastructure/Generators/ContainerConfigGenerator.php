@@ -13,10 +13,10 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
-        return $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
+        $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
     }
 }

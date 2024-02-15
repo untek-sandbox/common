@@ -19,7 +19,7 @@ class ControllerTestGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
+    public function generate(GenerateRestApiCommand $command): void
     {
         $controllerTestClassName = ApplicationPathHelper::getControllerTestClassName($command);
         $params = [
@@ -30,8 +30,5 @@ class ControllerTestGenerator
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

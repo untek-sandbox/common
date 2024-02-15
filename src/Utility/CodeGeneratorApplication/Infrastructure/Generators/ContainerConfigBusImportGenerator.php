@@ -17,7 +17,7 @@ class ContainerConfigBusImportGenerator
     {
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
@@ -26,12 +26,10 @@ class ContainerConfigBusImportGenerator
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../' . $modulePath . '\');';
         $fileName = __DIR__ . '/../../../../../../../../config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($fileName, $templateFile);
-        $resultCollection = new GenerateResultCollection();
+        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $templateFile);
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($fileName, $code));
         }
-        return $resultCollection;
     }
 }

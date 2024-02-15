@@ -13,7 +13,7 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(string $abstractClassName, string $concreteClassName, array $args = null): GenerateResultCollection
+    public function generate(string $abstractClassName, string $concreteClassName, array $args = null): void
     {
         $codeForAppend =
             '    $services->set(\\' . $abstractClassName . '::class, \\' . $concreteClassName . '::class)';
@@ -27,13 +27,10 @@ class ContainerConfigGenerator
         $codeForAppend .= ';';
         $configFile = ComposerHelper::getPsr4Path($this->namespace) . '/resources/config/services/main.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         if (!$configGenerator->hasCode($concreteClassName)) {
             $code = $configGenerator->appendCode($codeForAppend);
         }
         $this->collection->add(new FileResult($configFile, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

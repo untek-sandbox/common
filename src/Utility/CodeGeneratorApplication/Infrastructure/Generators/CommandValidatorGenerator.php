@@ -20,7 +20,7 @@ class CommandValidatorGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $validatorClassName = ApplicationPathHelper::getCommandValidatorClass($command);
@@ -32,8 +32,5 @@ class CommandValidatorGenerator
         $code = $this->codeGenerator->generatePhpClassCode($validatorClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($validatorClassName);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

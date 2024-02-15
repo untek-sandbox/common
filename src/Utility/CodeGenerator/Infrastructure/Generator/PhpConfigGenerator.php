@@ -3,26 +3,41 @@
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Untek\Core\FileSystem\Helpers\FileHelper;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 class PhpConfigGenerator
 {
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct(private string $configFile, private string $template)
+    public function __construct(protected GenerateResultCollection $collection, private string $configFile, private string $template)
     {
         $this->codeGenerator = new CodeGenerator();
     }
 
     public function appendCode(string $codeForAppend): string
     {
-        $fs = new Filesystem();
-        if (!$fs->exists($this->configFile)) {
+        $code = $this->getCode($this->configFile);
+        if (empty($code)) {
             $code = $this->codeGenerator->generatePhpCode($this->template);
-        } else {
-            $code = file_get_contents($this->configFile);
         }
         $code = $this->codeGenerator->appendCode($code, $codeForAppend);
+        return $code;
+    }
+
+    protected function getCode(string $name): ?string
+    {
+        $name = FileHelper::normalizePath($name);
+        $fs = new Filesystem();
+        if ($this->collection->has($name)) {
+            $result = $this->collection->get($name);
+            $code = $result->getContent();
+        } elseif ($fs->exists($name)) {
+            $code = file_get_contents($name);
+        } else {
+            $code = null;
+        }
         return $code;
     }
 
@@ -33,10 +48,10 @@ class PhpConfigGenerator
 
     public function hasCodeInFile(string $fileName, string $needle): bool
     {
-        if (!is_file($fileName)) {
+        $code = $this->getCode($fileName);
+        if (empty($code)) {
             return false;
         }
-        $code = file_get_contents($fileName);
         return str_contains($code, $needle);
     }
 }

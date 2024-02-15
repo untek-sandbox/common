@@ -40,9 +40,7 @@ class GenerateDatabaseCommandHandler
             new MigrationGenerator($this->collection),
         ];
 
-        $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($this->collection);
-
-        return $collection;
+        GeneratorHelper::generate($generators, $command);
+//        GeneratorHelper::dump($this->collection);
     }
 }

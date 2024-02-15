@@ -17,7 +17,7 @@ class ContainerConfigImportGenerator
     {
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
@@ -29,6 +29,6 @@ class ContainerConfigImportGenerator
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
         $modulePath = $relative . '/resources/config/services/main.php';
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($this->collection, $command->getNamespace());
-        return $consoleLoadConfigGenerator->generate($modulePath);
+        $consoleLoadConfigGenerator->generate($modulePath);
     }
 }

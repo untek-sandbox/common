@@ -17,7 +17,7 @@ class CliCommandShortcutGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResultCollection
+    public function generate(GenerateCliCommand $command): void
     {
         $fileName = $this->getShortcutFileName($command);
         $params = [
@@ -26,9 +26,6 @@ class CliCommandShortcutGenerator
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
         $code = $this->codeGenerator->generateCode($template, $params);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 
     private function getShortcutFileName(GenerateCliCommand $command): string

@@ -17,16 +17,15 @@ class RoutConfigImportGenerator
     {
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
+    public function generate(GenerateRestApiCommand $command): void
     {
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
         $modulePath = $relative . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
-        $resultCollection = $this->generateConfig($modulePath, '/v' . $command->getVersion());
-        return $resultCollection;
+        $this->generateConfig($modulePath, '/v' . $command->getVersion());
     }
 
-    protected function generateConfig(string $modulePath, string $prefix = null): GenerateResultCollection
+    protected function generateConfig(string $modulePath, string $prefix = null): void
     {
         $modulePath = ltrim($modulePath, '/');
         $codeForAppend = '    $routes
@@ -34,12 +33,10 @@ class RoutConfigImportGenerator
         ->prefix(\'' . $prefix . '\');';
         $configFile = __DIR__ . '/../../../../../../../../context/rest-api/config/routes.php';
         $templateFile = __DIR__ . '/../../resources/templates/routes-load-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-        $resultCollection = new GenerateResultCollection();
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($configFile, $code));
         }
-        return $resultCollection;
     }
 }

@@ -19,7 +19,7 @@ class RepositoryInterfaceGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
+    public function generate(GenerateDatabaseCommand $command): void
     {
         $className = ApplicationPathHelper::getInterfaceClassName($command);
         $params = [
@@ -29,8 +29,5 @@ class RepositoryInterfaceGenerator
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

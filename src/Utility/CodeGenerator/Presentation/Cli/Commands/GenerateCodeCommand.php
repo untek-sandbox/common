@@ -94,8 +94,8 @@ class GenerateCodeCommand extends Command
             /*$collection = */$this->bus->handle($command);
 //            $collection->merge($resultCollection);
         }
-//        GeneratorHelper::dump($collection);
         $collection = ContainerHelper::getContainer()->get(GenerateResultCollection::class);
+        GeneratorHelper::dump($collection);
         $items = [];
         foreach ($collection->getAll() as $result) {
             $items[$result->getName()] = $result;

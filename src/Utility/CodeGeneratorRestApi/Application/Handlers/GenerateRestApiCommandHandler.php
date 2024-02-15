@@ -41,13 +41,11 @@ class GenerateRestApiCommandHandler
             new RoutConfigImportGenerator($this->collection),
         ];
 
-        $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($this->collection);
+        GeneratorHelper::generate($generators, $command);
+//        GeneratorHelper::dump($this->collection);
 
         $uri = '/rest-api/v' . $command->getVersion() . '/' . $command->getUri();
         $endpoint = $command->getHttpMethod() . ' ' . $uri;
         $this->collection->add(new InfoResult('API endpoint', $endpoint));
-
-        return $collection;
     }
 }

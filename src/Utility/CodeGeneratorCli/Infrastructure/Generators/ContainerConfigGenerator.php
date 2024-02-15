@@ -13,13 +13,13 @@ class ContainerConfigGenerator
     {
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResultCollection
+    public function generate(GenerateCliCommand $command): void
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
         $args = [
             'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)'
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
-        return $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
+        $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
     }
 }

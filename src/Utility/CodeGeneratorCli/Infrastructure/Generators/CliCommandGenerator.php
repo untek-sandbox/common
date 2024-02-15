@@ -22,7 +22,7 @@ class CliCommandGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateCliCommand $command): GenerateResultCollection
+    public function generate(GenerateCliCommand $command): void
     {
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
@@ -38,10 +38,5 @@ class CliCommandGenerator
         $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
-
     }
-
 }

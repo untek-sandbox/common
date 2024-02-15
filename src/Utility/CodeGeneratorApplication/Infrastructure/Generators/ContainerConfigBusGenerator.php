@@ -16,20 +16,18 @@ class ContainerConfigBusGenerator
     {
     }
 
-    public function generate(GenerateApplicationCommand $command): GenerateResultCollection
+    public function generate(GenerateApplicationCommand $command): void
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($fileName, $templateFile);
-        $resultCollection = new GenerateResultCollection();
+        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $templateFile);
         if (!$configGenerator->hasCode($handlerClassName)) {
             $controllerDefinition =
                 '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';
             $code = $configGenerator->appendCode($controllerDefinition);
             $this->collection->add(new FileResult($fileName, $code));
         }
-        return $resultCollection;
     }
 }

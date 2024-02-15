@@ -19,7 +19,7 @@ class MigrationGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
+    public function generate(GenerateDatabaseCommand $command): void
     {
         $time = date('Y_m_d_His');
         $className = 'm_' . $time . '_create_' . $command->getTableName() . '_table';
@@ -31,10 +31,7 @@ class MigrationGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
         $code = $this->codeGenerator->generatePhpCode($template, $params);
-        $resultCollection = new GenerateResultCollection();
         $this->collection->add(new FileResult($fileName, $code));
-        $importResultCollection = (new MigrationConfigGenerator($this->collection, $command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
-        $this->collection->merge($importResultCollection);
-        return $resultCollection;
+        (new MigrationConfigGenerator($this->collection, $command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
     }
 }

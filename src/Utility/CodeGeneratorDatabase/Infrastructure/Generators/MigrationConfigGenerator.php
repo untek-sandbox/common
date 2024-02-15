@@ -15,7 +15,7 @@ class MigrationConfigGenerator
     {
     }
 
-    public function generate(): GenerateResultCollection
+    public function generate(): void
     {
         $fileName = PackageHelper::pathByNamespace($this->namespace) . '/resources/migrations';
         $fileName = (new Filesystem())->makePathRelative($fileName, realpath(__DIR__ . '/../../../../../../../..'));
@@ -24,12 +24,10 @@ class MigrationConfigGenerator
         $codeForAppend = "    __DIR__ . '/../$fileName',";
         $configFile = $this->migrationConfigFile;
         $templateFile = __DIR__ . '/../../resources/templates/migration-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
-        $resultCollection = new GenerateResultCollection();
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($configFile, $code));
         }
-        return $resultCollection;
     }
 }

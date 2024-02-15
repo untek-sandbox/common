@@ -21,7 +21,7 @@ class ControllerGenerator
         $this->codeGenerator = new CodeGenerator();
     }
 
-    public function generate(GenerateRestApiCommand $command): GenerateResultCollection
+    public function generate(GenerateRestApiCommand $command): void
     {
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
@@ -37,8 +37,5 @@ class ControllerGenerator
         $code = $this->codeGenerator->generatePhpClassCode($controllerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerClassName);
         $this->collection->add(new FileResult($fileName, $code));
-        return new GenerateResultCollection([
-
-        ]);
     }
 }

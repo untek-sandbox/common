@@ -10,15 +10,12 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 class GeneratorHelper
 {
 
-    public static function generate(array $generators, object $command): GenerateResultCollection
+    public static function generate(array $generators, object $command): void
     {
-        $collection = new GenerateResultCollection();
         foreach ($generators as $generator) {
             /** @var GeneratorInterface $generator */
-            $resultCollection = $generator->generate($command);
-            $collection->merge($resultCollection);
+            $generator->generate($command);
         }
-        return $collection;
     }
 
     public static function dump(GenerateResultCollection $collection): void
