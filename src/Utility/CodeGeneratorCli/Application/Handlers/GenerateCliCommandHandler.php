@@ -35,7 +35,7 @@ class GenerateCliCommandHandler
         GeneratorHelper::dump($collection);
 
         $cliCommand = $command->getCliCommand();
-        $collection->add(new InfoResult('CLI command', $cliCommand));
+        $collection->add(new InfoResult('CLI command', 'php bin/console ' . $cliCommand));
 
         return $collection;
     }

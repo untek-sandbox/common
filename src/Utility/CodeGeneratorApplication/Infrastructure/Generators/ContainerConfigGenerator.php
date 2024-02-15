@@ -9,6 +9,10 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigGenerator
 {
 
+//    public function __construct(protected GenerateResultCollection $collection)
+//    {
+//    }
+
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);

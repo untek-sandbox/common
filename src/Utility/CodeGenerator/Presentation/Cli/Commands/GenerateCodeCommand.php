@@ -14,10 +14,11 @@ use Untek\Lib\Components\Byte\Helpers\ByteSizeFormatHelper;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
-use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 
 class GenerateCodeCommand extends Command
 {
@@ -46,7 +47,6 @@ class GenerateCodeCommand extends Command
         $commands = [];
         foreach ($this->interacts as $interact) {
             /** @var InteractInterface $interact */
-
             $interactCommands = $interact->input($io);
             if ($interactCommands) {
                 $commands = ArrayHelper::merge($commands, $interactCommands);
@@ -60,18 +60,16 @@ class GenerateCodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $inputFile = $input->getOption('inputFile');
         if ($inputFile) {
-            $inputFile = TemplateHelper::render($inputFile, [
-                'directory' => $_SERVER['OLDPWD'],
-            ], '{{', '}}');
+            $renderParams = ['directory' => $_SERVER['OLDPWD']];
+            $inputFile = TemplateHelper::render($inputFile, $renderParams, '{{', '}}');
             $store = new StoreFile($inputFile);
             $commands = $store->load();
-//            $io->info('Loaded from config file.');
         } else {
             $commands = $this->input($io);
         }
         if ($commands) {
             try {
-                $files = $this->handleCommands($commands, $io);
+                $collection = $this->handleCommands($commands);
             } catch (UnprocessableEntityException $exception) {
                 $errors = [];
                 foreach ($exception->getViolations() as $violation) {
@@ -81,70 +79,77 @@ class GenerateCodeCommand extends Command
                 }
                 throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $errors));
             }
-//            $io->newLine();
-//            $io->writeln('Generated files:');
-//            $io->listing($files);
+            $this->outputGeneratedFiles($collection, $io);
+            $this->outputInfoTable($collection, $io);
             $io->success('Code generated successfully');
         }
         return Command::SUCCESS;
     }
 
-    protected function handleCommands(array $commands, SymfonyStyle $io): void
+    protected function handleCommands(array $commands): GenerateResultCollection
     {
         $collection = new GenerateResultCollection();
         foreach ($commands as $command) {
             $resultCollection = $this->bus->handle($command);
             $collection->merge($resultCollection);
         }
+//        GeneratorHelper::dump($collection);
+        $items = [];
+        foreach ($collection->getAll() as $result) {
+            $items[$result->getName()] = $result;
+        }
+        ksort($items);
+        return new GenerateResultCollection($items);
+    }
 
+    private function outputGeneratedFiles(GenerateResultCollection $collection, SymfonyStyle $io): void
+    {
         $io->title('Generated files');
-
         $generatedFiles = $this->getFilesList($collection);
-        sort($generatedFiles);
         $io->listing($generatedFiles);
+    }
 
+    private function outputInfoTable(GenerateResultCollection $collection, SymfonyStyle $io): void
+    {
         $io->title('Info');
-
         $table = $this->generateInfoTableRows($collection);
-
         $size = $this->calculateSize($collection);
+        $generatedFiles = $this->getFilesList($collection);
         $table[] = ['Total files', count($generatedFiles)];
         $table[] = ['Total size', ByteSizeFormatHelper::sizeFormat($size)];
-
         $io->table([], $table);
     }
 
-    private function generateInfoTableRows(GenerateResultCollection $collection): array {
+    private function generateInfoTableRows(GenerateResultCollection $collection): array
+    {
         $table = [];
         foreach ($collection->getAll() as $result) {
-            if($result instanceof InfoResult) {
-                $info = '';
-                if($result->getName()) {
-                    $info .= $result->getName() . ': ';
-                }
-                $info .= $result->getContent();
+            if ($result instanceof InfoResult) {
                 $table[] = [$result->getName(), $result->getContent()];
             }
         }
         return $table;
     }
 
-    private function calculateSize(GenerateResultCollection $collection): int {
+    private function calculateSize(GenerateResultCollection $collection): int
+    {
         $size = 0;
         foreach ($collection->getAll() as $result) {
-            if($result instanceof FileResult) {
+            if ($result instanceof FileResult) {
                 $size = $size + mb_strlen($result->getContent());
             }
         }
         return $size;
     }
 
-    private function getFilesList(GenerateResultCollection $collection): array {
+    private function getFilesList(GenerateResultCollection $collection): array
+    {
         $list = [];
         foreach ($collection->getAll() as $result) {
-            if($result instanceof FileResult) {
+            if ($result instanceof FileResult) {
                 $file = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getName()));
-                $list[] = $file;
+                $prefix = $result->isNew() ? '<bg=green>ADD</>' : '<bg=blue>UPD</>';
+                $list[] = $prefix . ' ' . $file;
             }
         }
         return $list;

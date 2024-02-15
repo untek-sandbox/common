@@ -10,15 +10,18 @@ class FileResult implements ResultInterface
 
     private ?string $name = null;
     private string $content;
+    private bool $isNew = false;
 
     public function __construct(
         string $name,
         string $content,
+        ?bool $isNew = null,
     )
     {
         $name = FileHelper::normalizePath($name);
         $this->name = $name;
         $this->content = $content;
+        $this->isNew = $isNew === null ? !file_exists($name) : $isNew;
     }
 
     public function getName(): string
@@ -29,6 +32,11 @@ class FileResult implements ResultInterface
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function isNew(): bool
+    {
+        return $this->isNew;
     }
 
     /*private function normalizeFileName(string $fileName): string

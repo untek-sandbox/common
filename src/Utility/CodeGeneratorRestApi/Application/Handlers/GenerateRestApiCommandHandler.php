@@ -39,7 +39,8 @@ class GenerateRestApiCommandHandler
         $collection = GeneratorHelper::generate($generators, $command);
         GeneratorHelper::dump($collection);
 
-        $endpoint = $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();
+        $uri = '/rest-api/v' . $command->getVersion() . '/' . $command->getUri();
+        $endpoint = $command->getHttpMethod() . ' ' . $uri;
         $collection->add(new InfoResult('API endpoint', $endpoint));
 
         return $collection;
