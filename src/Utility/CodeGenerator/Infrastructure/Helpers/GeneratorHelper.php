@@ -24,7 +24,7 @@ class GeneratorHelper
     {
         $fs = new Filesystem();
         foreach ($collection->getAll() as $result) {
-            $fs->dumpFile($result->getFileName(), $result->getCode());
+            $fs->dumpFile($result->getName(), $result->getContent());
         }
     }
 }

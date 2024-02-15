@@ -95,10 +95,10 @@ class GenerateCodeCommand extends Command
             $collection->merge($resultCollection);
         }
         foreach ($collection->getAll() as $result) {
-            if (realpath($result->getFileName())) {
-                $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
+            if (realpath($result->getName())) {
+                $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getName()));
             } else {
-                $files[] = $result->getFileName();
+                $files[] = $result->getName();
             }
         }
         return $files;
