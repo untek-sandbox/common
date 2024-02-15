@@ -2,8 +2,8 @@
 
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 class ContainerLoadConfigGenerator
 {
@@ -21,7 +21,7 @@ class ContainerLoadConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend . PHP_EOL);
-            $resultCollection->add(new GenerateResult($configFile, $code));
+            $resultCollection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

@@ -1,8 +1,10 @@
 <?php
 
-namespace Untek\Utility\CodeGeneratorApplication\Application\Dto;
+namespace Untek\Utility\CodeGenerator\Application\Dto;
 
-class GenerateResult
+use Untek\Utility\CodeGenerator\Application\Interfaces\ResultInterface;
+
+class InfoResult implements ResultInterface
 {
 
     private ?string $fileName = null;

@@ -4,9 +4,9 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -24,17 +24,17 @@ class ConsoleCommandConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
+            $resultCollection->add(new FileResult($cliCommandConfigFileName, $code));
         }
         $importResult = $this->addImport($cliCommandConfigFileName);
         if ($importResult) {
             $resultCollection->add($importResult);
         }
-        $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
+        $resultCollection->add(new FileResult($cliCommandConfigFileName, $code));
         return $resultCollection;
     }
 
-    private function addImport($cliCommandConfigFileName): ?GenerateResult
+    private function addImport($cliCommandConfigFileName): ?FileResult
     {
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
         $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
@@ -45,7 +45,7 @@ class ConsoleCommandConfigGenerator
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../' . $shareCliCommandConfigFileName . '\');';
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            return new GenerateResult($configFile, $code);
+            return new FileResult($configFile, $code);
         }
     }
 }

@@ -4,10 +4,10 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
@@ -38,7 +38,7 @@ class CliCommandGenerator
         $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
         return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
+            new FileResult($fileName, $code)
         ]);
 
     }

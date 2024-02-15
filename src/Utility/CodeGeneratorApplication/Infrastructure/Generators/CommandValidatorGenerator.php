@@ -2,11 +2,11 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -32,7 +32,7 @@ class CommandValidatorGenerator
         $code = $this->codeGenerator->generatePhpClassCode($validatorClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($validatorClassName);
         return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
+            new FileResult($fileName, $code)
         ]);
     }
 }

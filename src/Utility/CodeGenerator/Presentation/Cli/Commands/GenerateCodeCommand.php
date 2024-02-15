@@ -14,7 +14,7 @@ use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 class GenerateCodeCommand extends Command
 {

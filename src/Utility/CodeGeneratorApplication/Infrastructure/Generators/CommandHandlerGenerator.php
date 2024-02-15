@@ -2,11 +2,11 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 
 class CommandHandlerGenerator
@@ -32,7 +32,7 @@ class CommandHandlerGenerator
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
         return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
+            new FileResult($fileName, $code)
         ]);
     }
 }

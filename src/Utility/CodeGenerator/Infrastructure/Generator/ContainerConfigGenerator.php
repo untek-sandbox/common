@@ -3,8 +3,8 @@
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
 use Untek\Core\Code\Helpers\ComposerHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 class ContainerConfigGenerator
 {
@@ -32,7 +32,7 @@ class ContainerConfigGenerator
             $code = $configGenerator->appendCode($codeForAppend);
         }
         return new GenerateResultCollection([
-            new GenerateResult($configFile, $code)
+            new FileResult($configFile, $code)
         ]);
     }
 }

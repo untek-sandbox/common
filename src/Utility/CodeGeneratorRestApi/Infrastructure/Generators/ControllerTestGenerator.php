@@ -2,10 +2,10 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
 
@@ -30,7 +30,7 @@ class ControllerTestGenerator
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);
         return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
+            new FileResult($fileName, $code)
         ]);
     }
 }

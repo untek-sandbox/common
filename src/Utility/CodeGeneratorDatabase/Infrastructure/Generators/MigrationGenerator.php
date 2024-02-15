@@ -3,9 +3,9 @@
 namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
 use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 
@@ -32,7 +32,7 @@ class MigrationGenerator
         $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
         $code = $this->codeGenerator->generatePhpCode($template, $params);
         $resultCollection = new GenerateResultCollection();
-        $resultCollection->add(new GenerateResult($fileName, $code));
+        $resultCollection->add(new FileResult($fileName, $code));
         $importResultCollection = (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
         $resultCollection->merge($importResultCollection);
         return $resultCollection;

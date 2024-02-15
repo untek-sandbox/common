@@ -2,9 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 
 class CliCommandShortcutGenerator
@@ -26,7 +26,7 @@ class CliCommandShortcutGenerator
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
         $code = $this->codeGenerator->generateCode($template, $params);
         return new GenerateResultCollection([
-            new GenerateResult($fileName, $code)
+            new FileResult($fileName, $code)
         ]);
     }
 

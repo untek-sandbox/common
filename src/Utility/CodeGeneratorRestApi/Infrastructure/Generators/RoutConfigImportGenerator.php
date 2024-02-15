@@ -3,10 +3,10 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 
 use Untek\Core\Code\Helpers\ComposerHelper;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfigGenerator;
 
@@ -34,7 +34,7 @@ class RoutConfigImportGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new GenerateResult($configFile, $code));
+            $resultCollection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

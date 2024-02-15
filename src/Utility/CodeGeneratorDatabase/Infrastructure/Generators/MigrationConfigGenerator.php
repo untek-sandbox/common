@@ -4,9 +4,9 @@ namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
 class MigrationConfigGenerator
 {
@@ -28,7 +28,7 @@ class MigrationConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new GenerateResult($configFile, $code));
+            $resultCollection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

@@ -2,7 +2,7 @@
 
 namespace Untek\Utility\CodeGenerator\Application\Interfaces;
 
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 /**
  * @method GenerateResultCollection generate(CommandInterface $command)

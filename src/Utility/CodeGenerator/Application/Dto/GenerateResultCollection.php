@@ -1,11 +1,11 @@
 <?php
 
-namespace Untek\Utility\CodeGeneratorApplication\Application\Dto;
+namespace Untek\Utility\CodeGenerator\Application\Dto;
 
 class GenerateResultCollection
 {
 
-    /** @var array|GenerateResult[] */
+    /** @var array|FileResult[] */
     private array $items = [];
 
     public function __construct(array $items = [])
@@ -36,17 +36,17 @@ class GenerateResultCollection
         string $type = 'file',
     )
     {
-        $this->add(new GenerateResult($fileName, $code, $type));
+        $this->add(new FileResult($fileName, $code, $type));
     }
 
-    public function add(GenerateResult $result): self
+    public function add(FileResult $result): self
     {
         $this->items[] = $result;
         return $this;
     }
 
     /**
-     * @return array|GenerateResult[]
+     * @return array|FileResult[]
      */
     public function getAll(): array
     {

@@ -4,7 +4,7 @@ namespace Untek\Utility\CodeGenerator\Infrastructure\Helpers;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Application\Interfaces\GeneratorInterface;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 
 class GeneratorHelper
 {
