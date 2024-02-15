@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Container\Helpers\ContainerHelper;
+use Untek\Core\FileSystem\Helpers\FileHelper;
 use Untek\Core\Text\Helpers\TemplateHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Lib\Components\Byte\Helpers\ByteSizeFormatHelper;
@@ -89,13 +90,15 @@ class GenerateCodeCommand extends Command
 
     protected function handleCommands(array $commands): GenerateResultCollection
     {
-//        $collection = new GenerateResultCollection();
         foreach ($commands as $command) {
-            /*$collection = */$this->bus->handle($command);
-//            $collection->merge($resultCollection);
+            $this->bus->handle($command);
         }
         $collection = ContainerHelper::getContainer()->get(GenerateResultCollection::class);
         GeneratorHelper::dump($collection);
+        return $this->sortCollection($collection);
+    }
+
+    protected function sortCollection(GenerateResultCollection $collection): GenerateResultCollection {
         $items = [];
         foreach ($collection->getAll() as $result) {
             $items[$result->getName()] = $result;
@@ -149,7 +152,7 @@ class GenerateCodeCommand extends Command
         $list = [];
         foreach ($collection->getAll() as $result) {
             if ($result instanceof FileResult) {
-                $file = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getName()));
+                $file = GeneratorFileHelper::fileNameTotoRelative(FileHelper::normalizePath($result->getName()));
                 $prefix = $result->isNew() ? '<bg=green>ADD</>' : '<bg=blue>UPD</>';
                 $list[] = $prefix . ' ' . $file;
             }
