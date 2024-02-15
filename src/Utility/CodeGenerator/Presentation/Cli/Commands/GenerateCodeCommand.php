@@ -57,7 +57,7 @@ class GenerateCodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $inputFile = $input->getOption('inputFile');
-        if($inputFile) {
+        if ($inputFile) {
             $inputFile = TemplateHelper::render($inputFile, [
                 'directory' => $_SERVER['OLDPWD'],
             ], '{{', '}}');
@@ -78,7 +78,7 @@ class GenerateCodeCommand extends Command
                     $error = "$fieldName: {$violation->getMessage()}";
                     $errors[] = $error;
                 }
-                throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL .implode(PHP_EOL, $errors));
+                throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $errors));
             }
 
             $io->newLine();
@@ -99,7 +99,7 @@ class GenerateCodeCommand extends Command
         }
 
         foreach ($collection->getAll() as $result) {
-            if(realpath($result->getFileName())) {
+            if (realpath($result->getFileName())) {
                 $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
             } else {
                 $files[] = $result->getFileName();

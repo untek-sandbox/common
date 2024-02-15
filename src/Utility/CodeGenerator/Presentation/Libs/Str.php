@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony MakerBundle package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Untek\Utility\CodeGenerator\Presentation\Libs;
 
 use Doctrine\Inflector\Inflector;
@@ -18,6 +9,7 @@ use Symfony\Component\DependencyInjection\Container;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Ryan Weaver <weaverryan@gmail.com>
+ * @todo move to common package
  */
 final class Str
 {
@@ -36,7 +28,6 @@ final class Str
         $value = str_replace(' ', '', $value);
         $value = ucfirst($value);
         $value = self::addSuffix($value, $suffix);
-
         return $value;
     }
 
@@ -51,7 +42,6 @@ final class Str
         $value = preg_replace('/(?<=\\w)([A-Z])/', '_$1', $value);
         $value = preg_replace('/_{2,}/', '_', $value);
         $value = strtolower($value);
-
         return $value;
     }
 
@@ -67,14 +57,13 @@ final class Str
 
     public static function asRoutePath(string $value): string
     {
-        return '/'.str_replace('_', '/', self::asTwigVariable($value));
+        return '/' . str_replace('_', '/', self::asTwigVariable($value));
     }
 
     public static function asRouteName(string $value): string
     {
         $routeName = self::asTwigVariable($value);
-
-        return str_starts_with($routeName, 'app_') ? $routeName : 'app_'.$routeName;
+        return str_starts_with($routeName, 'app_') ? $routeName : 'app_' . $routeName;
     }
 
     public static function asSnakeCase(string $value): string
@@ -92,7 +81,7 @@ final class Str
         return sprintf('on%s', self::asClassName($eventName));
     }
 
-    /*public static function getShortClassName(string $fullClassName): string
+    public static function getShortClassName(string $fullClassName): string
     {
         if (empty(self::getNamespace($fullClassName))) {
             return $fullClassName;
@@ -104,13 +93,12 @@ final class Str
     public static function getNamespace(string $fullClassName): string
     {
         return substr($fullClassName, 0, strrpos($fullClassName, '\\'));
-    }*/
+    }
 
     public static function asFilePath(string $value): string
     {
         $value = Container::underscore(trim($value));
         $value = str_replace('\\', '/', $value);
-
         return $value;
     }
 
@@ -120,7 +108,6 @@ final class Str
         $words = explode('_', $snake);
         $words[\count($words) - 1] = self::pluralize($words[\count($words) - 1]);
         $reSnaked = implode('_', $words);
-
         return self::asLowerCamelCase($reSnaked);
     }
 
@@ -130,7 +117,6 @@ final class Str
         $words = explode('_', $snake);
         $words[\count($words) - 1] = self::singularize($words[\count($words) - 1]);
         $reSnaked = implode('_', $words);
-
         return self::asLowerCamelCase($reSnaked);
     }
 
@@ -156,11 +142,8 @@ final class Str
             'gnome',
             'kangaroo',
         ];
-
         return sprintf('%s %s', $adjectives[array_rand($adjectives)], $nouns[array_rand($nouns)]);
     }
-
-    
 
     /**
      * @return bool
@@ -170,7 +153,6 @@ final class Str
         $arr1 = [$class1, $class2];
         $arr2 = [$class1, $class2];
         sort($arr2);
-
         return $arr1[0] == $arr2[0];
     }
 
@@ -194,7 +176,6 @@ final class Str
         if (null === static::$inflector) {
             static::$inflector = InflectorFactory::create()->build();
         }
-
         return static::$inflector;
     }
 }

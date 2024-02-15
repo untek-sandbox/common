@@ -4,16 +4,16 @@
 namespace Untek\Utility\CodeGeneratorApplication\Presentation\Cli\Interacts;
 
 use Symfony\Component\Console\Question\Question;
-use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Text\Helpers\Inflector;
+use Untek\Framework\Console\Infrastructure\Validators\ClassNameValidator;
+use Untek\Framework\Console\Infrastructure\Validators\NotBlankValidator;
+use Untek\Framework\Console\Infrastructure\Validators\PropertyNameValidator;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Framework\Console\Infrastructure\Exceptions\RuntimeCommandException;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
-use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGeneratorApplication\Presentation\Enums\PropertyTypeEnum;
-use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 
 class GenerateApplicationInteract implements InteractInterface
 {
@@ -22,9 +22,8 @@ class GenerateApplicationInteract implements InteractInterface
     {
         $namespace = $this->inputNamespace($io);
         $type = $this->inputType($io);
-        $name = $io->ask('Enter a action name', null, [Validator::class, 'validateClassName']);
+        $name = $io->ask('Enter a action name', null, [ClassNameValidator::class, 'validate']);
         $properties = $this->inputProperties($io);
-
         $command = new GenerateApplicationCommand();
         $command->setType($type);
         $command->setNamespace($namespace);
@@ -34,14 +33,11 @@ class GenerateApplicationInteract implements InteractInterface
         return [$command];
     }
 
-    private function inputNamespace(SymfonyStyle $io): string {
+    private function inputNamespace(SymfonyStyle $io): string
+    {
         $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::validateClassName($value);
-            /*$path = ComposerHelper::getPsr4Path($value);
-            if(empty($path)) {
-                throw new RuntimeCommandException('Incorrect namespace');
-            }*/
+            NotBlankValidator::validate($value);
+            ClassNameValidator::validate($value);
             return $value;
         });
         return $namespace;
@@ -65,7 +61,7 @@ class GenerateApplicationInteract implements InteractInterface
         do {
             $propertyName = $io->ask('Enter a property name or press Enter for skip', null, function ($value): ?string {
                 if ($value) {
-                    Validator::validatePropertyName($value);
+                    PropertyNameValidator::validate($value);
                 }
                 return $value;
             });

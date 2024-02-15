@@ -5,16 +5,16 @@ namespace Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
+use Untek\Framework\Console\Infrastructure\Validators\ClassNameValidator;
+use Untek\Framework\Console\Infrastructure\Validators\EnglishValidator;
+use Untek\Framework\Console\Infrastructure\Validators\NotBlankValidator;
 use Untek\Framework\Console\Symfony4\Question\ChoiceQuestion;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
-use Untek\Framework\Console\Infrastructure\Exceptions\RuntimeCommandException;
+use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
-use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
-use Untek\Utility\CodeGenerator\Presentation\Libs\Validator;
 
 class GenerateRestApiInteract implements InteractInterface
 {
@@ -22,7 +22,7 @@ class GenerateRestApiInteract implements InteractInterface
     public function input(SymfonyStyle $io): array
     {
         $namespace = $this->inputNamespace($io);
-        $moduleName = $io->ask('Enter a module name', ClassHelper::getClassOfClassName($namespace), [Validator::class, 'validateClassName']);
+        $moduleName = $io->ask('Enter a module name', ClassHelper::getClassOfClassName($namespace), [ClassNameValidator::class, 'validate']);
         $commandClasses = $this->getCommandsFromNameSpace($namespace);
         if ($commandClasses) {
             $commandClass = $this->inputCommand($io, $commandClasses);
@@ -47,23 +47,21 @@ Or select new namespace with exist commands.');
         }
     }
 
-    private function inputNamespace(SymfonyStyle $io): string {
+    private function inputNamespace(SymfonyStyle $io): string
+    {
         $namespace = $io->ask('Enter a namespace', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::validateClassName($value);
-            /*$path = ComposerHelper::getPsr4Path($value);
-            if(empty($path)) {
-                throw new RuntimeCommandException('Incorrect namespace');
-            }*/
+            NotBlankValidator::validate($value);
+            ClassNameValidator::validate($value);
             return $value;
         });
         return $namespace;
     }
 
-    private function inputUri(SymfonyStyle $io): string {
+    private function inputUri(SymfonyStyle $io): string
+    {
         $uri = $io->ask('Enter a URI (for example: "user/{id}")', null, function ($value): ?string {
-            Validator::notBlank($value);
-            Validator::isEnglish($value);
+            NotBlankValidator::validate($value);
+            EnglishValidator::validate($value);
             return $value;
         });
         return $uri;
