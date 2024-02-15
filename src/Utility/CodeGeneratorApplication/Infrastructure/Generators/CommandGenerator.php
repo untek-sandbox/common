@@ -2,7 +2,6 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
@@ -24,17 +23,12 @@ class CommandGenerator
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
-
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
         $template = __DIR__ . '/../../resources/templates/command.tpl.php';
-
         $code = $this->codeGenerator->generatePhpClassCode($commandClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($commandClassName);
-
-//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);

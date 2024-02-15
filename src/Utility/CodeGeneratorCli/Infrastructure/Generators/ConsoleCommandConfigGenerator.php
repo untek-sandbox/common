@@ -2,17 +2,13 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
+use Symfony\Component\Filesystem\Filesystem;
+use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
-use Symfony\Component\Filesystem\Filesystem;
-use Untek\Core\Code\Helpers\ComposerHelper;
-use Untek\Core\Code\Helpers\PackageHelper;
-use Untek\Core\Instance\Helpers\ClassHelper;
-use Untek\Core\Text\Helpers\Inflector;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 
 class ConsoleCommandConfigGenerator
 {
@@ -21,39 +17,33 @@ class ConsoleCommandConfigGenerator
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
         $cliCommandConfigFileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/config/commands.php';
-
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($cliCommandConfigFileName, $templateFile);
-        $concreteCode = '\\'.$cliCommandClassName.'';
-        $codeForAppend = '  $commandConfigurator->registerCommandClass('.$concreteCode.'::class);';
-
+        $concreteCode = '\\' . $cliCommandClassName . '';
+        $codeForAppend = '  $commandConfigurator->registerCommandClass(' . $concreteCode . '::class);';
         $resultCollection = new GenerateResultCollection();
-
-        if(!$configGenerator->hasCode($concreteCode)) {
+        if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
         }
-
         $importResult = $this->addImport($cliCommandConfigFileName);
-
-        if($importResult) {
+        if ($importResult) {
             $resultCollection->add($importResult);
         }
         $resultCollection->add(new GenerateResult($cliCommandConfigFileName, $code));
         return $resultCollection;
     }
 
-    private function addImport($cliCommandConfigFileName): ?GenerateResult {
+    private function addImport($cliCommandConfigFileName): ?GenerateResult
+    {
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
         $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
         $configGenerator = new PhpConfigGenerator($configFile, $templateFile);
         $shareCliCommandConfigFileName = (new Filesystem())->makePathRelative($cliCommandConfigFileName, realpath(__DIR__ . '/../../../../../../../..'));
         $shareCliCommandConfigFileName = rtrim($shareCliCommandConfigFileName, '/');
-
         $concreteCode = $shareCliCommandConfigFileName;
-        $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../'.$shareCliCommandConfigFileName.'\');';
-
-        if(!$configGenerator->hasCode($concreteCode)) {
+        $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../../../' . $shareCliCommandConfigFileName . '\');';
+        if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
             return new GenerateResult($configFile, $code);
         }

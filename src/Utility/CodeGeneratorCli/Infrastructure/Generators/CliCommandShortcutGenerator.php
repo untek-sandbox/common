@@ -2,7 +2,6 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
@@ -25,9 +24,7 @@ class CliCommandShortcutGenerator
             'cliCommandName' => $command->getCliCommand(),
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
-
         $code = $this->codeGenerator->generateCode($template, $params);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);
@@ -35,11 +32,9 @@ class CliCommandShortcutGenerator
 
     private function getShortcutFileName(GenerateCliCommand $command): string
     {
-//        $lowerModuleName = mb_strtolower($command->getModuleName());
         $commandSections = explode(':', $command->getCliCommand());
         $moduleName = array_splice($commandSections, 0, 1)[0];
         $actionName = implode('-', $commandSections);
-
         $shortcutFileName = str_replace(':', '-', $command->getCliCommand());
         $binDirectory = realpath(__DIR__ . '/../../../../../../../../bin');
         $fileName = $binDirectory . '/' . $moduleName . '/' . $actionName . '.sh';

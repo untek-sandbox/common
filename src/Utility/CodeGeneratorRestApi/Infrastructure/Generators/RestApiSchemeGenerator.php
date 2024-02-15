@@ -26,25 +26,16 @@ class RestApiSchemeGenerator
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $commandFullClassName = $command->getCommandClass();
-//        $commandFullClassName = Str::up($command->getCommandClass());
-//        dd($commandFullClassName);
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        
         $schemaClassName = ApplicationPathHelper::getRestApiSchemaClassName($command);
-//dd($schemaClassName);
-
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
-
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($schemaClassName);
-
-//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);

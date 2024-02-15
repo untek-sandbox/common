@@ -2,16 +2,15 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
-use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
+use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
+use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
+use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 
 class CliCommandGenerator
 {
@@ -28,9 +27,7 @@ class CliCommandGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
-
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
@@ -38,10 +35,8 @@ class CliCommandGenerator
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command.tpl.php';
-
         $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);

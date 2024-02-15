@@ -2,7 +2,6 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
@@ -28,12 +27,8 @@ class ControllerTestGenerator
             'method' => $command->getHttpMethod(),
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
-
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);
-
-//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);

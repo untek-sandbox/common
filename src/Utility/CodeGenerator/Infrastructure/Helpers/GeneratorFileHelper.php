@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGenerator\Infrastructure\Helpers;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Core\FileSystem\Helpers\FileHelper;
 
 class GeneratorFileHelper
 {
@@ -17,11 +18,10 @@ class GeneratorFileHelper
     public static function fileNameTotoRelative(string $filename): string
     {
         $fs = new Filesystem();
-        if($fs->isAbsolutePath($filename)) {
+        if ($fs->isAbsolutePath($filename)) {
             $filename = str_replace(getenv('ROOT_DIRECTORY'), '', $filename);
-//            dd($filename);
         }
-//        $filename = $fs->makePathRelative(realpath($filename), getenv('ROOT_DIRECTORY'));
+        $filename = FileHelper::normalizePath($filename);
         return rtrim($filename, '/');
     }
 }

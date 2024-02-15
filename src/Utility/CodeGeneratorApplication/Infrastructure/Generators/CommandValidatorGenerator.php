@@ -2,7 +2,6 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
@@ -25,21 +24,13 @@ class CommandValidatorGenerator
     {
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $validatorClassName = ApplicationPathHelper::getCommandValidatorClass($command);
-
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
             'commandClassName' => $commandClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/validator.tpl.php';
-
-//        $fileGenerator = new FileGenerator();
-//        $fileName = $fileGenerator->generatePhpClass($validatorClassName, $template, $params);
-
         $code = $this->codeGenerator->generatePhpClassCode($validatorClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($validatorClassName);
-
-//        $fileName = GeneratorFileHelper::fileNameTotoRelative($fileName);
-
         return new GenerateResultCollection([
             new GenerateResult($fileName, $code)
         ]);
