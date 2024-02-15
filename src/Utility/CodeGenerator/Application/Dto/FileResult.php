@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGenerator\Application\Dto;
 
+use Untek\Core\FileSystem\Helpers\FileHelper;
 use Untek\Utility\CodeGenerator\Application\Interfaces\ResultInterface;
 
 class FileResult implements ResultInterface
@@ -15,7 +16,7 @@ class FileResult implements ResultInterface
         string $content,
     )
     {
-        $name = $this->normalizeFileName($name);
+        $name = FileHelper::normalizePath($name);
         $this->name = $name;
         $this->content = $content;
     }
@@ -30,12 +31,12 @@ class FileResult implements ResultInterface
         return $this->content;
     }
 
-    private function normalizeFileName(string $fileName): string
+    /*private function normalizeFileName(string $fileName): string
     {
         $fileName1 = realpath($fileName);
         if (!empty($fileName1)) {
             $fileName = $fileName1;
         }
         return $fileName;
-    }
+    }*/
 }

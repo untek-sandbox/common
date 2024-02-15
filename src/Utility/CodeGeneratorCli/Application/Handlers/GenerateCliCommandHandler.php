@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorCli\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Application\Validators\GenerateCliCommandValidator;
@@ -32,6 +33,9 @@ class GenerateCliCommandHandler
 
         $collection = GeneratorHelper::generate($generators, $command);
         GeneratorHelper::dump($collection);
+
+        $cliCommand = $command->getCliCommand();
+        $collection->add(new InfoResult('CLI command', $cliCommand));
 
         return $collection;
     }

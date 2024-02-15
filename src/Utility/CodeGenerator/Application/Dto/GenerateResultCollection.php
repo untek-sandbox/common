@@ -2,10 +2,12 @@
 
 namespace Untek\Utility\CodeGenerator\Application\Dto;
 
+use Untek\Utility\CodeGenerator\Application\Interfaces\ResultInterface;
+
 class GenerateResultCollection
 {
 
-    /** @var array|FileResult[] */
+    /** @var array|ResultInterface[] */
     private array $items = [];
 
     public function __construct(array $items = [])
@@ -30,23 +32,14 @@ class GenerateResultCollection
         return $this;
     }
 
-    public function addResult(
-        string $fileName = null,
-        ?string $code = null,
-        string $type = 'file',
-    )
-    {
-        $this->add(new FileResult($fileName, $code, $type));
-    }
-
-    public function add(FileResult $result): self
+    public function add(ResultInterface $result): self
     {
         $this->items[] = $result;
         return $this;
     }
 
     /**
-     * @return array|FileResult[]
+     * @return array|ResultInterface[]
      */
     public function getAll(): array
     {

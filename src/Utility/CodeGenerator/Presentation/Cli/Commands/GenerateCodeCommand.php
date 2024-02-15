@@ -10,11 +10,14 @@ use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Text\Helpers\TemplateHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
+use Untek\Lib\Components\Byte\Helpers\ByteSizeFormatHelper;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;
-use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 
 class GenerateCodeCommand extends Command
 {
@@ -62,13 +65,13 @@ class GenerateCodeCommand extends Command
             ], '{{', '}}');
             $store = new StoreFile($inputFile);
             $commands = $store->load();
-            $io->info('Loaded from config file.');
+//            $io->info('Loaded from config file.');
         } else {
             $commands = $this->input($io);
         }
         if ($commands) {
             try {
-                $files = $this->handleCommands($commands);
+                $files = $this->handleCommands($commands, $io);
             } catch (UnprocessableEntityException $exception) {
                 $errors = [];
                 foreach ($exception->getViolations() as $violation) {
@@ -78,29 +81,72 @@ class GenerateCodeCommand extends Command
                 }
                 throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $errors));
             }
-            $io->newLine();
-            $io->writeln('Generated files:');
-            $io->listing($files);
+//            $io->newLine();
+//            $io->writeln('Generated files:');
+//            $io->listing($files);
             $io->success('Code generated successfully');
         }
         return Command::SUCCESS;
     }
 
-    protected function handleCommands(array $commands): array
+    protected function handleCommands(array $commands, SymfonyStyle $io): void
     {
-        $files = [];
         $collection = new GenerateResultCollection();
         foreach ($commands as $command) {
             $resultCollection = $this->bus->handle($command);
             $collection->merge($resultCollection);
         }
+
+        $io->title('Generated files');
+
+        $generatedFiles = $this->getFilesList($collection);
+        sort($generatedFiles);
+        $io->listing($generatedFiles);
+
+        $io->title('Info');
+
+        $table = $this->generateInfoTableRows($collection);
+
+        $size = $this->calculateSize($collection);
+        $table[] = ['Total files', count($generatedFiles)];
+        $table[] = ['Total size', ByteSizeFormatHelper::sizeFormat($size)];
+
+        $io->table([], $table);
+    }
+
+    private function generateInfoTableRows(GenerateResultCollection $collection): array {
+        $table = [];
         foreach ($collection->getAll() as $result) {
-            if (realpath($result->getName())) {
-                $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getName()));
-            } else {
-                $files[] = $result->getName();
+            if($result instanceof InfoResult) {
+                $info = '';
+                if($result->getName()) {
+                    $info .= $result->getName() . ': ';
+                }
+                $info .= $result->getContent();
+                $table[] = [$result->getName(), $result->getContent()];
             }
         }
-        return $files;
+        return $table;
+    }
+
+    private function calculateSize(GenerateResultCollection $collection): int {
+        $size = 0;
+        foreach ($collection->getAll() as $result) {
+            if($result instanceof FileResult) {
+                $size = $size + mb_strlen($result->getContent());
+            }
+        }
+        return $size;
+    }
+
+    private function getFilesList(GenerateResultCollection $collection): array {
+        $list = [];
+        foreach ($collection->getAll() as $result) {
+            if($result instanceof FileResult) {
+                $file = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getName()));
+                $list[] = $file;
+            }
+        }
+        return $list;
     }
 }
