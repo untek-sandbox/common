@@ -9,13 +9,17 @@ use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 class ContainerConfigGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
         $args = [
             'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)'
         ];
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
         return $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
     }
 }

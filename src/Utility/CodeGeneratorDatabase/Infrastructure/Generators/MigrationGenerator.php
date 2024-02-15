@@ -14,7 +14,7 @@ class MigrationGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -32,9 +32,9 @@ class MigrationGenerator
         $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
         $code = $this->codeGenerator->generatePhpCode($template, $params);
         $resultCollection = new GenerateResultCollection();
-        $resultCollection->add(new FileResult($fileName, $code));
-        $importResultCollection = (new MigrationConfigGenerator($command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
-        $resultCollection->merge($importResultCollection);
+        $this->collection->add(new FileResult($fileName, $code));
+        $importResultCollection = (new MigrationConfigGenerator($this->collection, $command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
+        $this->collection->merge($importResultCollection);
         return $resultCollection;
     }
 }

@@ -9,6 +9,10 @@ use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHe
 class ContainerConfigGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateDatabaseCommand $command): GenerateResultCollection
     {
         $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
@@ -16,7 +20,7 @@ class ContainerConfigGenerator
         $args = [
             'service(\Illuminate\Database\Capsule\Manager::class)'
         ];
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
         return $consoleConfigGenerator->generate($repositoryInterfaceClassName, $repositoryClassName, $args);
     }
 }

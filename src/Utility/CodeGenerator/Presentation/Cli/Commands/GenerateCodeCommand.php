@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
+use Untek\Core\Container\Helpers\ContainerHelper;
 use Untek\Core\Text\Helpers\TemplateHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Lib\Components\Byte\Helpers\ByteSizeFormatHelper;
@@ -88,12 +89,13 @@ class GenerateCodeCommand extends Command
 
     protected function handleCommands(array $commands): GenerateResultCollection
     {
-        $collection = new GenerateResultCollection();
+//        $collection = new GenerateResultCollection();
         foreach ($commands as $command) {
-            $resultCollection = $this->bus->handle($command);
-            $collection->merge($resultCollection);
+            /*$collection = */$this->bus->handle($command);
+//            $collection->merge($resultCollection);
         }
 //        GeneratorHelper::dump($collection);
+        $collection = ContainerHelper::getContainer()->get(GenerateResultCollection::class);
         $items = [];
         foreach ($collection->getAll() as $result) {
             $items[$result->getName()] = $result;

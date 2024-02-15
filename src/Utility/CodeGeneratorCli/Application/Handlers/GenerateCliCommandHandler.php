@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorCli\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
@@ -15,6 +16,10 @@ use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\ContainerConfigGene
 class GenerateCliCommandHandler
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     /**
      * @param GenerateCliCommand $command
      * @throws UnprocessableEntityException
@@ -25,17 +30,17 @@ class GenerateCliCommandHandler
         $validator->validate($command);
 
         $generators = [
-            new CliCommandGenerator(),
-            new ConsoleCommandConfigGenerator(),
-            new ContainerConfigGenerator(),
-            new CliCommandShortcutGenerator(),
+            new CliCommandGenerator($this->collection),
+            new ConsoleCommandConfigGenerator($this->collection),
+            new ContainerConfigGenerator($this->collection),
+            new CliCommandShortcutGenerator($this->collection),
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($collection);
+        GeneratorHelper::dump($this->collection);
 
         $cliCommand = $command->getCliCommand();
-        $collection->add(new InfoResult('CLI command', 'php bin/console ' . $cliCommand));
+        $this->collection->add(new InfoResult('CLI command', 'php bin/console ' . $cliCommand));
 
         return $collection;
     }

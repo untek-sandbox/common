@@ -9,14 +9,14 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigGenerator
 {
 
-//    public function __construct(protected GenerateResultCollection $collection)
-//    {
-//    }
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
 
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
         return $consoleConfigGenerator->generate($handlerClassName, $handlerClassName);
     }
 }

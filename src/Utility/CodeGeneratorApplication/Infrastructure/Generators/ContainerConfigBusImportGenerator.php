@@ -13,6 +13,10 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusImportGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
@@ -26,7 +30,7 @@ class ContainerConfigBusImportGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new FileResult($fileName, $code));
+            $this->collection->add(new FileResult($fileName, $code));
         }
         return $resultCollection;
     }

@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
@@ -18,6 +19,10 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RoutConfigImpor
 class GenerateRestApiCommandHandler
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     /**
      * @param GenerateRestApiCommand $command
      * @throws UnprocessableEntityException
@@ -28,20 +33,20 @@ class GenerateRestApiCommandHandler
         $validator->validate($command);
 
         $generators = [
-            new ControllerGenerator(),
-            new RestApiSchemeGenerator(),
-            new ControllerTestGenerator(),
-            new ContainerConfigGenerator(),
-            new RoutConfigGenerator(),
-            new RoutConfigImportGenerator(),
+            new ControllerGenerator($this->collection),
+            new RestApiSchemeGenerator($this->collection),
+            new ControllerTestGenerator($this->collection),
+            new ContainerConfigGenerator($this->collection),
+            new RoutConfigGenerator($this->collection),
+            new RoutConfigImportGenerator($this->collection),
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($collection);
+        GeneratorHelper::dump($this->collection);
 
         $uri = '/rest-api/v' . $command->getVersion() . '/' . $command->getUri();
         $endpoint = $command->getHttpMethod() . ' ' . $uri;
-        $collection->add(new InfoResult('API endpoint', $endpoint));
+        $this->collection->add(new InfoResult('API endpoint', $endpoint));
 
         return $collection;
     }

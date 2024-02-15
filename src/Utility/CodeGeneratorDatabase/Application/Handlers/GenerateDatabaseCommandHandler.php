@@ -3,6 +3,7 @@
 namespace Untek\Utility\CodeGeneratorDatabase\Application\Handlers;
 
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Application\Validators\GenerateDatabaseCommandValidator;
@@ -17,6 +18,10 @@ use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryInte
 class GenerateDatabaseCommandHandler
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     /**
      * @param GenerateDatabaseCommand $command
      * @throws UnprocessableEntityException
@@ -27,16 +32,16 @@ class GenerateDatabaseCommandHandler
         $validator->validate($command);
 
         $generators = [
-            new RepositoryInterfaceGenerator(),
-            new NormalizerGenerator(),
-            new EloquentRepositoryGenerator(),
-            new ModelGenerator(),
-            new ContainerConfigGenerator(),
-            new MigrationGenerator(),
+            new RepositoryInterfaceGenerator($this->collection),
+            new NormalizerGenerator($this->collection),
+            new EloquentRepositoryGenerator($this->collection),
+            new ModelGenerator($this->collection),
+            new ContainerConfigGenerator($this->collection),
+            new MigrationGenerator($this->collection),
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($collection);
+        GeneratorHelper::dump($this->collection);
 
         return $collection;
     }

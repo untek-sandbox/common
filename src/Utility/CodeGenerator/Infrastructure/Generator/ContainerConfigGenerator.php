@@ -9,7 +9,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 class ContainerConfigGenerator
 {
 
-    public function __construct(private string $namespace)
+    public function __construct(protected GenerateResultCollection $collection, private string $namespace)
     {
     }
 
@@ -31,8 +31,9 @@ class ContainerConfigGenerator
         if (!$configGenerator->hasCode($concreteClassName)) {
             $code = $configGenerator->appendCode($codeForAppend);
         }
+        $this->collection->add(new FileResult($configFile, $code));
         return new GenerateResultCollection([
-            new FileResult($configFile, $code)
+
         ]);
     }
 }

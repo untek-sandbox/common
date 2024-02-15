@@ -12,7 +12,7 @@ class CliCommandShortcutGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -25,8 +25,9 @@ class CliCommandShortcutGenerator
         ];
         $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
         $code = $this->codeGenerator->generateCode($template, $params);
+        $this->collection->add(new FileResult($fileName, $code));
         return new GenerateResultCollection([
-            new FileResult($fileName, $code)
+
         ]);
     }
 

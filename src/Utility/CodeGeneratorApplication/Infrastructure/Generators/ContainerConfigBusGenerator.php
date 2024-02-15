@@ -12,6 +12,10 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateApplicationCommand $command): GenerateResultCollection
     {
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
@@ -24,7 +28,7 @@ class ContainerConfigBusGenerator
             $controllerDefinition =
                 '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';
             $code = $configGenerator->appendCode($controllerDefinition);
-            $resultCollection->add(new FileResult($fileName, $code));
+            $this->collection->add(new FileResult($fileName, $code));
         }
         return $resultCollection;
     }

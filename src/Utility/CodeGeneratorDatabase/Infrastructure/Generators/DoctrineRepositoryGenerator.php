@@ -14,7 +14,7 @@ class DoctrineRepositoryGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -33,8 +33,9 @@ class DoctrineRepositoryGenerator
         $template = __DIR__ . '/../../resources/templates/' . $repositoryDriver . '-repository.php';
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
+        $this->collection->add(new FileResult($fileName, $code));
         return new GenerateResultCollection([
-            new FileResult($fileName, $code)
+
         ]);
     }
 }

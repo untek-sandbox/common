@@ -13,6 +13,10 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHel
 class RoutConfigGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
@@ -20,7 +24,7 @@ class RoutConfigGenerator
         $code = $this->generateConfig($fileName, $controllerClassName, $command);
         $resultCollection = new GenerateResultCollection();
         if ($code) {
-            $resultCollection->add(new FileResult($fileName, $code));
+            $this->collection->add(new FileResult($fileName, $code));
         }
         return $resultCollection;
     }

@@ -16,7 +16,7 @@ class ControllerGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -36,8 +36,9 @@ class ControllerGenerator
         $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
         $code = $this->codeGenerator->generatePhpClassCode($controllerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerClassName);
+        $this->collection->add(new FileResult($fileName, $code));
         return new GenerateResultCollection([
-            new FileResult($fileName, $code)
+
         ]);
     }
 }

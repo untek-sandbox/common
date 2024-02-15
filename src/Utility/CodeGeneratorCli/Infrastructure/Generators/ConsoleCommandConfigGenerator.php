@@ -13,6 +13,10 @@ use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
 class ConsoleCommandConfigGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateCliCommand $command): GenerateResultCollection
     {
         $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
@@ -24,13 +28,13 @@ class ConsoleCommandConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new FileResult($cliCommandConfigFileName, $code));
+            $this->collection->add(new FileResult($cliCommandConfigFileName, $code));
         }
         $importResult = $this->addImport($cliCommandConfigFileName);
         if ($importResult) {
-            $resultCollection->add($importResult);
+            $this->collection->add($importResult);
         }
-        $resultCollection->add(new FileResult($cliCommandConfigFileName, $code));
+        $this->collection->add(new FileResult($cliCommandConfigFileName, $code));
         return $resultCollection;
     }
 

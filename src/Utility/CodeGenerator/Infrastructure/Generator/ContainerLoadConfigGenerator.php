@@ -8,7 +8,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 class ContainerLoadConfigGenerator
 {
 
-    public function __construct(private string $namespace)
+    public function __construct(protected GenerateResultCollection $collection, private string $namespace)
     {
     }
 
@@ -21,7 +21,7 @@ class ContainerLoadConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend . PHP_EOL);
-            $resultCollection->add(new FileResult($configFile, $code));
+            $this->collection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

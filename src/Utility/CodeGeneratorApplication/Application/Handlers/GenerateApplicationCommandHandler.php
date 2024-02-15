@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
+use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
@@ -15,20 +16,24 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerCo
 class GenerateApplicationCommandHandler
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function __invoke(GenerateApplicationCommand $command)
     {
         $generators = [
-            new CommandGenerator(),
-            new CommandHandlerGenerator(),
-            new CommandValidatorGenerator(),
-            new ContainerConfigGenerator(),
-            new ContainerConfigImportGenerator(),
-            new ContainerConfigBusGenerator(),
-            new ContainerConfigBusImportGenerator(),
+            new CommandGenerator($this->collection),
+            new CommandHandlerGenerator($this->collection),
+            new CommandValidatorGenerator($this->collection),
+            new ContainerConfigGenerator($this->collection),
+            new ContainerConfigImportGenerator($this->collection),
+            new ContainerConfigBusGenerator($this->collection),
+            new ContainerConfigBusImportGenerator($this->collection),
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-        GeneratorHelper::dump($collection);
+        GeneratorHelper::dump($this->collection);
 
         return $collection;
     }

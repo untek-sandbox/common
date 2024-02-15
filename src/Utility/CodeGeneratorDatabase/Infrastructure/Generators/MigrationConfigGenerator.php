@@ -11,7 +11,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 class MigrationConfigGenerator
 {
 
-    public function __construct(private string $namespace, private string $migrationConfigFile)
+    public function __construct(protected GenerateResultCollection $collection, private string $namespace, private string $migrationConfigFile)
     {
     }
 
@@ -28,7 +28,7 @@ class MigrationConfigGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($concreteCode)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new FileResult($configFile, $code));
+            $this->collection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

@@ -9,6 +9,10 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHel
 class ContainerConfigGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
@@ -16,7 +20,7 @@ class ContainerConfigGenerator
             'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)',
             'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
         ];
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($command->getNamespace());
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
         return $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
     }
 }

@@ -13,6 +13,10 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfig
 class RoutConfigImportGenerator
 {
 
+    public function __construct(protected GenerateResultCollection $collection)
+    {
+    }
+
     public function generate(GenerateRestApiCommand $command): GenerateResultCollection
     {
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
@@ -34,7 +38,7 @@ class RoutConfigImportGenerator
         $resultCollection = new GenerateResultCollection();
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
-            $resultCollection->add(new FileResult($configFile, $code));
+            $this->collection->add(new FileResult($configFile, $code));
         }
         return $resultCollection;
     }

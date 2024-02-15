@@ -16,7 +16,7 @@ class RestApiSchemeGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -34,8 +34,9 @@ class RestApiSchemeGenerator
         $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($schemaClassName);
+        $this->collection->add(new FileResult($fileName, $code));
         return new GenerateResultCollection([
-            new FileResult($fileName, $code)
+
         ]);
     }
 }

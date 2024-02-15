@@ -14,7 +14,7 @@ class CommandHandlerGenerator
 
     private CodeGenerator $codeGenerator;
 
-    public function __construct()
+    public function __construct(protected GenerateResultCollection $collection)
     {
         $this->codeGenerator = new CodeGenerator();
     }
@@ -31,8 +31,9 @@ class CommandHandlerGenerator
         $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
+        $this->collection->add(new FileResult($fileName, $code));
         return new GenerateResultCollection([
-            new FileResult($fileName, $code)
+
         ]);
     }
 }
