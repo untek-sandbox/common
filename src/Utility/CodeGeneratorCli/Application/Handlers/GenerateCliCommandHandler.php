@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorCli\Application\Handlers;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Application\Validators\GenerateCliCommandValidator;
@@ -24,8 +25,6 @@ class GenerateCliCommandHandler
         $validator = new GenerateCliCommandValidator();
         $validator->validate($command);
 
-        $collection = new GenerateResultCollection();
-
         $generators = [
             new CliCommandGenerator(),
             new ConsoleCommandConfigGenerator(),
@@ -33,10 +32,7 @@ class GenerateCliCommandHandler
             new CliCommandShortcutGenerator(),
         ];
 
-        foreach ($generators as $generator) {
-            $resultCollection = $generator->generate($command);
-            $collection->merge($resultCollection);
-        }
+        $collection = GeneratorHelper::generate($generators, $command);
 
         $fs = new Filesystem();
         foreach ($collection->getAll() as $result) {

@@ -5,9 +5,6 @@ namespace Untek\Utility\CodeGeneratorApplication\Application\Dto;
 class GenerateResult
 {
 
-    const TYPE_FILE = 'file';
-    const TYPE_OTHER = 'other';
-
     private ?string $fileName = null;
     private string $code;
 

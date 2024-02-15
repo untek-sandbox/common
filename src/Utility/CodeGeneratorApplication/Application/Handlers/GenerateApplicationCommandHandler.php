@@ -4,6 +4,7 @@ namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
+use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
@@ -19,8 +20,6 @@ class GenerateApplicationCommandHandler
 
     public function __invoke(GenerateApplicationCommand $command)
     {
-        $collection = new GenerateResultCollection();
-
         $generators = [
             new CommandGenerator(),
             new CommandHandlerGenerator(),
@@ -31,10 +30,7 @@ class GenerateApplicationCommandHandler
             new ContainerConfigBusImportGenerator(),
         ];
 
-        foreach ($generators as $generator) {
-            $resultCollection = $generator->generate($command);
-            $collection->merge($resultCollection);
-        }
+        $collection = GeneratorHelper::generate($generators, $command);
 
         $files = [];
         $fs = new Filesystem();

@@ -55,7 +55,6 @@ class GenerateCodeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
         $inputFile = $input->getOption('inputFile');
         if ($inputFile) {
             $inputFile = TemplateHelper::render($inputFile, [
@@ -67,7 +66,6 @@ class GenerateCodeCommand extends Command
         } else {
             $commands = $this->input($io);
         }
-
         if ($commands) {
             try {
                 $files = $this->handleCommands($commands);
@@ -80,7 +78,6 @@ class GenerateCodeCommand extends Command
                 }
                 throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $errors));
             }
-
             $io->newLine();
             $io->writeln('Generated files:');
             $io->listing($files);
@@ -97,7 +94,6 @@ class GenerateCodeCommand extends Command
             $resultCollection = $this->bus->handle($command);
             $collection->merge($resultCollection);
         }
-
         foreach ($collection->getAll() as $result) {
             if (realpath($result->getFileName())) {
                 $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
