@@ -2,11 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandHandlerGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandValidatorGenerator;
@@ -31,13 +28,8 @@ class GenerateApplicationCommandHandler
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
+        GeneratorHelper::dump($collection);
 
-        $files = [];
-        $fs = new Filesystem();
-        foreach ($collection->getAll() as $result) {
-            $fs->dumpFile($result->getFileName(), $result->getCode());
-            $files[] = GeneratorFileHelper::fileNameTotoRelative(realpath($result->getFileName()));
-        }
         return $collection;
     }
 }

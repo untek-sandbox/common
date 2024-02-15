@@ -2,11 +2,9 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResult;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ContainerConfigGenerator;
@@ -38,11 +36,7 @@ class GenerateRestApiCommandHandler
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-
-        $fs = new Filesystem();
-        foreach ($collection->getAll() as $result) {
-            $fs->dumpFile($result->getFileName(), $result->getCode());
-        }
+        GeneratorHelper::dump($collection);
 
         $endpoint = 'Endpoint: ' . $command->getHttpMethod() . ' rest-api/v' . $command->getVersion() . '/' . $command->getUri();
         $collection->add(new GenerateResult($endpoint, ''));

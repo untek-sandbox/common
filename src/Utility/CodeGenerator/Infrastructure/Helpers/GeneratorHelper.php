@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGenerator\Infrastructure\Helpers;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Untek\Utility\CodeGenerator\Application\Interfaces\GeneratorInterface;
 use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 
@@ -17,5 +18,13 @@ class GeneratorHelper
             $collection->merge($resultCollection);
         }
         return $collection;
+    }
+
+    public static function dump(GenerateResultCollection $collection): void
+    {
+        $fs = new Filesystem();
+        foreach ($collection->getAll() as $result) {
+            $fs->dumpFile($result->getFileName(), $result->getCode());
+        }
     }
 }

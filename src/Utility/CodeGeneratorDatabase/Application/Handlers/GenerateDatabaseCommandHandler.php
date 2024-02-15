@@ -2,10 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Application\Handlers;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
-use Untek\Utility\CodeGeneratorApplication\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Application\Validators\GenerateDatabaseCommandValidator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\ContainerConfigGenerator;
@@ -38,11 +36,7 @@ class GenerateDatabaseCommandHandler
         ];
 
         $collection = GeneratorHelper::generate($generators, $command);
-
-        $fs = new Filesystem();
-        foreach ($collection->getAll() as $result) {
-            $fs->dumpFile($result->getFileName(), $result->getCode());
-        }
+        GeneratorHelper::dump($collection);
 
         return $collection;
     }
