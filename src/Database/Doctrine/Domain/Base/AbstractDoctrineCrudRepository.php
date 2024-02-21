@@ -70,7 +70,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
      */
     public function update(object $entity): void
     {
-        $entity = $this->findOneById($entity->getId());
+        $this->findOneById($entity->getId());
 
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->update($this->getTableName());
