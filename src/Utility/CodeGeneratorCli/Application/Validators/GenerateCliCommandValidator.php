@@ -34,7 +34,7 @@ class GenerateCliCommandValidator extends AbstractObjectValidator
                     new Assert\Type('string'),
                 ],
                 'properties' => [
-                    new Assert\NotBlank(),
+//                    new Assert\NotBlank(),
                     new Assert\Type('array'),
                 ],
             ]
