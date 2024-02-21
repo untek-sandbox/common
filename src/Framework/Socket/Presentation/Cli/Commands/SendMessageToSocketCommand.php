@@ -6,17 +6,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
+use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
-use Untek\Framework\Socket\Infrastructure\Services\SocketDaemon;
-use DateTime;
 
 class SendMessageToSocketCommand extends Command
 {
 
-    private SocketDaemon $socketDaemon;
+    private SocketDaemonInterface $socketDaemon;
 
-    public function __construct(SocketDaemon $socketDaemon)
+    public function __construct(SocketDaemonInterface $socketDaemon)
     {
         parent::__construct();
         $this->socketDaemon = $socketDaemon;

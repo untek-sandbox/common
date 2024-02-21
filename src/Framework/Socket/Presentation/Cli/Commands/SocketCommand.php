@@ -7,14 +7,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Untek\Framework\Socket\Infrastructure\Services\SocketDaemon;
+use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 
 class SocketCommand extends Command
 {
 
-    private $socketDaemon;
+    private SocketDaemonInterface $socketDaemon;
 
-    public function __construct(SocketDaemon $socketDaemon)
+    public function __construct(SocketDaemonInterface $socketDaemon)
     {
         parent::__construct();
         $this->socketDaemon = $socketDaemon;

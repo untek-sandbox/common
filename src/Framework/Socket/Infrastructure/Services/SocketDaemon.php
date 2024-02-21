@@ -2,24 +2,19 @@
 
 namespace Untek\Framework\Socket\Infrastructure\Services;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Untek\Core\Contract\Common\Exceptions\NotFoundException;
+use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
+use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
+use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
+use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
+use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
 use Untek\Model\Entity\Helpers\EntityHelper;
-use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
+use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Workerman\Connection\ConnectionInterface;
 use Workerman\Worker;
-use Untek\Core\Contract\Common\Exceptions\NotFoundException;
-use Untek\Core\Contract\User\Interfaces\Entities\IdentityEntityInterface;
-use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
-use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
-use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
-use Untek\User\Authentication\Domain\Interfaces\Services\AuthServiceInterface;
-use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
-use Untek\User\Authentication\Domain\Authentication\Token\ApiToken;
-use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
 
-class SocketDaemon
+class SocketDaemon implements SocketDaemonInterface
 {
 
     private $users = [];
@@ -90,7 +85,7 @@ class SocketDaemon
         };
     }
 
-    public function onMessage(ConnectionInterface $connection, $data) 
+    public function onMessage(ConnectionInterface $connection, $data)
     {
         $userId = $this->connectionRepository->userIdByConnection($connection);
         //print_r(['$userId' , $userId]);
@@ -107,13 +102,14 @@ class SocketDaemon
             $event->setPayload([
                 'data' => $data,
             ]);
-    
+
             $this->sendToWebSocket($event, $connection);
         }
 
     }
 
-    protected function sendConnectEventToClient($userId) {
+    protected function sendConnectEventToClient($userId)
+    {
         $event = new SocketEvent();
         $event->setUserId($userId);
         $event->setName(SocketEventEnum::CONNECT);
