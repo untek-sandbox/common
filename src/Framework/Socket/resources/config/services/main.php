@@ -21,15 +21,29 @@ return static function (ContainerConfigurator $configurator): void {
     }
     
     $services->set(ConnectionRamStorage::class, ConnectionRamStorage::class);
-    $services->set(SocketDaemon::class, SocketDaemon::class)
-        ->args([
-            service(ConnectionRamStorage::class),
-            service(TokenServiceInterface::class),
-            service(ClientMessageHandlerInterface::class),
-            getenv('WEB_SOCKET_LOCAL_URL'),
-            getenv('WEB_SOCKET_CLIENT_URL'),
-            getenv('APP_ENV'),
-        ]);
+
+    if(getenv('APP_MODE') === 'test') {
+        $services->set(SocketDaemon::class, \Untek\Framework\Socket\Infrastructure\Services\SocketDaemonTest::class)
+            ->args([
+                service(ConnectionRamStorage::class),
+                service(TokenServiceInterface::class),
+                service(ClientMessageHandlerInterface::class),
+                getenv('WEB_SOCKET_LOCAL_URL'),
+                getenv('WEB_SOCKET_CLIENT_URL'),
+                getenv('APP_ENV'),
+            ]);
+    } else {
+        $services->set(SocketDaemon::class, SocketDaemon::class)
+            ->args([
+                service(ConnectionRamStorage::class),
+                service(TokenServiceInterface::class),
+                service(ClientMessageHandlerInterface::class),
+                getenv('WEB_SOCKET_LOCAL_URL'),
+                getenv('WEB_SOCKET_CLIENT_URL'),
+                getenv('APP_ENV'),
+            ]);
+    }
+    
     $services->set(SocketCommand::class, SocketCommand::class)
         ->args([
             service(SocketDaemon::class),
