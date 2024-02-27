@@ -61,13 +61,6 @@ return static function (ContainerConfigurator $configurator): void {
         ]);
     $services->set(BotService::class, BotService::class);
 
-    $services->set(InstanceResolver::class, InstanceResolver::class);
-    $services->set(InstanceProvider::class, InstanceProvider::class)
-        ->args([
-            service(ContainerInterface::class),
-            service(InstanceResolver::class),
-        ]);
-
     $services->set(LongPullService::class, LongPullService::class)
         ->args(
             [
