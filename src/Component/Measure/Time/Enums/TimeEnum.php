@@ -1,15 +1,10 @@
 <?php
 
-namespace Untek\Component\Time\Enums;
-
-use Untek\Core\Code\Helpers\DeprecateHelper;
+namespace Untek\Component\Measure\Time\Enums;
 
 /**
  * Единицы измерения времени
  */
-
-DeprecateHelper::hardThrow();
-
 class TimeEnum
 {
 

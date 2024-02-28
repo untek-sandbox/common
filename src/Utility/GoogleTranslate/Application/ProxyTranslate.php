@@ -7,7 +7,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
-use Untek\Component\Time\Enums\TimeEnum;
+use Untek\Component\Measure\Time\Enums\TimeEnum;
 use Untek\Core\ConfigManager\Interfaces\ConfigManagerInterface;
 use Untek\Core\Container\Traits\ContainerAttributeTrait;
 use Untek\Core\Instance\Libs\Resolvers\ArgumentMetadataResolver;
