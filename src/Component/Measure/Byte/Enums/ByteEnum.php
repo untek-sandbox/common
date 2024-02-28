@@ -1,16 +1,12 @@
 <?php
 
-namespace Untek\Lib\Components\Byte\Enums;
+namespace Untek\Component\Measure\Byte\Enums;
 
-use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Enum\Interfaces\GetLabelsInterface;
 
 /**
  * Единицы измерения информации в байтах
  */
-
-DeprecateHelper::hardThrow();
-
 class ByteEnum implements GetLabelsInterface
 {
 
