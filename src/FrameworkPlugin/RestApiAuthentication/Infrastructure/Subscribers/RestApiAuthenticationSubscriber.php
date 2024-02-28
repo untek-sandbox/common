@@ -45,6 +45,10 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
         try {
             $userId = $this->tokenService->getIdentityIdByToken($credentials);
             $identity = $this->identityRepository->getUserById($userId);
+            if(!$identity->isEnabled()) {
+                throw new AuthenticationException('User is disabled.');
+            }
+
             $token = new ApiToken($identity, 'main', $identity->getRoles(), $credentials);
             $this->tokenStorage->setToken($token);
         } catch (UserNotFoundException | NotFoundException $e) {
