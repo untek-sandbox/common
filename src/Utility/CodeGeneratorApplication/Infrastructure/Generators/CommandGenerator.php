@@ -14,6 +14,7 @@ class CommandGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/command.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -26,7 +27,7 @@ class CommandGenerator
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../resources/templates/command.tpl.php';
+        $template = $command->getTemplateByName(self::class) ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($commandClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($commandClassName);
         $this->collection->add(new FileResult($fileName, $code));

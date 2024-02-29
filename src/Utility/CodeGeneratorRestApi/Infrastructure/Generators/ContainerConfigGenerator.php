@@ -18,7 +18,8 @@ class ContainerConfigGenerator
         $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
         $args = [
             'service(\Untek\Model\Cqrs\Application\Services\CommandBusInterface::class)',
-            'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)'
+            'service(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class)',
+            'service(\Untek\Component\App\Services\ControllerAccessChecker::class)',
         ];
         $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
         $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);

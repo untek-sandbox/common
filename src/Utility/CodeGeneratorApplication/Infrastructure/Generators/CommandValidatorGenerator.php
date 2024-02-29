@@ -14,6 +14,7 @@ class CommandValidatorGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/validator.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -28,7 +29,7 @@ class CommandValidatorGenerator
             'properties' => ApplicationHelper::prepareProperties($command),
             'commandClassName' => $commandClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/validator.tpl.php';
+        $template = $command->getTemplateByName(self::class) ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($validatorClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($validatorClassName);
         $this->collection->add(new FileResult($fileName, $code));

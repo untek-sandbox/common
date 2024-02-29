@@ -28,6 +28,9 @@ class <?= $className ?> extends AbstractObjectValidator
 <?php foreach ($properties as $attribute):
     $propertyName = $attribute->getName();
     $propertyType = $attribute->getType()->generate();
+    $reflection = new \Laminas\Code\Reflection\PropertyReflection($attribute->getType(), 'nullable');
+    $nullable = $reflection->getValue($attribute->getType());
+//    dd($nullable);
     ?>
                 '<?= $propertyName ?>' => [
                     new Assert\NotBlank(),

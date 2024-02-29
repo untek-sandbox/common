@@ -14,8 +14,19 @@ class ApplicationHelper
         $properties = [];
         foreach ($command->getProperties() as &$commandAttribute) {
             $name = Inflector::variablize($commandAttribute['name']);
-            $propertyGenerator = new PropertyGenerator($name, '', PropertyGenerator::FLAG_PRIVATE, TypeGenerator::fromTypeString($commandAttribute['type']));
-            $propertyGenerator->omitDefaultValue();
+            $type = $commandAttribute['type'];
+            if (!empty($commandAttribute['nullable'])) {
+                $type = '?' . $type;
+            }
+
+            $typeGenerator = TypeGenerator::fromTypeString($type);
+
+            $propertyGenerator = new PropertyGenerator($name, '', PropertyGenerator::FLAG_PRIVATE, $typeGenerator);
+            if (isset($commandAttribute['defaultValue'])) {
+                $propertyGenerator->setDefaultValue($commandAttribute['defaultValue']);
+            } else {
+                $propertyGenerator->omitDefaultValue();
+            }
             $properties[] = $propertyGenerator;
         }
         return $properties;
