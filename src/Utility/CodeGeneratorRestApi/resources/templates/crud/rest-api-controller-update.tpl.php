@@ -25,6 +25,7 @@ class <?= $className ?> extends AbstractRestApiController
 
     public function __construct(
         private CommandBusInterface $bus,
+        private UrlGeneratorInterface $urlGenerator,
         private ControllerAccessChecker $accessChecker,
     )
     {
