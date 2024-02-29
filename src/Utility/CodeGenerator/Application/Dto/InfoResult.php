@@ -28,4 +28,9 @@ class InfoResult implements ResultInterface
     {
         return $this->content;
     }
+
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
 }

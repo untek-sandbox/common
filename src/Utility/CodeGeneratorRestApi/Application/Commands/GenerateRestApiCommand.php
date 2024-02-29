@@ -11,6 +11,7 @@ class GenerateRestApiCommand
     private string $uri;
     private string $httpMethod;
     private string $version;
+    private array $templates = [];
 
     public function getNamespace(): string
     {
@@ -70,6 +71,21 @@ class GenerateRestApiCommand
     public function setVersion(string $version): void
     {
         $this->version = $version;
+    }
+
+    public function getTemplates(): array
+    {
+        return $this->templates;
+    }
+
+    public function getTemplateByName(string $name): ?string
+    {
+        return $this->templates[$name] ?? null;
+    }
+
+    public function setTemplates(array $templates): void
+    {
+        $this->templates = $templates;
     }
 
 }

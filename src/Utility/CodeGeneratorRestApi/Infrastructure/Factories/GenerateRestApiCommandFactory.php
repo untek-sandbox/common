@@ -10,7 +10,7 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiComma
 class GenerateRestApiCommandFactory
 {
 
-    public static function create($namespace, $type, $entityName, $uri, $method, $apiVersion = null): GenerateRestApiCommand {
+    public static function create($namespace, $type, $entityName, $uri, $method, $apiVersion = null, array $templates = []): GenerateRestApiCommand {
         $apiVersion = $apiVersion ? $apiVersion : getenv('REST_API_VERSION');
         
         $commandClassName = TypeHelper::generateCommandClassName($namespace, $type, Inflector::camelize($entityName));
@@ -24,6 +24,7 @@ class GenerateRestApiCommandFactory
         $command->setUri($uri);
         $command->setHttpMethod($method);
         $command->setVersion($apiVersion);
+        $command->setTemplates($templates);
         return $command;
     }
 }

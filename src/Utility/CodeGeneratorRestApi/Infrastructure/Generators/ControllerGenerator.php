@@ -15,6 +15,7 @@ class ControllerGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -32,8 +33,9 @@ class ControllerGenerator
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
             'schemaClassName' => $schemaClassName,
+            'routeName' => $routeName = $command->getHttpMethod() . '_' . $command->getUri(),
         ];
-        $template = __DIR__ . '/../../resources/templates/rest-api-controller.tpl.php';
+        $template = $command->getTemplateByName(self::class) ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($controllerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerClassName);
         $this->collection->add(new FileResult($fileName, $code));

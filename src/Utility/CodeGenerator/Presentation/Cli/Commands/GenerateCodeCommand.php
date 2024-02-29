@@ -79,6 +79,7 @@ class GenerateCodeCommand extends Command
                     $error = "$fieldName: {$violation->getMessage()}";
                     $errors[] = $error;
                 }
+//                dd($exception->getViolations());
                 throw new \Exception('Unprocessable entity.' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $errors));
             }
             $this->outputGeneratedFiles($collection, $io);
