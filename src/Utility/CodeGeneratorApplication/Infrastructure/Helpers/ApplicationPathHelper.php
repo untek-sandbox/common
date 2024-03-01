@@ -5,9 +5,15 @@ namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
+use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 
 class ApplicationPathHelper
 {
+
+    public static function getRepositoryInterfaceClassName(GenerateDatabaseCommand $command): string
+    {
+        return $command->getNamespace() . '\\Application\\Services\\' . Inflector::camelize($command->getTableName()) . 'RepositoryInterface';
+    }
 
     public static function getCommandValidatorClass(GenerateApplicationCommand $command): string
     {

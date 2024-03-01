@@ -29,7 +29,7 @@ class CommandValidatorGenerator
             'properties' => ApplicationHelper::prepareProperties($command),
             'commandClassName' => $commandClassName,
         ];
-        $template = $command->getTemplateByName(self::class) ?: $this->template;
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($validatorClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($validatorClassName);
         $this->collection->add(new FileResult($fileName, $code));

@@ -35,19 +35,14 @@ abstract class AbstractCommand
         $this->crudType = $crudType;
     }
 
-    public function getTemplates(): array
+    public function getParameter(string $generatorClass, string $key)
     {
-        return $this->templates;
+        return $this->templates[$generatorClass][$key] ?? null;
     }
 
-    public function getTemplateByName(string $name): ?string
+    public function setParameters(array $parameters): void
     {
-        return $this->templates[$name] ?? null;
-    }
-
-    public function setTemplates(array $templates): void
-    {
-        $this->templates = $templates;
+        $this->templates = $parameters;
     }
 
     public function getNamespace(): string

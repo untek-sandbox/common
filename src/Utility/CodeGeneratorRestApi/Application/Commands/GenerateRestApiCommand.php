@@ -73,19 +73,13 @@ class GenerateRestApiCommand
         $this->version = $version;
     }
 
-    public function getTemplates(): array
+    public function getParameter(string $generatorClass, string $key)
     {
-        return $this->templates;
+        return $this->templates[$generatorClass][$key] ?? null;
     }
 
-    public function getTemplateByName(string $name): ?string
+    public function setParameters(array $parameters): void
     {
-        return $this->templates[$name] ?? null;
+        $this->templates = $parameters;
     }
-
-    public function setTemplates(array $templates): void
-    {
-        $this->templates = $templates;
-    }
-
 }

@@ -27,7 +27,7 @@ class CommandGenerator
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
-        $template = $command->getTemplateByName(self::class) ?: $this->template;
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($commandClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($commandClassName);
         $this->collection->add(new FileResult($fileName, $code));

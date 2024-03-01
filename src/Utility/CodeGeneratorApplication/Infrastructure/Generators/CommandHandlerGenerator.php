@@ -13,6 +13,7 @@ class CommandHandlerGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -24,11 +25,12 @@ class CommandHandlerGenerator
         $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $validatorClassName = ApplicationPathHelper::getCommandValidatorClass($command);
+
         $params = [
             'commandClassName' => $commandClassName,
             'validatorClassName' => $validatorClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/handler.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($handlerClassName);
         $this->collection->add(new FileResult($fileName, $code));

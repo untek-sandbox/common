@@ -35,7 +35,7 @@ class ControllerGenerator
             'schemaClassName' => $schemaClassName,
             'routeName' => $routeName = $command->getHttpMethod() . '_' . $command->getUri(),
         ];
-        $template = $command->getTemplateByName(self::class) ?: $this->template;
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($controllerClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerClassName);
         $this->collection->add(new FileResult($fileName, $code));

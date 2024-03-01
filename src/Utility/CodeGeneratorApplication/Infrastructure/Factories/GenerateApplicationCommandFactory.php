@@ -7,13 +7,13 @@ use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicat
 class GenerateApplicationCommandFactory
 {
 
-    public static function create($namespace, $type, $entityName, $properties, array $templates = []): GenerateApplicationCommand {
+    public static function create($namespace, $type, $entityName, $properties, array $parameters = []): GenerateApplicationCommand {
         $command = new GenerateApplicationCommand();
         $command->setNamespace($namespace);
         $command->setType($type);
         $command->setName($entityName);
         $command->setProperties($properties);
-        $command->setTemplates($templates);
+        $command->setParameters($parameters);
         return $command;
     }
 }

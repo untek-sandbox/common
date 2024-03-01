@@ -22,7 +22,9 @@ use <?= $schemaClassName ?>;
 class <?= $className ?> extends AbstractGetListRestApiController
 {
 
-    public function __construct(private CommandBusInterface $bus)
+    public function __construct(
+        private CommandBusInterface $bus,
+    )
     {
         $this->schema = new <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($schemaClassName) ?>();
     }
