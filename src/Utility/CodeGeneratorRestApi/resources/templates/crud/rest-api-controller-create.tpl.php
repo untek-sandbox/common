@@ -28,10 +28,11 @@ class <?= $className ?> extends AbstractCreateRestApiController
 
     public function __construct(
         private CommandBusInterface $bus,
-        private UrlGeneratorInterface $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         private ControllerAccessChecker $accessChecker,
     )
     {
+        $this->urlGenerator = $urlGenerator;
         $this->schema = new <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($schemaClassName) ?>();
     }
 

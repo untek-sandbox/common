@@ -31,6 +31,11 @@ class GenerateDatabaseCommandValidator extends AbstractObjectValidator
                     new Assert\Length(null, 1, 255),
                     new Assert\Type('string'),
                 ],
+                'modelName' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(null, 1, 255),
+                    new Assert\Type('string'),
+                ],
                 'properties' => [
                     new Assert\NotBlank(),
                     new Assert\Type('array'),

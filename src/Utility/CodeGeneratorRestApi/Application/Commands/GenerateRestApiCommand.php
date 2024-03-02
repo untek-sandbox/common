@@ -12,6 +12,7 @@ class GenerateRestApiCommand
     private string $httpMethod;
     private string $version;
     private array $templates = [];
+    private ?string $modelName;
 
     public function getNamespace(): string
     {
@@ -81,5 +82,15 @@ class GenerateRestApiCommand
     public function setParameters(array $parameters): void
     {
         $this->templates = $parameters;
+    }
+
+    public function getModelName(): ?string
+    {
+        return $this->modelName;
+    }
+
+    public function setModelName(?string $modelName): void
+    {
+        $this->modelName = $modelName;
     }
 }

@@ -5,6 +5,7 @@
  * @var string $className
  * @var string $commandClassName
  * @var string $validatorClassName
+ * @var string $modelName
  */
 
 ?>

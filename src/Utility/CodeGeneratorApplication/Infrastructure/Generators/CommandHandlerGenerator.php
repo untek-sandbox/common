@@ -29,6 +29,8 @@ class CommandHandlerGenerator
         $params = [
             'commandClassName' => $commandClassName,
             'validatorClassName' => $validatorClassName,
+            'modelName' => $command->getModelName(),
+            'modelClass' => \Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper::getModelClass($command),
         ];
         $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($handlerClassName, $template, $params);

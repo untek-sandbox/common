@@ -8,24 +8,24 @@ use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCom
 class ApplicationPathHelper
 {
 
-    public static function getInterfaceClassName(GenerateDatabaseCommand $command): string
+    public static function getInterfaceClassName(object $command): string
     {
-        return $command->getNamespace() . '\\Application\\Services\\' . Inflector::camelize($command->getTableName()) . 'RepositoryInterface';
+        return $command->getNamespace() . '\\Application\\Services\\' . $command->getModelName() . 'RepositoryInterface';
     }
 
-    public static function getModelClass(GenerateDatabaseCommand $command): string
+    public static function getModelClass(object $command): string
     {
-        return $command->getNamespace() . '\\Domain\\Model\\' . Inflector::camelize($command->getTableName());
+        return $command->getNamespace() . '\\Domain\\Model\\' . $command->getModelName();
     }
 
-    public static function getNormalizerClass(GenerateDatabaseCommand $command): string
+    public static function getNormalizerClass(object $command): string
     {
-        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Normalizer\\' . Inflector::camelize($command->getTableName()) . 'Normalizer';
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Normalizer\\' . $command->getModelName() . 'Normalizer';
     }
 
-    public static function getRepositoryClass(GenerateDatabaseCommand $command, string $driver): string
+    public static function getRepositoryClass(object $command, string $driver): string
     {
         $driverName = Inflector::camelize($driver);
-        return $command->getNamespace() . '\\Infrastructure\\Persistence\\' . $driverName . '\\Repository\\' . Inflector::camelize($command->getTableName()) . 'Repository';
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\' . $driverName . '\\Repository\\' . $command->getModelName() . 'Repository';
     }
 }

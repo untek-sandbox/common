@@ -5,6 +5,7 @@
  * @var string $className
  * @var string $commandClassName
  * @var string $validatorClassName
+ * @var string $modelClass
  */
 
 ?>
@@ -35,7 +36,7 @@ class <?= $className ?>
         $validator = new \<?= $validatorClassName ?>();
         $validator->validate($command);
 
-        $entity = new YouModelClass();
+        $entity = new \<?= $modelClass ?>();
         PropertyHelper::mergeObjects($command, $entity);
         $this->repository->create($entity);
         return $entity;

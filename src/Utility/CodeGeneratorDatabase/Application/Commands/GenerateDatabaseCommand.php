@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Application\Commands;
 
+use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
 
 class GenerateDatabaseCommand extends AbstractCommand
@@ -9,6 +10,7 @@ class GenerateDatabaseCommand extends AbstractCommand
 
     private string $namespace;
     private string $tableName;
+    private ?string $modelName = null;
     private array $properties;
     private string $repositoryDriver = 'eloquent';
 
@@ -52,4 +54,16 @@ class GenerateDatabaseCommand extends AbstractCommand
         $this->repositoryDriver = $repositoryDriver;
     }
 
+    public function getModelName(): ?string
+    {
+        if($this->modelName) {
+            return $this->modelName;
+        }
+        return Inflector::camelize($this->getTableName());
+    }
+
+    public function setModelName(?string $modelName): void
+    {
+        $this->modelName = $modelName;
+    }
 }
