@@ -14,6 +14,27 @@ class GenerateDatabaseCommand extends AbstractCommand
     private array $properties;
     private string $repositoryDriver = 'eloquent';
 
+    public function __construct(
+        string $namespace = null,
+        string $tableName = null,
+        array $properties = null,
+        string $modelName = null,
+    )
+    {
+        if($namespace) {
+            $this->namespace = $namespace;
+        }
+        if($tableName) {
+            $this->tableName = $tableName;
+        }
+        if($properties) {
+            $this->properties = $properties;
+        }
+        if($modelName) {
+            $this->modelName = $modelName;
+        }
+    }
+
     public function getNamespace(): string
     {
         return $this->namespace;
