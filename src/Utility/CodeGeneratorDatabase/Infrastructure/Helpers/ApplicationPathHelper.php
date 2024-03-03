@@ -18,6 +18,11 @@ class ApplicationPathHelper
         return $command->getNamespace() . '\\Domain\\Model\\' . $command->getModelName();
     }
 
+    public static function getSeedClass(object $command): string
+    {
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Seeds\\' . $command->getModelName() . 'Seed';
+    }
+
     public static function getNormalizerClass(object $command): string
     {
         return $command->getNamespace() . '\\Infrastructure\\Persistence\\Normalizer\\' . $command->getModelName() . 'Normalizer';
