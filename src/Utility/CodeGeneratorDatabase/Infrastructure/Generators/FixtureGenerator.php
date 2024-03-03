@@ -24,12 +24,13 @@ class FixtureGenerator
     public function generate(GenerateDatabaseCommand $command): void
     {
         $seedClassName = ApplicationPathHelper::getSeedClass($command);
-        $fileName = realpath(__DIR__ . '/../../../../../../../..') . '/resources/seeds/' . $command->getTableName() . '.php';
+        $mainFileName = realpath(__DIR__ . '/../../../../../../../..') . '/resources/seeds/' . $command->getTableName() . '.php';
+        $mainFileName = realpath(__DIR__ . '/../../../../../../../..') . '/tests/fixtures/seeds/' . $command->getTableName() . '.php';
         $params = [
             'seedClassName' => $seedClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/fixture.tpl.php';
         $code = $this->codeGenerator->generatePhpCode($template, $params);
-        $this->collection->add(new FileResult($fileName, $code));
+        $this->collection->add(new FileResult($mainFileName, $code));
     }
 }
