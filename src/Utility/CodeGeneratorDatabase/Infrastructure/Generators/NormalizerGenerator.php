@@ -24,6 +24,7 @@ class NormalizerGenerator
         $className = ApplicationPathHelper::getNormalizerClass($command);
         $params = [
             'tableName' => $command->getTableName(),
+            'properties' => $command->getProperties(),
         ];
         $template = __DIR__ . '/../../resources/templates/normalizer.php';
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);

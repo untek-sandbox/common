@@ -18,7 +18,7 @@ class <?= $className ?>
 
     public function generateItems(): array
     {
-        $collectionSize = 10;
+        $collectionSize = 50;
         $collection = [];
         for ($id = 1; $id <= $collectionSize; $id++) {
             $item = [
@@ -32,7 +32,11 @@ if($propertyName == 'id') {
 } elseif($propertyType == 'int') {
     $value = "\$id";
 } elseif($propertyType == 'string') {
-    $value = "'qwerty'";
+    $value = "'qwerty' . \$id";
+} elseif($propertyType == 'array') {
+    $value = '"[\"qwerty\"]"';
+} elseif($propertyType == '\DateTimeImmutable') {
+    $value = "(new \DateTime())->format(\DateTime::ISO8601)";
 } else {
     $value = "null";
 }

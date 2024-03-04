@@ -24,7 +24,9 @@ class ContainerConfigGenerator
         if (!$configGenerator->hasCode($concreteClassName)) {
             $code = $configGenerator->appendCode($codeForAppend);
         }
-        $this->collection->add(new FileResult($configFile, $code));
+        if(!empty($code)) {
+            $this->collection->add(new FileResult($configFile, $code));
+        }
     }
 
     private function generateDefinition(string $abstractClassName, string $concreteClassName, array $args = null): string {

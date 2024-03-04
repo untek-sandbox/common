@@ -9,6 +9,7 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Factories\GenerateAppl
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandHandlerGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandValidatorGenerator;
+use Untek\Utility\CodeGeneratorCrud\Infrastructure\Enums\CrudOperationEnum;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Factories\GenerateRestApiCommandFactory;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ControllerGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RestApiSchemeGenerator;
@@ -43,7 +44,7 @@ class GenerateCrudCommandsFactory
     {
         $repositoryInterface = $namespace . '\\Application\\Services\\' . $modelName . 'RepositoryInterface';
         $crudTemplate = [
-            'list' => [
+            CrudOperationEnum::LIST => [
                 'type' => TypeEnum::QUERY,
                 'name' => "Get{$modelName}List",
                 'uri' => $uriPrefix,
@@ -68,7 +69,7 @@ class GenerateCrudCommandsFactory
                 ],
                 'properties' => [],
             ],
-            'create' => [
+            CrudOperationEnum::CREATE => [
                 'type' => TypeEnum::COMMAND,
                 'name' => "Create{$modelName}",
                 'uri' => $uriPrefix,
@@ -86,7 +87,7 @@ class GenerateCrudCommandsFactory
                     ],
                 ],
             ],
-            'one' => [
+            CrudOperationEnum::ONE => [
                 'type' => TypeEnum::QUERY,
                 'name' => "Get{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
@@ -122,7 +123,7 @@ class GenerateCrudCommandsFactory
                     ],
                 ],
             ],
-            'update' => [
+            CrudOperationEnum::UPDATE => [
                 'type' => TypeEnum::COMMAND,
                 'name' => "Update{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
@@ -157,7 +158,7 @@ class GenerateCrudCommandsFactory
                     ],*/
                 ],
             ],
-            'delete' => [
+            CrudOperationEnum::DELETE => [
                 'type' => TypeEnum::COMMAND,
                 'name' => "Delete{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
