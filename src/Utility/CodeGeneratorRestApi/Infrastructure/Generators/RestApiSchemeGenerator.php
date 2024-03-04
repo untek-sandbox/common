@@ -23,6 +23,9 @@ class RestApiSchemeGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
+        if($command->getParameter(self::class, 'skip') == true) {
+            return;
+        }
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
@@ -32,6 +35,7 @@ class RestApiSchemeGenerator
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
             'modelClassName' => $modelClassName,
+            'properties' => $command->getProperties(),
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);

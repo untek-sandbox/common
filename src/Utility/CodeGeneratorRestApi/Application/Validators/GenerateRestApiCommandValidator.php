@@ -23,6 +23,9 @@ class GenerateRestApiCommandValidator extends AbstractObjectValidator
                 'templates' => new Assert\Optional([
                     new Assert\Type('array'),
                 ]),
+                'properties' => new Assert\Optional([
+                    new Assert\Type('array'),
+                ]),
                 'crudType' => new Assert\Optional([
                     new Enum(['class' => CrudTypeEnum::class]),
                 ]),

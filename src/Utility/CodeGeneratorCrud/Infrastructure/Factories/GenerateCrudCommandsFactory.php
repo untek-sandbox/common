@@ -11,11 +11,12 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandHand
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandValidatorGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Factories\GenerateRestApiCommandFactory;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ControllerGenerator;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RestApiSchemeGenerator;
 
 class GenerateCrudCommandsFactory
 {
 
-    public static function create(array $crud, string $namespace, string $modelName = null): array
+    public static function create(array $crud, string $namespace, string $modelName = null, array $dbProperties): array
     {
 //        $crud = self::prepareDefinition($crud);
         $commands = [];
@@ -27,7 +28,7 @@ class GenerateCrudCommandsFactory
             $properties = $item['properties'] ?? [];
             $parameters = $item['parameters'] ?? [];
 
-            $commands[] = GenerateRestApiCommandFactory::create($namespace, $type, $name, $uri, $method, null, $parameters, $modelName, $properties);
+            $commands[] = GenerateRestApiCommandFactory::create($namespace, $type, $name, $uri, $method, null, $parameters, $modelName, $dbProperties);
             $commands[] = GenerateApplicationCommandFactory::create($namespace, $type, $name, $properties, $parameters, $modelName);
         }
         return $commands;
@@ -84,16 +85,6 @@ class GenerateCrudCommandsFactory
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/rest-api-controller/rest-api-controller-create.tpl.php',
                     ],
                 ],
-                /*'properties' => [
-                    [
-                        'name' => 'parent_id',
-                        'type' => 'int',
-                    ],
-                    [
-                        'name' => 'title',
-                        'type' => 'array',
-                    ],
-                ],*/
             ],
             'one' => [
                 'type' => TypeEnum::QUERY,
@@ -147,6 +138,9 @@ class GenerateCrudCommandsFactory
                     ControllerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/rest-api-controller/rest-api-controller-update.tpl.php',
                     ],
+                    RestApiSchemeGenerator::class => [
+                        'skip' => true,
+                    ],
                 ],
                 'properties' => [
                     [
@@ -181,6 +175,9 @@ class GenerateCrudCommandsFactory
                     ],
                     ControllerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/rest-api-controller/rest-api-controller-delete.tpl.php',
+                    ],
+                    RestApiSchemeGenerator::class => [
+                        'skip' => true,
                     ],
                 ],
                 'properties' => [

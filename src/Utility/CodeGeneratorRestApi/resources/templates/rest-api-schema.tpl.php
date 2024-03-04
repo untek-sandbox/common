@@ -20,7 +20,19 @@ class <?= $className ?> implements RestApiSchemaInterface
 
     public function encode(mixed $data): mixed
     {
-        /** @var <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($relationClassName) ?> $data */
-        return PropertyHelper::toArray($data);
+        /** @var <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($modelClassName) ?> $data */
+        $item = [
+<?php foreach ($properties as $attribute):
+    $propertyName = $attribute['name'];
+    $propertyType = $attribute['type'];
+    $camelCaseName = \Untek\Core\Text\Helpers\Inflector::camelize($propertyName);
+    $lcCamelCaseName = lcfirst($camelCaseName);
+    ?>
+    <?php
+    echo "\t\t'$lcCamelCaseName' => \$data->get{$camelCaseName}(),\n";
+    ?>
+<?php endforeach; ?>
+        ];
+        return $item;
     }
 }
