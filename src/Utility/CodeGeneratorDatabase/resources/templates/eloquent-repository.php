@@ -9,6 +9,7 @@
 use Untek\Utility\CodeGeneratorApplication\Presentation\Enums\PropertyTypeEnum;
 use Laminas\Code\Generator\PropertyGenerator;
 use Untek\Core\Text\Helpers\Inflector;
+use Untek\Core\Instance\Helpers\ClassHelper;
 
 ?>
 
@@ -17,9 +18,11 @@ namespace <?= $namespace ?>;
 use <?= $interfaceClassName ?>;
 use <?= $modelClassName ?>;
 use <?= $normalizerClassName ?>;
+use <?= $relationClassName ?>;
 use Untek\Database\Eloquent\Infrastructure\Abstract\AbstractEloquentCrudRepository;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Untek\Component\Relation\Interfaces\RelationConfigInterface;
 
 class <?= $className ?> extends AbstractEloquentCrudRepository implements <?= $className ?>Interface
 {
@@ -31,11 +34,16 @@ class <?= $className ?> extends AbstractEloquentCrudRepository implements <?= $c
 
     public function getClassName(): string
     {
-        return <?= Inflector::camelize($tableName) ?>::class;
+        return <?= ClassHelper::getClassOfClassName($modelClassName) ?>::class;
     }
 
     protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
     {
-        return new <?= \Untek\Core\Instance\Helpers\ClassHelper::getClassOfClassName($normalizerClassName) ?>();
+        return new <?= ClassHelper::getClassOfClassName($normalizerClassName) ?>();
+    }
+
+    public function getRelation(): RelationConfigInterface
+    {
+        return new <?= ClassHelper::getClassOfClassName($relationClassName) ?>();
     }
 }

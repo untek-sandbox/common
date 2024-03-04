@@ -122,6 +122,8 @@ class GenerateCodeCommand extends Command
         $size = $this->calculateSize($collection);
         $generatedFiles = $this->getFilesList($collection);
         $table[] = ['Total files', count($generatedFiles)];
+        $table[] = ['New files', $this->newFilesCount($collection)];
+        $table[] = ['Updated files', $this->updateFilesCount($collection)];
         $table[] = ['Total size', ByteSizeFormatHelper::sizeFormat($size)];
         $io->table([], $table);
     }
@@ -137,11 +139,33 @@ class GenerateCodeCommand extends Command
         return $table;
     }
 
+    private function newFilesCount(GenerateResultCollection $collection): int
+    {
+        $count = 0;
+        foreach ($collection->getAll() as $result) {
+            if ($result instanceof FileResult && $result->isNew()) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    private function updateFilesCount(GenerateResultCollection $collection): int
+    {
+        $count = 0;
+        foreach ($collection->getAll() as $result) {
+            if ($result instanceof FileResult && !$result->isNew()) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
     private function calculateSize(GenerateResultCollection $collection): int
     {
         $size = 0;
         foreach ($collection->getAll() as $result) {
-            if ($result instanceof FileResult) {
+            if ($result instanceof FileResult && $result->isNew()) {
                 $size = $size + mb_strlen($result->getContent());
             }
         }

@@ -9,7 +9,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
 
-class EloquentRepositoryGenerator
+class RelationGenerator
 {
 
     private CodeGenerator $codeGenerator;
@@ -21,20 +21,11 @@ class EloquentRepositoryGenerator
 
     public function generate(GenerateDatabaseCommand $command): void
     {
-        $repositoryDriver = $command->getRepositoryDriver();
-        $modelClassName = ApplicationPathHelper::getModelClass($command);
-        $className = ApplicationPathHelper::getRepositoryClass($command, $repositoryDriver);
-        $normalizerClassName = ApplicationPathHelper::getNormalizerClass($command);
-        $interfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
-        $relationClassName = ApplicationPathHelper::getRelationClass($command);
+        $className = ApplicationPathHelper::getRelationClass($command);
         $params = [
             'tableName' => $command->getTableName(),
-            'interfaceClassName' => $interfaceClassName,
-            'modelClassName' => $modelClassName,
-            'normalizerClassName' => $normalizerClassName,
-            'relationClassName' => $relationClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/' . $repositoryDriver . '-repository.php';
+        $template = __DIR__ . '/../../resources/templates/relation.php';
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->collection->add(new FileResult($fileName, $code));

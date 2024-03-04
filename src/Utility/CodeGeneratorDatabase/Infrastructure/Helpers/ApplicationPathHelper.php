@@ -28,6 +28,11 @@ class ApplicationPathHelper
         return $command->getNamespace() . '\\Infrastructure\\Persistence\\Normalizer\\' . $command->getModelName() . 'Normalizer';
     }
 
+    public static function getRelationClass(object $command): string
+    {
+        return $command->getNamespace() . '\\Infrastructure\\Persistence\\Relation\\' . $command->getModelName() . 'Relation';
+    }
+
     public static function getRepositoryClass(object $command, string $driver): string
     {
         $driverName = Inflector::camelize($driver);

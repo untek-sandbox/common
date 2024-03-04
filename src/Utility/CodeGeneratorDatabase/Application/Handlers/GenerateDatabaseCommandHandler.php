@@ -13,6 +13,7 @@ use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\FixtureGenerat
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\MigrationGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\ModelGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\NormalizerGenerator;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RelationGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryInterfaceGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\SeedGenerator;
@@ -36,6 +37,7 @@ class GenerateDatabaseCommandHandler
         $generators = [
             new RepositoryInterfaceGenerator($this->collection),
             new NormalizerGenerator($this->collection),
+            new RelationGenerator($this->collection),
             new EloquentRepositoryGenerator($this->collection),
             new ModelGenerator($this->collection),
             new SeedGenerator($this->collection),
