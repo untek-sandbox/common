@@ -27,7 +27,7 @@ class GenerateCrudCommandsFactory
             $properties = $item['properties'] ?? [];
             $parameters = $item['parameters'] ?? [];
 
-            $commands[] = GenerateRestApiCommandFactory::create($namespace, $type, $name, $uri, $method, null, $parameters, $modelName);
+            $commands[] = GenerateRestApiCommandFactory::create($namespace, $type, $name, $uri, $method, null, $parameters, $modelName, $properties);
             $commands[] = GenerateApplicationCommandFactory::create($namespace, $type, $name, $properties, $parameters, $modelName);
         }
         return $commands;

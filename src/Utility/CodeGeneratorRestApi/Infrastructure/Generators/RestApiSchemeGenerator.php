@@ -27,9 +27,11 @@ class RestApiSchemeGenerator
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
         $schemaClassName = ApplicationPathHelper::getRestApiSchemaClassName($command);
+        $modelClassName = \Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper::getModelClass($command);
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
+            'modelClassName' => $modelClassName,
         ];
         $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);

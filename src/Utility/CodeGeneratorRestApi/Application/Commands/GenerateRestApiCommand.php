@@ -13,6 +13,7 @@ class GenerateRestApiCommand
     private string $version;
     private array $templates = [];
     private ?string $modelName;
+    private array $properties = [];
 
     public function getNamespace(): string
     {
@@ -92,5 +93,15 @@ class GenerateRestApiCommand
     public function setModelName(?string $modelName): void
     {
         $this->modelName = $modelName;
+    }
+
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    public function setProperties(array $properties): void
+    {
+        $this->properties = $properties;
     }
 }
