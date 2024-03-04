@@ -21,6 +21,17 @@ class UserCredentialRepository extends AbstractDoctrineCrudRepository implements
         return CredentialEntity::class;
     }
 
+    public function findByUserId(int $userId, array $types = null): array
+    {
+        $criteria = [
+            'user_id' => $userId,
+        ];
+        if($types) {
+//            $criteria['type'] = $types;
+        }
+        return $this->findBy($criteria);
+    }
+
     public function findByCredential(string $credential, array $types = null): array
     {
         $criteria = [
