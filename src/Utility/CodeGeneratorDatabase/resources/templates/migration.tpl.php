@@ -39,6 +39,8 @@ class <?= $className ?> extends BaseCreateTableMigration
         echo '      $table->string(\''.$propertyName.'\')->comment(\'\');';
     } elseif($propertyType == '\DateTimeImmutable') {
         echo '      $table->dateTime(\''.$propertyName.'\')->comment(\'\');';
+    } elseif($propertyType == 'bool') {
+        echo '      $table->boolean(\''.$propertyName.'\')->comment(\'\');';
     } else {
         echo '      $table->unknown(\''.$propertyName.'\')->comment(\'\');';
     }

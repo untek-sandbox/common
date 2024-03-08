@@ -16,7 +16,6 @@ class GenerateRestApiCommandValidator extends AbstractObjectValidator
         return new Assert\Collection([
             'fields' => [
                 'modelName' => [
-                    new Assert\NotBlank(),
                     new Assert\Length(null, 1, 255),
                     new Assert\Type('string'),
                 ],

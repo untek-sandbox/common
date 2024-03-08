@@ -14,7 +14,7 @@ class ContainerLoadConfigGenerator
 
     public function generate(string $modulePath): GenerateResultCollection
     {
-        $codeForAppend = '$loader->load(__DIR__ . \'/../' . $modulePath . '\');';
+        $codeForAppend = '$loader->load(__DIR__ . \'/..' . $modulePath . '\');';
         $configFile = __DIR__ . '/../../../../../../../../config/container.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);

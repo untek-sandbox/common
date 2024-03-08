@@ -23,7 +23,7 @@ class ContainerConfigBusImportGenerator
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
         $modulePath = $relative . '/resources/config/command-bus.php';
-        $codeForAppend = '    $configLoader->boot(__DIR__ . \'/../' . $modulePath . '\');';
+        $codeForAppend = '    $configLoader->boot(__DIR__ . \'/..' . $modulePath . '\');';
         $fileName = __DIR__ . '/../../../../../../../../config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $templateFile);
