@@ -30,10 +30,4 @@ class GenerateApplicationCommand extends AbstractCommand
     {
         $this->modelName = $modelName;
     }
-
-    public function getCamelizeName(): string
-    {
-        $camelizeName = Inflector::camelize($this->getName());
-        return $camelizeName . Inflector::camelize($this->getType());
-    }
 }

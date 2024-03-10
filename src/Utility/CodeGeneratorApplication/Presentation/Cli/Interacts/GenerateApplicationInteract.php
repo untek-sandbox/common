@@ -25,9 +25,9 @@ class GenerateApplicationInteract implements InteractInterface
         $name = $io->ask('Enter a action name', null, [ClassNameValidator::class, 'validate']);
         $properties = $this->inputProperties($io);
         $command = new GenerateApplicationCommand();
-        $command->setType($type);
+        $command->setCommandType($type);
         $command->setNamespace($namespace);
-        $command->setName($name);
+        $command->setCommandName($name);
         $command->setProperties($properties);
 
         return [$command];

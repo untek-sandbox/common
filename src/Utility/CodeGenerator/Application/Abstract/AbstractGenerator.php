@@ -2,6 +2,10 @@
 
 namespace Untek\Utility\CodeGenerator\Application\Abstract;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
+
 abstract class AbstractGenerator
 {
 

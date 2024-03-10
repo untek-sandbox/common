@@ -53,9 +53,9 @@ class GenerateApplicationFakeInteract implements InteractInterface
             $name = $item['name'];
 
             $command = new GenerateApplicationCommand();
-            $command->setType($type);
+            $command->setCommandType($type);
             $command->setNamespace($namespace);
-            $command->setName($name);
+            $command->setCommandName($name);
             $command->setProperties($properties);
             $commands[] = $command;
         }

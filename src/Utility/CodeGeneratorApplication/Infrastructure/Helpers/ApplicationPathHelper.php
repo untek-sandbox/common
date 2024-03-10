@@ -15,7 +15,7 @@ class ApplicationPathHelper
 
     public static function getCommandClass(GenerateApplicationCommand $command): string
     {
-        if ($command->getType() == TypeEnum::QUERY) {
+        if ($command->getCommandType() == TypeEnum::QUERY) {
             $directoy = 'Queries';
         } else {
             $directoy = 'Commands';
