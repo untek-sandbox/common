@@ -5,11 +5,13 @@ namespace Untek\Utility\CodeGeneratorApplication\Application\Commands;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommandCommand;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
 class GenerateApplicationCommand extends AbstractCommandCommand
 {
 
-    private array $properties;
+    use CommandParameterTrait;
+
     private ?string $modelName = null;
 
     public function getProperties(): array

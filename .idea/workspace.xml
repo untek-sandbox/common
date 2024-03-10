@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6572d7ca-d2f5-475c-80dc-274d5fd825f1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Utility/CodeGenerator/Application/Commands/AbstractCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility/CodeGenerator/Application/Commands/AbstractCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utility/CodeGeneratorApplication/Application/Commands/GenerateApplicationCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility/CodeGeneratorApplication/Application/Commands/GenerateApplicationCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utility/CodeGeneratorCli/Application/Commands/GenerateCliCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility/CodeGeneratorCli/Application/Commands/GenerateCliCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utility/CodeGeneratorDatabase/Application/Commands/GenerateDatabaseCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility/CodeGeneratorDatabase/Application/Commands/GenerateDatabaseCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utility/CodeGeneratorRestApi/Application/Commands/GenerateRestApiCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility/CodeGeneratorRestApi/Application/Commands/GenerateRestApiCommand.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2dUvgN8a0IqZLoJcF1gyxjrCjK0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6572d7ca-d2f5-475c-80dc-274d5fd825f1" name="Default Changelist" comment="" />
+      <created>1710075582521</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1710075582521</updated>
+      <workItem from="1710075584450" duration="847000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -4,9 +4,12 @@ namespace Untek\Utility\CodeGeneratorDatabase\Application\Commands;
 
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
 class GenerateDatabaseCommand extends AbstractCommand
 {
+
+    use CommandParameterTrait;
 
     private string $namespace;
     private string $tableName;

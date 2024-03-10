@@ -3,9 +3,12 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Commands;
 
 use Untek\Core\Code\Helpers\DeprecateHelper;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
 class GenerateRestApiCommand
 {
+
+    use CommandParameterTrait;
 
     private string $namespace;
     private string $moduleName;
@@ -75,16 +78,6 @@ class GenerateRestApiCommand
     public function setVersion(string $version): void
     {
         $this->version = $version;
-    }
-
-    public function getParameter(string $generatorClass, string $key)
-    {
-        return $this->templates[$generatorClass][$key] ?? null;
-    }
-
-    public function setParameters(array $parameters): void
-    {
-        $this->templates = $parameters;
     }
 
     public function getModelName(): ?string

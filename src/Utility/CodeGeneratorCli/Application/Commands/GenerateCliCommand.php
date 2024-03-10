@@ -3,9 +3,12 @@
 namespace Untek\Utility\CodeGeneratorCli\Application\Commands;
 
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
 class GenerateCliCommand //extends AbstractCommand
 {
+
+    use CommandParameterTrait;
 
     public function __construct(
         private string $namespace,
@@ -13,9 +16,10 @@ class GenerateCliCommand //extends AbstractCommand
         private string $commandClass,
         private string $cliCommand,
         private array $properties = [],
-        private array $parameters = [],
+        array $parameters = [],
     )
     {
+        $this->parameters = $parameters;
     }
 
     /**
@@ -90,15 +94,5 @@ class GenerateCliCommand //extends AbstractCommand
     public function setProperties(array $properties): void
     {
         $this->properties = $properties;
-    }
-
-    public function getParameter(string $generatorClass, string $key)
-    {
-        return $this->parameters[$generatorClass][$key] ?? null;
-    }
-
-    public function setParameters(array $parameters): void
-    {
-        $this->parameters = $parameters;
     }
 }
