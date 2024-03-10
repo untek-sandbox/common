@@ -3,7 +3,6 @@
 namespace Untek\Utility\CodeGeneratorCrud\Infrastructure\Factories;
 
 use Untek\Core\Arr\Helpers\ArrayHelper;
-use Untek\Utility\CodeGenerator\Application\Enums\CrudTypeEnum;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Factories\GenerateApplicationCommandFactory;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\CommandGenerator;
@@ -49,7 +48,6 @@ class GenerateCrudCommandsFactory
                 'name' => "Get{$modelName}List",
                 'uri' => $uriPrefix,
                 'method' => 'GET',
-                'crudType' => CrudTypeEnum::LIST,
                 'parameters' => [
                     CommandHandlerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/handler/get-list-handler.tpl.php',
@@ -74,7 +72,6 @@ class GenerateCrudCommandsFactory
                 'name' => "Create{$modelName}",
                 'uri' => $uriPrefix,
                 'method' => 'POST',
-                'crudType' => CrudTypeEnum::CREATE,
                 'parameters' => [
                     CommandHandlerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/handler/create-handler.tpl.php',
@@ -92,7 +89,6 @@ class GenerateCrudCommandsFactory
                 'name' => "Get{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
                 'method' => 'GET',
-                'crudType' => CrudTypeEnum::ONE,
                 'properties' => [
                     [
                         'name' => 'id',
@@ -128,7 +124,6 @@ class GenerateCrudCommandsFactory
                 'name' => "Update{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
                 'method' => 'PUT',
-                'crudType' => CrudTypeEnum::UPDATE,
                 'parameters' => [
                     CommandHandlerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/handler/update-handler.tpl.php',
@@ -163,7 +158,6 @@ class GenerateCrudCommandsFactory
                 'name' => "Delete{$modelName}ById",
                 'uri' => $uriPrefix . '/{id}',
                 'method' => 'DELETE',
-                'crudType' => CrudTypeEnum::DELETE,
                 'parameters' => [
                     CommandHandlerGenerator::class => [
                         'template' => __DIR__ . '/../../../CodeGeneratorCrud/resources/templates/handler/delete-handler.tpl.php',

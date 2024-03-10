@@ -4,8 +4,9 @@ namespace Untek\Utility\CodeGeneratorApplication\Application\Commands;
 
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
+use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommandCommand;
 
-class GenerateApplicationCommand extends AbstractCommand
+class GenerateApplicationCommand extends AbstractCommandCommand
 {
 
     private array $properties;

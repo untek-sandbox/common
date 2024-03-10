@@ -6,7 +6,6 @@ use Symfony\Component\Validator\Constraint;
 use Untek\Model\Components\Constraints\Enum;
 use Untek\Model\Validator\Libs\AbstractObjectValidator;
 use Symfony\Component\Validator\Constraints as Assert;
-use Untek\Utility\CodeGenerator\Application\Enums\CrudTypeEnum;
 
 class GenerateDatabaseCommandValidator extends AbstractObjectValidator
 {
@@ -17,9 +16,6 @@ class GenerateDatabaseCommandValidator extends AbstractObjectValidator
             'fields' => [
                 'templates' => new Assert\Optional([
                     new Assert\Type('array'),
-                ]),
-                'crudType' => new Assert\Optional([
-                    new Enum(['class' => CrudTypeEnum::class]),
                 ]),
                 'namespace' => [
                     new Assert\NotBlank(),
