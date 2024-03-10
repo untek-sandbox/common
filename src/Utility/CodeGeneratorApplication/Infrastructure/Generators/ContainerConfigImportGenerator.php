@@ -19,7 +19,7 @@ class ContainerConfigImportGenerator
 
     public function generate(GenerateApplicationCommand $command): void
     {
-        $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
+        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         if (realpath($path) === false) {
             $up = FilePathHelper::up($path);

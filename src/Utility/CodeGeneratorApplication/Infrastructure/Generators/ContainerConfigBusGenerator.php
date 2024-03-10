@@ -18,7 +18,7 @@ class ContainerConfigBusGenerator
 
     public function generate(GenerateApplicationCommand $command): void
     {
-        $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
+        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/command-bus.php';
         $templateFile = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';

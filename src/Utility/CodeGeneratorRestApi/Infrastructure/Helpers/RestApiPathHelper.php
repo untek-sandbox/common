@@ -10,7 +10,7 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 class RestApiPathHelper
 {
 
-    public static function getRestApiSchemaClassName(GenerateRestApiCommand $command): string
+    public static function getRestApiSchemaClass(GenerateRestApiCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
@@ -19,7 +19,7 @@ class RestApiPathHelper
         return $command->getNamespace() . '\\Presentation\\Http\\RestApi\\Schema\\' . $pureCommandClassName . 'Schema';
     }
 
-    public static function getControllerClassName(GenerateRestApiCommand $command): string
+    public static function getControllerClass(GenerateRestApiCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
@@ -28,7 +28,7 @@ class RestApiPathHelper
         return $command->getNamespace() . '\\Presentation\\Http\\RestApi\\Controllers\\' . $pureCommandClassName . 'Controller';
     }
 
-    public static function getControllerTestClassName(GenerateRestApiCommand $command): string
+    public static function getControllerTestClass(GenerateRestApiCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);

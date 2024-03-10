@@ -24,7 +24,7 @@ class ApplicationPathHelper
         return $command->getNamespace() . '\\Application\\'.$directoy.'\\' . $command->getCamelizeName();
     }
 
-    public static function getHandlerClassName(AbstractCommandCommand $command): string
+    public static function getHandlerClass(AbstractCommandCommand $command): string
     {
         return $command->getNamespace() . '\\Application\\Handlers\\' . $command->getCamelizeName() . 'Handler';
     }

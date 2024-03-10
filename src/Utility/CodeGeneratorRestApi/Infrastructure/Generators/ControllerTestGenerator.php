@@ -21,7 +21,7 @@ class ControllerTestGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerTestClassName = RestApiPathHelper::getControllerTestClassName($command);
+        $controllerTestClassName = RestApiPathHelper::getControllerTestClass($command);
         $params = [
             'endpoint' => '/v' . $command->getVersion() . '/' . $command->getUri(),
             'method' => $command->getHttpMethod(),

@@ -19,7 +19,7 @@ class RoutConfigGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerClassName = RestApiPathHelper::getControllerClassName($command);
+        $controllerClassName = RestApiPathHelper::getControllerClass($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
         $code = $this->generateConfig($fileName, $controllerClassName, $command);
         if ($code) {

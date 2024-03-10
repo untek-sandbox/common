@@ -29,7 +29,7 @@ class RestApiSchemeGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        $schemaClassName = RestApiPathHelper::getRestApiSchemaClassName($command);
+        $schemaClassName = RestApiPathHelper::getRestApiSchemaClass($command);
         $modelClassName = \Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper::getModelClass($command);
         $params = [
             'commandClassName' => $commandClassName,

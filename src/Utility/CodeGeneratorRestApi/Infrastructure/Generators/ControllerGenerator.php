@@ -27,8 +27,8 @@ class ControllerGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        $controllerClassName = RestApiPathHelper::getControllerClassName($command);
-        $schemaClassName = RestApiPathHelper::getRestApiSchemaClassName($command);
+        $controllerClassName = RestApiPathHelper::getControllerClass($command);
+        $schemaClassName = RestApiPathHelper::getRestApiSchemaClass($command);
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,

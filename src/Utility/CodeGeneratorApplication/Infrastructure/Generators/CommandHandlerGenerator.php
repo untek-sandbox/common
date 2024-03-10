@@ -22,7 +22,7 @@ class CommandHandlerGenerator
 
     public function generate(GenerateApplicationCommand $command): void
     {
-        $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
+        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $validatorClassName = ApplicationPathHelper::getCommandValidatorClass($command);
 

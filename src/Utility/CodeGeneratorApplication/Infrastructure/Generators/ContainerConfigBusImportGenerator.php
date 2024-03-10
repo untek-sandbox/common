@@ -19,7 +19,7 @@ class ContainerConfigBusImportGenerator
 
     public function generate(GenerateApplicationCommand $command): void
     {
-        $handlerClassName = ApplicationPathHelper::getHandlerClassName($command);
+        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
         $modulePath = $relative . '/resources/config/command-bus.php';

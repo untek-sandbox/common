@@ -18,7 +18,7 @@ class ContainerConfigGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerClassName = RestApiPathHelper::getControllerClassName($command);
+        $controllerClassName = RestApiPathHelper::getControllerClass($command);
         $args = [
             '\\'.CommandBusInterface::class,
             UrlGeneratorInterface::class,
