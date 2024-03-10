@@ -3,12 +3,14 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Commands;
 
 use Untek\Core\Code\Helpers\DeprecateHelper;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandNamespaceTrait;
 use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
 class GenerateRestApiCommand
 {
 
     use CommandParameterTrait;
+    use CommandNamespaceTrait;
 
     private string $namespace;
     private string $moduleName;
@@ -19,16 +21,6 @@ class GenerateRestApiCommand
     private array $templates = [];
     private ?string $modelName;
     private array $properties = [];
-
-    public function getNamespace(): string
-    {
-        return $this->namespace;
-    }
-
-    public function setNamespace(string $namespace): void
-    {
-        $this->namespace = $namespace;
-    }
 
     public function getModuleName(): string
     {

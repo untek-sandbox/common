@@ -4,12 +4,14 @@ namespace Untek\Utility\CodeGeneratorDatabase\Application\Commands;
 
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommand;
+use Untek\Utility\CodeGenerator\Application\Traits\CommandNamespaceTrait;
 use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
 
-class GenerateDatabaseCommand extends AbstractCommand
+class GenerateDatabaseCommand //extends AbstractCommand
 {
 
     use CommandParameterTrait;
+    use CommandNamespaceTrait;
 
     private string $namespace;
     private string $tableName;
@@ -36,16 +38,6 @@ class GenerateDatabaseCommand extends AbstractCommand
         if($modelName) {
             $this->modelName = $modelName;
         }
-    }
-
-    public function getNamespace(): string
-    {
-        return $this->namespace;
-    }
-
-    public function setNamespace(string $namespace): void
-    {
-        $this->namespace = $namespace;
     }
 
     public function getTableName(): string

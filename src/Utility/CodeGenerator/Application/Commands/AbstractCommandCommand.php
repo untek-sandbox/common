@@ -6,7 +6,7 @@ use Untek\Core\Enum\Helpers\EnumHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 
-abstract class AbstractCommandCommand extends AbstractCommand
+abstract class AbstractCommandCommand //extends AbstractCommand
 {
 
     private string $commandName;
