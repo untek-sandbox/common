@@ -1,0 +1,58 @@
+#docker files
+.docker/db
+.docker/apache/server.pem
+.docker/apache/server-key.pem
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+.phpdoc
+
+.phpunit.result.cache
+
+*.log
+/.env.*
+*.local.php
+#.env
+
+# windows thumbnail cache
+Thumbs.db
+
+# PHP Storm IDE
+/.idea/*
+#/.idea/dictionaries/*
+#/.idea/inspectionProfiles/
+#/.idea/dataSources/
+#/.idea/*.*
+
+# composer vendor dir
+/vendor
+
+#/var
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+
+/public/docs/phpdoc
+/public/docs/phpunit-coverage
+/var
+
+# vagrant runtime
+/.vagrant
+
+.dbeaver-data-sources.xml
+session/
+/public/file-storage/
