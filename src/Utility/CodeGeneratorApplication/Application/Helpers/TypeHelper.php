@@ -2,21 +2,23 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Helpers;
 
+use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 
 class TypeHelper
 {
 
-    public static function generateCommandClassName(string $namespace, string $type, string $entityName) {
-        $commandClass = TypeHelper::generateCommandName($type, $entityName);
+    public static function generateCommandClassName(string $namespace, string $type, string $commandName) {
+        $commandClass = TypeHelper::generateCommandName($type, $commandName);
         return $namespace . '\\Application\\' . $commandClass;
     }
 
-    public static function generateCommandName(string $type, string $entityName) {
+    private static function generateCommandName(string $type, string $commandName) {
+        $commandName = Inflector::camelize($commandName);
         if($type === TypeEnum::COMMAND) {
-            $commandClass = 'Commands\\' . $entityName . 'Command';
+            $commandClass = 'Commands\\' . $commandName . 'Command';
         } elseif($type === TypeEnum::QUERY) {
-            $commandClass = 'Queries\\' . $entityName . 'Query';
+            $commandClass = 'Queries\\' . $commandName . 'Query';
         }
         return $commandClass;
     }
