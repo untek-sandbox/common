@@ -12,6 +12,8 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusGenerator
 {
 
+    private string $template = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';
+
     public function __construct(protected GenerateResultCollection $collection)
     {
     }
@@ -21,8 +23,8 @@ class ContainerConfigBusGenerator
         $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $commandClassName = ApplicationPathHelper::getCommandClass($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/command-bus.php';
-        $templateFile = __DIR__ . '/../../resources/templates/command-bus-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $templateFile);
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
+        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $template);
         if (!$configGenerator->hasCode($handlerClassName)) {
             $controllerDefinition =
                 '    $configurator->define(\\' . $commandClassName . '::class, \\' . $handlerClassName . '::class);';

@@ -15,6 +15,7 @@ class RestApiSchemeGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -37,7 +38,7 @@ class RestApiSchemeGenerator
             'modelClassName' => $modelClassName,
             'properties' => $command->getProperties(),
         ];
-        $template = __DIR__ . '/../../resources/templates/rest-api-schema.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($schemaClassName);
         $this->collection->add(new FileResult($fileName, $code));

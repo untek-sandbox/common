@@ -11,6 +11,7 @@ class CliCommandShortcutGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -23,7 +24,7 @@ class CliCommandShortcutGenerator
         $params = [
             'cliCommandName' => $command->getCliCommand(),
         ];
-        $template = __DIR__ . '/../../resources/templates/cli-command-shortcut.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generateCode($template, $params);
         $this->collection->add(new FileResult($fileName, $code));
     }

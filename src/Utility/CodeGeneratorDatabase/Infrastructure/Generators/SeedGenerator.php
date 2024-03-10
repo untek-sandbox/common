@@ -14,6 +14,7 @@ class SeedGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/seed.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -26,7 +27,7 @@ class SeedGenerator
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../resources/templates/seed.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->collection->add(new FileResult($fileName, $code));

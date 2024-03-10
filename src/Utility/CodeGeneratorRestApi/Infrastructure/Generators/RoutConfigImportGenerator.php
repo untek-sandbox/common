@@ -13,6 +13,8 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesLoadConfig
 class RoutConfigImportGenerator
 {
 
+    private string $template = __DIR__ . '/../../resources/templates/routes-load-config.tpl.php';
+
     public function __construct(protected GenerateResultCollection $collection)
     {
     }
@@ -22,18 +24,18 @@ class RoutConfigImportGenerator
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
         $modulePath = $relative . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
-        $this->generateConfig($modulePath, '/v' . $command->getVersion());
+        $this->generateConfig($command, $modulePath, '/v' . $command->getVersion());
     }
 
-    protected function generateConfig(string $modulePath, string $prefix = null): void
+    protected function generateConfig(GenerateRestApiCommand $command, string $modulePath, string $prefix = null): void
     {
         $modulePath = ltrim($modulePath, '/');
         $codeForAppend = '    $routes
         ->import(__DIR__ . \'/../../../' . $modulePath . '\')
         ->prefix(\'' . $prefix . '\');';
         $configFile = __DIR__ . '/../../../../../../../../context/rest-api/config/routes.php';
-        $templateFile = __DIR__ . '/../../resources/templates/routes-load-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($configFile, $code));

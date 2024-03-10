@@ -13,6 +13,8 @@ use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\CliPathHelper;
 class ConsoleCommandConfigGenerator
 {
 
+    private string $template = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
+
     public function __construct(protected GenerateResultCollection $collection)
     {
     }
@@ -38,9 +40,9 @@ class ConsoleCommandConfigGenerator
 
     private function addImport($cliCommandConfigFileName): ?FileResult
     {
-        $templateFile = __DIR__ . '/../../resources/templates/cli-command-share-config.tpl.php';
+        $template = $this->template;
         $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
-        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
         $shareCliCommandConfigFileName = (new Filesystem())->makePathRelative($cliCommandConfigFileName, realpath(__DIR__ . '/../../../../../../../..'));
         $shareCliCommandConfigFileName = rtrim($shareCliCommandConfigFileName, '/');
         $concreteCode = $shareCliCommandConfigFileName;

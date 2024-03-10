@@ -13,6 +13,8 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 class RoutConfigGenerator
 {
 
+    private string $template = __DIR__ . '/../../resources/templates/route-config.tpl.php';
+
     public function __construct(protected GenerateResultCollection $collection)
     {
     }
@@ -29,8 +31,8 @@ class RoutConfigGenerator
 
     protected function generateConfig(string $configFile, string $controllerClassName, GenerateRestApiCommand $command): ?string
     {
-        $templateFile = __DIR__ . '/../../resources/templates/route-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
+        $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
         $code = null;
         if (!$configGenerator->hasCode($controllerClassName)) {
             $routeName = $command->getHttpMethod() . '_' . $command->getUri();

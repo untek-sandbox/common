@@ -13,6 +13,7 @@ class MigrationGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -29,9 +30,9 @@ class MigrationGenerator
             'className' => $className,
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../resources/templates/migration.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpCode($template, $params);
         $this->collection->add(new FileResult($fileName, $code));
-        (new MigrationConfigGenerator($this->collection, $command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate();
+        (new MigrationConfigGenerator($this->collection, $command->getNamespace(), getenv('MIGRATION_CONFIG_FILE')))->generate($command);
     }
 }

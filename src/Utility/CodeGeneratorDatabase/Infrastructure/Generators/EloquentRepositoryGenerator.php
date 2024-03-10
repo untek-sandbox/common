@@ -13,6 +13,7 @@ class EloquentRepositoryGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/eloquent-repository.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -34,7 +35,8 @@ class EloquentRepositoryGenerator
             'normalizerClassName' => $normalizerClassName,
             'relationClassName' => $relationClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/' . $repositoryDriver . '-repository.php';
+//        $template = __DIR__ . '/../../resources/templates/' . $repositoryDriver . '-repository.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($className, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($className);
         $this->collection->add(new FileResult($fileName, $code));

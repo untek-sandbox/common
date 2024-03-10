@@ -13,6 +13,8 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigBusImportGenerator
 {
 
+    private string $template = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
+
     public function __construct(protected GenerateResultCollection $collection)
     {
     }
@@ -25,8 +27,8 @@ class ContainerConfigBusImportGenerator
         $modulePath = $relative . '/resources/config/command-bus.php';
         $codeForAppend = '    $configLoader->boot(__DIR__ . \'/..' . $modulePath . '\');';
         $fileName = __DIR__ . '/../../../../../../../../config/command-bus.php';
-        $templateFile = __DIR__ . '/../../resources/templates/command-bus-load-config.tpl.php';
-        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $templateFile);
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
+        $configGenerator = new PhpConfigGenerator($this->collection, $fileName, $template);
         if (!$configGenerator->hasCode($modulePath)) {
             $code = $configGenerator->appendCode($codeForAppend);
             $this->collection->add(new FileResult($fileName, $code));

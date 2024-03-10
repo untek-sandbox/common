@@ -16,6 +16,7 @@ class CliCommandGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/cli-command.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -34,7 +35,7 @@ class CliCommandGenerator
             'cliCommandName' => $command->getCliCommand(),
             'properties' => ApplicationHelper::prepareProperties($command),
         ];
-        $template = __DIR__ . '/../../resources/templates/cli-command.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $fileName = GeneratorFileHelper::getFileNameByClass($cliCommandClassName);
         $code = $this->codeGenerator->generatePhpClassCode($cliCommandClassName, $template, $params);
         $this->collection->add(new FileResult($fileName, $code));

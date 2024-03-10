@@ -13,6 +13,7 @@ class ControllerTestGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -26,7 +27,7 @@ class ControllerTestGenerator
             'endpoint' => '/v' . $command->getVersion() . '/' . $command->getUri(),
             'method' => $command->getHttpMethod(),
         ];
-        $template = __DIR__ . '/../../resources/templates/rest-api-controller-test.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpClassCode($controllerTestClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($controllerTestClassName);
         $this->collection->add(new FileResult($fileName, $code));

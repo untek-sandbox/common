@@ -15,6 +15,7 @@ class FixtureGenerator
 {
 
     private CodeGenerator $codeGenerator;
+    private string $template = __DIR__ . '/../../resources/templates/fixture.tpl.php';
 
     public function __construct(protected GenerateResultCollection $collection)
     {
@@ -29,7 +30,7 @@ class FixtureGenerator
         $params = [
             'seedClassName' => $seedClassName,
         ];
-        $template = __DIR__ . '/../../resources/templates/fixture.tpl.php';
+        $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $code = $this->codeGenerator->generatePhpCode($template, $params);
         $this->collection->add(new FileResult($mainFileName, $code));
         $this->collection->add(new FileResult($testFileName, $code));
