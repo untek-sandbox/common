@@ -3,11 +3,17 @@
 namespace Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers;
 
 use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommandCommand;
-use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
+use Untek\Utility\CodeGeneratorApplication\Application\Helpers\TypeHelper;
 
 class ApplicationPathHelper
 {
+
+    public static function generateCommandClass(string $namespace, string $type, string $commandName): string
+    {
+        $commandClass = TypeHelper::generateCommandName($type, $commandName);
+        return $namespace . '\\Application\\' . $commandClass;
+    }
 
     public static function getCommandValidatorClass(AbstractCommandCommand $command): string
     {
@@ -21,7 +27,7 @@ class ApplicationPathHelper
         } else {
             $directoy = 'Commands';
         }
-        return $command->getNamespace() . '\\Application\\'.$directoy.'\\' . $command->getCamelizeName();
+        return $command->getNamespace() . '\\Application\\' . $directoy . '\\' . $command->getCamelizeName();
     }
 
     public static function getHandlerClass(AbstractCommandCommand $command): string

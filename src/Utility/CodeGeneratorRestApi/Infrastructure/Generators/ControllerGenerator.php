@@ -8,6 +8,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
+use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 
@@ -24,8 +25,8 @@ class ControllerGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $commandFullClassName = $command->getCommandClass();
-        $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
+        $commandFullClassName = ApplicationPathHelper::getCommandClass($command);
+        $commandClassName = ClassHelper::getClassOfClassName($commandFullClassName);
         $commandClassName = Inflector::camelize($commandClassName);
         $controllerClassName = RestApiPathHelper::getControllerClass($command);
         $schemaClassName = RestApiPathHelper::getRestApiSchemaClass($command);

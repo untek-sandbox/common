@@ -9,8 +9,8 @@ use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 abstract class AbstractCommandCommand //extends AbstractCommand
 {
 
-    private string $commandName;
-    private string $commandType;
+    protected string $commandName;
+    protected string $commandType;
 
     public function getCamelizeName(): string
     {

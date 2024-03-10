@@ -3,10 +3,13 @@
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Commands;
 
 use Untek\Core\Code\Helpers\DeprecateHelper;
+use Untek\Utility\CodeGenerator\Application\Commands\AbstractCommandCommand;
 use Untek\Utility\CodeGenerator\Application\Traits\CommandNamespaceTrait;
 use Untek\Utility\CodeGenerator\Application\Traits\CommandParameterTrait;
+use Untek\Utility\CodeGeneratorApplication\Application\Helpers\TypeHelper;
+use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPathHelper;
 
-class GenerateRestApiCommand
+class GenerateRestApiCommand extends AbstractCommandCommand
 {
 
     use CommandParameterTrait;
@@ -32,10 +35,13 @@ class GenerateRestApiCommand
         $this->moduleName = $moduleName;
     }
 
-    public function getCommandClass(): string
+    /*public function getCommandClass(): string
     {
-        return $this->commandClass;
-    }
+        if(!empty($this->commandClass)) {
+            return $this->commandClass;
+        }
+        return ApplicationPathHelper::getCommandClass($this);
+    }*/
 
     public function setCommandClass(string $commandClass): void
     {
