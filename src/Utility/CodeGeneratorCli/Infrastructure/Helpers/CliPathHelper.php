@@ -10,7 +10,7 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 class CliPathHelper
 {
 
-    public static function getControllerClass(GenerateCliCommand $command): string
+    public static function getCliCommandClass(GenerateCliCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);

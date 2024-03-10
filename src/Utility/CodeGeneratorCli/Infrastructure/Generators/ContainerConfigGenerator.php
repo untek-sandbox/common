@@ -16,7 +16,7 @@ class ContainerConfigGenerator
 
     public function generate(GenerateCliCommand $command): void
     {
-        $cliCommandClassName = CliPathHelper::getControllerClass($command);
+        $cliCommandClassName = CliPathHelper::getCliCommandClass($command);
         $args = [
             CommandBusInterface::class,
         ];

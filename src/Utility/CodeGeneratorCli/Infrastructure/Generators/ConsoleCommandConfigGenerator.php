@@ -19,7 +19,7 @@ class ConsoleCommandConfigGenerator
 
     public function generate(GenerateCliCommand $command): void
     {
-        $cliCommandClassName = CliPathHelper::getControllerClass($command);
+        $cliCommandClassName = CliPathHelper::getCliCommandClass($command);
         $cliCommandConfigFileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/config/commands.php';
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $cliCommandConfigFileName, $templateFile);

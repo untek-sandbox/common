@@ -27,7 +27,7 @@ class CliCommandGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        $cliCommandClassName = CliPathHelper::getControllerClass($command);
+        $cliCommandClassName = CliPathHelper::getCliCommandClass($command);
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
