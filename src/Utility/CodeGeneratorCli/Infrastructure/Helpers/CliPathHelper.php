@@ -7,10 +7,10 @@ use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 
-class ApplicationPathHelper
+class CliPathHelper
 {
 
-    public static function getControllerClassName(GenerateCliCommand $command): string
+    public static function getControllerClass(GenerateCliCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
@@ -19,12 +19,12 @@ class ApplicationPathHelper
         return $command->getNamespace() . '\\Presentation\\Cli\\Commands\\' . $pureCommandClassName . 'CliCommand';
     }
 
-    public static function getControllerTestClassName(GenerateCliCommand $command): string
+    /*public static function getCommandTestClass(GenerateCliCommand $command): string
     {
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
         $endCommandClassName = CommandHelper::getType($command->getCommandClass());
         $pureCommandClassName = substr($commandClassName, 0, 0 - strlen($endCommandClassName));
         return 'Tests\\Console\\' . $command->getModuleName() . '\\' . $pureCommandClassName . 'Test';
-    }
+    }*/
 }

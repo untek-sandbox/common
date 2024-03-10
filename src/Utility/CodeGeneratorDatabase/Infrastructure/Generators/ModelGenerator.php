@@ -8,7 +8,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 
 class ModelGenerator
 {
@@ -22,7 +22,7 @@ class ModelGenerator
 
     public function generate(GenerateDatabaseCommand $command): void
     {
-        $className = ApplicationPathHelper::getModelClass($command);
+        $className = DatabasePathHelper::getModelClass($command);
         $params = [
             'properties' => ApplicationHelper::prepareProperties($command),
         ];

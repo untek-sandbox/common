@@ -9,7 +9,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 
 class FixtureGenerator
 {
@@ -23,7 +23,7 @@ class FixtureGenerator
 
     public function generate(GenerateDatabaseCommand $command): void
     {
-        $seedClassName = ApplicationPathHelper::getSeedClass($command);
+        $seedClassName = DatabasePathHelper::getSeedClass($command);
         $mainFileName = realpath(__DIR__ . '/../../../../../../../..') . '/resources/seeds/' . $command->getTableName() . '.php';
         $testFileName = realpath(__DIR__ . '/../../../../../../../..') . '/tests/fixtures/seeds/' . $command->getTableName() . '.php';
         $params = [

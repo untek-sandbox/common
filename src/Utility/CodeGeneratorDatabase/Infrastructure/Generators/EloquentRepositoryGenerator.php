@@ -7,7 +7,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 
 class EloquentRepositoryGenerator
 {
@@ -22,11 +22,11 @@ class EloquentRepositoryGenerator
     public function generate(GenerateDatabaseCommand $command): void
     {
         $repositoryDriver = $command->getRepositoryDriver();
-        $modelClassName = ApplicationPathHelper::getModelClass($command);
-        $className = ApplicationPathHelper::getRepositoryClass($command, $repositoryDriver);
-        $normalizerClassName = ApplicationPathHelper::getNormalizerClass($command);
-        $interfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
-        $relationClassName = ApplicationPathHelper::getRelationClass($command);
+        $modelClassName = DatabasePathHelper::getModelClass($command);
+        $className = DatabasePathHelper::getRepositoryClass($command, $repositoryDriver);
+        $normalizerClassName = DatabasePathHelper::getNormalizerClass($command);
+        $interfaceClassName = DatabasePathHelper::getRepositoryInterface($command);
+        $relationClassName = DatabasePathHelper::getRelationClass($command);
         $params = [
             'tableName' => $command->getTableName(),
             'interfaceClassName' => $interfaceClassName,

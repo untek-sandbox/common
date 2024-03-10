@@ -7,7 +7,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 
 class NormalizerGenerator
 {
@@ -21,7 +21,7 @@ class NormalizerGenerator
 
     public function generate(GenerateDatabaseCommand $command): void
     {
-        $className = ApplicationPathHelper::getNormalizerClass($command);
+        $className = DatabasePathHelper::getNormalizerClass($command);
         $params = [
             'tableName' => $command->getTableName(),
             'properties' => $command->getProperties(),

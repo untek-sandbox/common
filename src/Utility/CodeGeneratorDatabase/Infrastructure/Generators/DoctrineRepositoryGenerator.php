@@ -8,7 +8,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 
 DeprecateHelper::hardThrow();
 
@@ -27,7 +27,7 @@ class DoctrineRepositoryGenerator
         $repositoryDriver = 'doctrine';
         $modelClassName = ApplicationPathHelper::getModelClass($command);
         $className = ApplicationPathHelper::getRepositoryClass($command, $repositoryDriver);
-        $interfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
+        $interfaceClassName = ApplicationPathHelper::getRepositoryInterface($command);
         $params = [
             'tableName' => $command->getTableName(),
             'interfaceClassName' => $interfaceClassName,

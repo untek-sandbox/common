@@ -2,6 +2,8 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Commands;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
 class GenerateRestApiCommand
 {
 

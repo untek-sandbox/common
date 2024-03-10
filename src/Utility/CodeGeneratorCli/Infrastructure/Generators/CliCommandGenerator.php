@@ -10,7 +10,7 @@ use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationHelper;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
-use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\CliPathHelper;
 
 class CliCommandGenerator
 {
@@ -27,7 +27,7 @@ class CliCommandGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
+        $cliCommandClassName = CliPathHelper::getControllerClass($command);
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,

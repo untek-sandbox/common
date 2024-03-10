@@ -5,13 +5,8 @@ namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers;
 use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 
-class ApplicationPathHelper
+class DatabasePathHelper
 {
-
-    public static function getInterfaceClassName(object $command): string
-    {
-        return $command->getNamespace() . '\\Application\\Services\\' . $command->getModelName() . 'RepositoryInterface';
-    }
 
     public static function getModelClass(object $command): string
     {
@@ -31,6 +26,11 @@ class ApplicationPathHelper
     public static function getRelationClass(object $command): string
     {
         return $command->getNamespace() . '\\Infrastructure\\Persistence\\Relation\\' . $command->getModelName() . 'Relation';
+    }
+
+    public static function getRepositoryInterface(object $command): string
+    {
+        return $command->getNamespace() . '\\Application\\Services\\' . $command->getModelName() . 'RepositoryInterface';
     }
 
     public static function getRepositoryClass(object $command, string $driver): string

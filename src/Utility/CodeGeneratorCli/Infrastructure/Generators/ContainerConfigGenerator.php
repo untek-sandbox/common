@@ -5,7 +5,7 @@ namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
-use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\CliPathHelper;
 
 class ContainerConfigGenerator
 {
@@ -16,7 +16,7 @@ class ContainerConfigGenerator
 
     public function generate(GenerateCliCommand $command): void
     {
-        $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
+        $cliCommandClassName = CliPathHelper::getControllerClass($command);
         $args = [
             CommandBusInterface::class,
         ];

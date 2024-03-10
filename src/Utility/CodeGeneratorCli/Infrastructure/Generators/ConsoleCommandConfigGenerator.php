@@ -8,7 +8,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
-use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\CliPathHelper;
 
 class ConsoleCommandConfigGenerator
 {
@@ -19,7 +19,7 @@ class ConsoleCommandConfigGenerator
 
     public function generate(GenerateCliCommand $command): void
     {
-        $cliCommandClassName = ApplicationPathHelper::getControllerClassName($command);
+        $cliCommandClassName = CliPathHelper::getControllerClass($command);
         $cliCommandConfigFileName = PackageHelper::pathByNamespace($command->getNamespace()) . '/resources/config/commands.php';
         $templateFile = __DIR__ . '/../../resources/templates/cli-command-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $cliCommandConfigFileName, $templateFile);

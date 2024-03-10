@@ -4,7 +4,7 @@ namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
-use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper;
 use Illuminate\Database\Capsule\Manager;
 
 class ContainerConfigGenerator
@@ -16,8 +16,8 @@ class ContainerConfigGenerator
 
     public function generate(GenerateDatabaseCommand $command): void
     {
-        $repositoryClassName = ApplicationPathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
-        $repositoryInterfaceClassName = ApplicationPathHelper::getInterfaceClassName($command);
+        $repositoryClassName = DatabasePathHelper::getRepositoryClass($command, $command->getRepositoryDriver());
+        $repositoryInterfaceClassName = DatabasePathHelper::getRepositoryInterface($command);
         $args = [
             Manager::class,
         ];
