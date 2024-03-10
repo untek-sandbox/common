@@ -7,7 +7,7 @@ use Untek\Component\App\Services\ControllerAccessChecker;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
-use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 
 class ContainerConfigGenerator
 {
@@ -18,7 +18,7 @@ class ContainerConfigGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
+        $controllerClassName = RestApiPathHelper::getControllerClassName($command);
         $args = [
             '\\'.CommandBusInterface::class,
             UrlGeneratorInterface::class,

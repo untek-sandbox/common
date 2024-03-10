@@ -9,7 +9,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
-use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 
 class RestApiSchemeGenerator
 {
@@ -29,7 +29,7 @@ class RestApiSchemeGenerator
         $commandFullClassName = $command->getCommandClass();
         $commandClassName = ClassHelper::getClassOfClassName($command->getCommandClass());
         $commandClassName = Inflector::camelize($commandClassName);
-        $schemaClassName = ApplicationPathHelper::getRestApiSchemaClassName($command);
+        $schemaClassName = RestApiPathHelper::getRestApiSchemaClassName($command);
         $modelClassName = \Untek\Utility\CodeGeneratorDatabase\Infrastructure\Helpers\DatabasePathHelper::getModelClass($command);
         $params = [
             'commandClassName' => $commandClassName,

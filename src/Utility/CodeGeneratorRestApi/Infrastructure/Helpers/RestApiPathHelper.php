@@ -7,7 +7,7 @@ use Untek\Core\Text\Helpers\Inflector;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Helpers\CommandHelper;
 
-class ApplicationPathHelper
+class RestApiPathHelper
 {
 
     public static function getRestApiSchemaClassName(GenerateRestApiCommand $command): string

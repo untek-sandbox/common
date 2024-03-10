@@ -8,7 +8,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generator\RoutesConfigGenerator;
-use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 
 class RoutConfigGenerator
 {
@@ -19,7 +19,7 @@ class RoutConfigGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerClassName = ApplicationPathHelper::getControllerClassName($command);
+        $controllerClassName = RestApiPathHelper::getControllerClassName($command);
         $fileName = ComposerHelper::getPsr4Path($command->getNamespace()) . '/resources/config/rest-api/v' . $command->getVersion() . '-routes.php';
         $code = $this->generateConfig($fileName, $controllerClassName, $command);
         if ($code) {

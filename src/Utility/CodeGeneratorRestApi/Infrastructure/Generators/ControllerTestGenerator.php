@@ -7,7 +7,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorFileHelper;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
-use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\ApplicationPathHelper;
+use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Helpers\RestApiPathHelper;
 
 class ControllerTestGenerator
 {
@@ -21,7 +21,7 @@ class ControllerTestGenerator
 
     public function generate(GenerateRestApiCommand $command): void
     {
-        $controllerTestClassName = ApplicationPathHelper::getControllerTestClassName($command);
+        $controllerTestClassName = RestApiPathHelper::getControllerTestClassName($command);
         $params = [
             'endpoint' => '/v' . $command->getVersion() . '/' . $command->getUri(),
             'method' => $command->getHttpMethod(),
