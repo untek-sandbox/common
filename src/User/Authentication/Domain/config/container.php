@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Security;
 use Untek\User\Authentication\Domain\Interfaces\AuthorizationTokenGeneratorInterface;
 use Untek\User\Authentication\Domain\Libs\SafeUriAuthorizationTokenGenerator;
 
-return [
+/*return [
     'definitions' => [
 
     ],
@@ -27,4 +27,4 @@ return [
         'Untek\User\Authentication\Domain\Interfaces\Repositories\CredentialRepositoryInterface' => 'Untek\User\Authentication\Domain\Repositories\Eloquent\CredentialRepository',
         'Untek\User\Authentication\Domain\Interfaces\Repositories\TokenRepositoryInterface' => 'Untek\User\Authentication\Domain\Repositories\Eloquent\TokenRepository',
     ],
-];
+];*/
