@@ -4,6 +4,7 @@ namespace Untek\Database\Eloquent\Domain\Base;
 
 use Illuminate\Database\QueryException;
 use Untek\Core\Arr\Helpers\ArrayHelper;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Model\Query\Entities\Query;
 use Untek\Model\Query\Enums\OperatorEnum;
@@ -24,6 +25,8 @@ use Untek\Core\Text\Helpers\TextHelper;
 use Untek\Model\Validator\Exceptions\UnprocessibleEntityException;
 use Untek\Model\Validator\Helpers\ValidationHelper;
 use Untek\Database\Eloquent\Domain\Helpers\QueryBuilder\EloquentQueryBuilderHelper;
+
+DeprecateHelper::hardThrow();
 
 abstract class BaseEloquentCrudRepository extends BaseEloquentRepository implements CrudRepositoryInterface, ForgeQueryByFilterInterface, FindOneUniqueInterface
 {

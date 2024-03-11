@@ -2,10 +2,13 @@
 
 namespace Untek\User\Authentication\Domain\Repositories\Eloquent;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\User\Authentication\Domain\Entities\TokenEntity;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\TokenRepositoryInterface;
 use Untek\Model\Query\Entities\Query;
 use Untek\Database\Eloquent\Domain\Base\BaseEloquentCrudRepository;
+
+DeprecateHelper::hardThrow();
 
 class TokenRepository extends BaseEloquentCrudRepository implements TokenRepositoryInterface
 {

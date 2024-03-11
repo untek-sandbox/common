@@ -2,11 +2,14 @@
 
 namespace Untek\User\Authentication\Domain\Repositories\Eloquent;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Model\Query\Entities\Query;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Enums\CredentialTypeEnum;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\CredentialRepositoryInterface;
+
+DeprecateHelper::hardThrow();
 
 class CredentialRepository extends \Untek\Database\Eloquent\Domain\Base\BaseEloquentCrudRepository implements CredentialRepositoryInterface
 {

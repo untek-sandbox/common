@@ -60,6 +60,15 @@ abstract class AbstractEloquentCrudRepository extends AbstractEloquentRepository
         $queryBuilder->delete($id);
     }
 
+    public function deleteByCondition(array $condition)
+    {
+        $queryBuilder = $this->createQueryBuilder();
+        foreach ($condition as $key => $value) {
+            $queryBuilder->where($key, OperatorEnum::EQUAL, $value);
+        }
+        $queryBuilder->delete();
+    }
+
     /**
      * @inheritdoc
      * @throws Exception
