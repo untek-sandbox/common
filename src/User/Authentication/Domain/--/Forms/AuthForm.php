@@ -10,8 +10,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Untek\Component\I18Next\Facades\I18Next;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Model\Validator\Interfaces\ValidationByMetadataInterface;
 use Untek\Component\Web\Form\Interfaces\BuildFormInterface;
+
+DeprecateHelper::hardThrow();
 
 class AuthForm implements ValidationByMetadataInterface
 {

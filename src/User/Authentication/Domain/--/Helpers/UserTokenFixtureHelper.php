@@ -2,7 +2,10 @@
 
 namespace Untek\User\Authentication\Domain\Helpers;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Env\Helpers\EnvHelper;
+
+DeprecateHelper::hardThrow();
 
 class UserTokenFixtureHelper
 {

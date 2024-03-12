@@ -2,6 +2,10 @@
 
 namespace Untek\User\Authentication\Domain\Fixtures;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
+
 class TokenTestFixture
 {
 

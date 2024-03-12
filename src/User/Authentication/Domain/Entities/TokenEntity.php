@@ -9,7 +9,7 @@ use Untek\Model\Validator\Interfaces\ValidationByMetadataInterface;
 use Untek\Model\Entity\Interfaces\UniqueInterface;
 use Untek\Model\Entity\Interfaces\EntityIdInterface;
 
-class TokenEntity implements ValidationByMetadataInterface, UniqueInterface, EntityIdInterface
+class -TokenEntity implements ValidationByMetadataInterface, UniqueInterface, EntityIdInterface
 {
 
     private $id = null;

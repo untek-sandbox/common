@@ -5,12 +5,15 @@ namespace Untek\User\Authentication\Domain\Subscribers;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Untek\Bundle\Summary\Domain\Exceptions\AttemptsBlockedException;
 use Untek\Bundle\Summary\Domain\Interfaces\Services\AttemptServiceInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Model\EntityManager\Traits\EntityManagerAwareTrait;
 use Untek\User\Authentication\Domain\Enums\AuthEventEnum;
 use Untek\User\Authentication\Domain\Enums\UserNotifyTypeEnum;
 use Untek\User\Authentication\Domain\Events\AuthEvent;
 use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
 use Untek\User\Notify\Domain\Interfaces\Services\NotifyServiceInterface;
+
+DeprecateHelper::hardThrow();
 
 class AuthenticationAttemptSubscriber implements EventSubscriberInterface
 {
