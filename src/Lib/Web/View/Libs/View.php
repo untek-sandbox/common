@@ -3,6 +3,7 @@
 namespace Untek\Lib\Web\View\Libs;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Lib\I18Next\Facades\I18Next;
 use Untek\Lib\I18Next\Interfaces\Services\TranslationServiceInterface;
@@ -18,12 +19,12 @@ class View
 
     private $renderDirectory;
     private $attributes = [];
-    private $urlGenerator;
-    private $translationService;
+//    private $urlGenerator;
+//    private $translationService;
 
     public function __construct(
-        UrlGeneratorInterface $urlGenerator = null,
-        TranslationServiceInterface $translationService = null,
+        private ?UrlGeneratorInterface $urlGenerator = null,
+        private ?TranslatorInterface $translationService = null,
         Js $js = null,
         Css $css = null
     )
@@ -48,9 +49,9 @@ class View
         return $this->urlGenerator->generate($name, $parameters, $referenceType);
     }
 
-    public function translate(string $bundleName, string $key, array $variables = []) {
+    /*public function translate(string $bundleName, string $key, array $variables = []) {
         return $this->translationService->t($bundleName, $key, $variables);
-    }
+    }*/
 
     public function addAttribute(string $name, $value) {
         $this->attributes[$name] = $value;
@@ -173,6 +174,9 @@ class View
     protected function includeRender(string $viewFile, array $__params = [])
     {
         extract($__params);
+        if(isset($this->translationService)) {
+            $translator = $this->translationService;
+        }
         $view = $this;
         include $viewFile;
     }
