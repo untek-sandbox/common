@@ -6,7 +6,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Lib\I18Next\Facades\I18Next;
-use Untek\Lib\I18Next\Interfaces\Services\TranslationServiceInterface;
 use Untek\Lib\Web\View\Helpers\RenderHelper;
 use Untek\Lib\Web\View\Resources\Css;
 use Untek\Lib\Web\View\Resources\Js;
@@ -19,18 +18,14 @@ class View
 
     private $renderDirectory;
     private $attributes = [];
-//    private $urlGenerator;
-//    private $translationService;
 
     public function __construct(
         private ?UrlGeneratorInterface $urlGenerator = null,
-        private ?TranslatorInterface $translationService = null,
+        private ?TranslatorInterface $translator = null,
         Js $js = null,
         Css $css = null
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->translationService = $translationService;
         $this->js = $js;
         $this->css = $css;
     }
@@ -48,10 +43,6 @@ class View
     public function url(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) {
         return $this->urlGenerator->generate($name, $parameters, $referenceType);
     }
-
-    /*public function translate(string $bundleName, string $key, array $variables = []) {
-        return $this->translationService->t($bundleName, $key, $variables);
-    }*/
 
     public function addAttribute(string $name, $value) {
         $this->attributes[$name] = $value;
@@ -174,8 +165,8 @@ class View
     protected function includeRender(string $viewFile, array $__params = [])
     {
         extract($__params);
-        if(isset($this->translationService)) {
-            $translator = $this->translationService;
+        if(isset($this->translator)) {
+            $translator = $this->translator;
         }
         $view = $this;
         include $viewFile;

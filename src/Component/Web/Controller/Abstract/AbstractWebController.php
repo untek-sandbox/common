@@ -36,6 +36,7 @@ abstract class AbstractWebController
     protected $fileExt = 'php';
     private $layoutManager;
     protected $baseUri;
+    protected string $templateFile;
 
     protected $toastrService;
     protected $breadcrumbWidget;
@@ -188,6 +189,11 @@ abstract class AbstractWebController
         }
         return $this->view;
     }*/
+
+    protected function render(array $params = []): Response
+    {
+        return $this->renderFile($this->templateFile, $params);
+    }
 
     protected function renderFile(string $file, array $params = []): Response
     {
