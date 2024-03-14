@@ -51,5 +51,6 @@ class ConsoleCommandConfigGenerator
             $code = $configGenerator->appendCode($codeForAppend);
             return new FileResult($configFile, $code);
         }
+        return null;
     }
 }
