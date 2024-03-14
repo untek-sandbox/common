@@ -4,6 +4,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Untek\Database\Base\Domain\Libs\Dependency;
 use Untek\Database\Base\Domain\Repositories\Eloquent\SchemaRepository;
+use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Untek\Database\Seed\Presentation\Cli\Commands\ImportSeedCliCommand;
 use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
@@ -45,5 +46,8 @@ return static function (ContainerConfigurator $configurator): void {
         ],
     ]);
 
-    $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class);
+    $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
+    ->args([
+        service(Manager::class),
+    ]);
 };
