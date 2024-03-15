@@ -27,7 +27,7 @@ class <?= $className ?> extends DatabaseItemNormalizer
     $fieldName = \Untek\Core\Text\Helpers\Inflector::underscore($propertyName);
     $propertyType = $attribute['type'];
     if($propertyType == 'array') {
-        echo "\t\t\$data['$fieldName'] = json_decode(\$data['$fieldName']);\n";
+        echo "\t\t\$data['$fieldName'] = json_decode(\$data['$fieldName'], true);\n";
     }
 }?>
         return parent::denormalize($data, $type, $format, $context);

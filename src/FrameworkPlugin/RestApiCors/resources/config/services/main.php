@@ -26,6 +26,9 @@ return static function (ContainerConfigurator $configurator): void {
     if (getenv('CORS_SUPPORTS_CREDENTIALS')) {
         $options['supportsCredentials'] = true;
     }
+    if (getenv('CORS_EXPOSED_HEADERS')) {
+        $options['exposedHeaders'] = explode(',', getenv('CORS_EXPOSED_HEADERS'));
+    }
 
     $services->set(CorsService::class, CorsService::class)
         ->args([
