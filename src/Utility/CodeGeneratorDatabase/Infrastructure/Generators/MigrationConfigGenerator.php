@@ -24,7 +24,7 @@ class MigrationConfigGenerator
         $fileName = (new Filesystem())->makePathRelative($fileName, realpath(__DIR__ . '/../../../../../../../..'));
         $fileName = rtrim($fileName, '/');
         $concreteCode = $fileName;
-        $codeForAppend = "    __DIR__ . '/../$fileName',";
+        $codeForAppend = "    __DIR__ . '/../../$fileName',";
         $configFile = $this->migrationConfigFile;
         $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
