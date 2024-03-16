@@ -37,15 +37,6 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(SourceRepository::class, SourceRepository::class);
 
-    $services->set(EntityManagerConfiguratorInterface::class, EntityManagerConfigurator::class);
-
-    $services->set(EntityManagerInterface::class, EntityManager::class)
-        ->args([
-            service(ContainerInterface::class),
-            service(EntityManagerConfiguratorInterface::class),
-        ]);
-
-
     $services->set(HistoryRepository::class, HistoryRepository::class)
         ->args([
             service(EntityManagerInterface::class),
