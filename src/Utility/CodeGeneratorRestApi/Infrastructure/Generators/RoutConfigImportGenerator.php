@@ -31,9 +31,9 @@ class RoutConfigImportGenerator
     {
         $modulePath = ltrim($modulePath, '/');
         $codeForAppend = '    $routes
-        ->import(__DIR__ . \'/../../../' . $modulePath . '\')
+        ->import(__DIR__ . \'/../../' . $modulePath . '\')
         ->prefix(\'' . $prefix . '\');';
-        $configFile = __DIR__ . '/../../../../../../../../context/rest-api/config/routes.php';
+        $configFile = __DIR__ . '/../../../../../../../../config/rest-api/routes.php';
         $template = $command->getParameter(self::class, 'template') ?: $this->template;
         $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
         if (!$configGenerator->hasCode($modulePath)) {

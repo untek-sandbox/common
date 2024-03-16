@@ -41,7 +41,7 @@ class ConsoleCommandConfigGenerator
     private function addImport($cliCommandConfigFileName): ?FileResult
     {
         $template = $this->template;
-        $configFile = __DIR__ . '/../../../../../../../../context/console/config/commands.php';
+        $configFile = __DIR__ . '/../../../../../../../../config/console/commands.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $template);
         $shareCliCommandConfigFileName = (new Filesystem())->makePathRelative($cliCommandConfigFileName, realpath(__DIR__ . '/../../../../../../../..'));
         $shareCliCommandConfigFileName = rtrim($shareCliCommandConfigFileName, '/');
