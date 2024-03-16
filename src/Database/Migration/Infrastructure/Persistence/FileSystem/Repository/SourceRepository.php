@@ -26,8 +26,7 @@ class SourceRepository
             if(is_dir($dir)) {
                 $migrationDir = realpath($dir);
             } else {
-                throw new DeprecatedException('Migration path format deprecated!');
-                $migrationDir = realpath(FilePathHelper::prepareRootPath($dir));
+                throw new \Exception("Migration directory \"$dir\" not found!");
             }
             $newClasses = self::scanDir($migrationDir);
             $classes = ArrayHelper::merge($classes, $newClasses);
