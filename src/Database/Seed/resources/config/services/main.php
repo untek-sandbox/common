@@ -26,7 +26,9 @@ return static function (ContainerConfigurator $configurator): void {
         service(Connection::class),
         getenv('SEED_DIRECTORY'),
 //        __DIR__ . '/../../../../../../../../../resources/seeds',
-    ]);
+    ])
+        ->tag('cqrs.handler')
+    ;
     
     $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
     ->args([
@@ -44,10 +46,14 @@ return static function (ContainerConfigurator $configurator): void {
         [
             'eq_migration',
         ],
-    ]);
+    ])
+        ->tag('cqrs.handler')
+    ;
 
     $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
     ->args([
         service(Manager::class),
-    ]);
+    ])
+        ->tag('cqrs.handler')
+    ;
 };

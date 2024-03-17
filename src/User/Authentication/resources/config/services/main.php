@@ -51,7 +51,10 @@ return static function (ContainerConfigurator $configurator): void {
 //        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
         service(IdentityRepositoryInterface::class),
         ['login', 'phone'],
-    ]);
+    ])
+        ->tag('cqrs.handler')
+    ;
+    
     $services->set(GenerateTokenByPasswordController::class, GenerateTokenByPasswordController::class)
         ->args([
             service(CommandBusInterface::class),
