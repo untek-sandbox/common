@@ -22,5 +22,6 @@ return static function (ContainerConfigurator $configurator): void {
             [
                 param(HttpLayoutContainerParameterEnum::TEMPLATE_LAYOUT_FILE)
             ]
-        );
+        )
+        ->tag('kernel.event_subscriber');
 };

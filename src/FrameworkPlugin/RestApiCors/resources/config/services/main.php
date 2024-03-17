@@ -38,5 +38,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(CorsSubscriber::class, CorsSubscriber::class)
         ->args([
             service(CorsService::class),
-        ]);
+        ])
+        ->tag('kernel.event_subscriber');
 };

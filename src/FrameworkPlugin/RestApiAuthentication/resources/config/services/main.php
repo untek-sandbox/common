@@ -22,5 +22,6 @@ return static function (ContainerConfigurator $configurator): void {
 //                service(AuthorizationCheckerInterface::class),
 //                'Authorization-Token',
             ]
-        );
+        )
+        ->tag('kernel.event_subscriber');
 };

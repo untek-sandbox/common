@@ -22,5 +22,7 @@ return static function (ContainerConfigurator $configurator): void {
             [
                 service(ContainerInterface::class),
             ]
-        );
+        )
+        ->call('setRestApiErrorControllerClass', [HttpErrorController::class])
+        ->tag('kernel.event_subscriber');
 };
