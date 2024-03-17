@@ -10,7 +10,7 @@ use Untek\FrameworkPlugin\HttpAuthentication\Infrastructure\Subscribers\WebAuthe
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services();
+    $services = $configurator->services()->defaults()->public();
 
     $services->set(WebAuthenticationSubscriber::class, WebAuthenticationSubscriber::class)
         ->args(

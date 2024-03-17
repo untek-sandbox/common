@@ -13,7 +13,7 @@ use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services();
+    $services = $configurator->services()->defaults()->public();
 
     try {
         $services->get(ClientMessageHandlerInterface::class);

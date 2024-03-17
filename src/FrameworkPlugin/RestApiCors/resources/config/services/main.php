@@ -6,7 +6,7 @@ use Untek\FrameworkPlugin\RestApiCors\Infrastructure\Subscribers\CorsSubscriber;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services();
+    $services = $configurator->services()->defaults()->public();
 
     $options = [];
     if (getenv('CORS_ALLOW_ORIGINS')) {

@@ -13,7 +13,7 @@ use Untek\Database\Seed\Application\Handlers\GetTablesQueryHandler;
 use Untek\Database\Seed\Presentation\Cli\Commands\ExportSeedCliCommand;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services();
+    $services = $configurator->services()->defaults()->public();
 
     $services->set(Dependency::class, Dependency::class)
         ->args([

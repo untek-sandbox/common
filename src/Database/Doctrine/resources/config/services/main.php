@@ -5,7 +5,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Untek\Database\Doctrine\Domain\Facades\DoctrineFacade;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services();
+    $services = $configurator->services()->defaults()->public();
 
     $services->set(Connection::class, Connection::class)
         ->factory([DoctrineFacade::class, 'createConnection']);
