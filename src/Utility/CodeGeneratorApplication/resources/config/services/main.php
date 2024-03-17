@@ -9,7 +9,8 @@ return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public();
 
     $services->set(GenerateApplicationCommandHandler::class, GenerateApplicationCommandHandler::class)
-    ->args([
-        service(GenerateResultCollection::class)
-    ]);
+        ->args([
+            service(GenerateResultCollection::class)
+        ])
+        ->tag('cqrs.handler');
 };

@@ -10,5 +10,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(\Untek\Utility\CodeGeneratorCli\Application\Handlers\GenerateCliCommandHandler::class, \Untek\Utility\CodeGeneratorCli\Application\Handlers\GenerateCliCommandHandler::class)
         ->args([
             service(GenerateResultCollection::class)
-        ]);
+        ])
+        ->tag('cqrs.handler');
 };

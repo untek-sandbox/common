@@ -11,5 +11,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(GenerateRestApiCommandHandler::class, GenerateRestApiCommandHandler::class)
         ->args([
             service(GenerateResultCollection::class)
-        ]);
+        ])
+        ->tag('cqrs.handler');
 };

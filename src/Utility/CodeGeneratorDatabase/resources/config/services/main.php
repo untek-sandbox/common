@@ -11,5 +11,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(GenerateDatabaseCommandHandler::class, GenerateDatabaseCommandHandler::class)
         ->args([
             service(GenerateResultCollection::class)
-        ]);
+        ])
+        ->tag('cqrs.handler');
 };
