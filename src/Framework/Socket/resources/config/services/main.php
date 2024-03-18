@@ -42,9 +42,12 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(SocketCommand::class, SocketCommand::class)
         ->args([
             service(SocketDaemonInterface::class),
-        ]);
+        ])
+        ->tag('console.command');
+
     $services->set(SendMessageToSocketCommand::class, SendMessageToSocketCommand::class)
         ->args([
             service(SocketDaemonInterface::class),
-        ]);
+        ])
+        ->tag('console.command');
 };

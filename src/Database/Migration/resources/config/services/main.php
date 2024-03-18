@@ -22,13 +22,15 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(DownCommand::class, DownCommand::class)
         ->args([
             service(MigrationService::class)
-        ]);
+        ])
+        ->tag('console.command');
 
 
     $services->set(UpCommand::class, UpCommand::class)
         ->args([
             service(MigrationService::class)
-        ]);
+        ])
+        ->tag('console.command');
 
     $services->set(SchemaRepository::class, SchemaRepository::class)
         ->args([

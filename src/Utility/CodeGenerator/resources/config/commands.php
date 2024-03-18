@@ -6,10 +6,10 @@ use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Utility\CodeGenerator\Presentation\Cli\Commands\GenerateCodeCommand;
 
 return function (CommandConfiguratorInterface $commandConfigurator, ContainerInterface $container) {
-    $commandBus = $container->get(CommandBusInterface::class);
+    /*$commandBus = $container->get(CommandBusInterface::class);
     $commandConfigurator->registerCommandInstance(new GenerateCodeCommand(
         'code-generator:generate',
         $commandBus,
         []
-    ));
+    ));*/
 };

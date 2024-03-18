@@ -33,12 +33,14 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
     ->args([
         service(CommandBusInterface::class),
-    ]);
+    ])
+        ->tag('console.command');
 
     $services->set(ExportSeedCliCommand::class, ExportSeedCliCommand::class)
         ->args([
             service(CommandBusInterface::class),
-        ]);
+        ])
+        ->tag('console.command');
 
     $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
     ->args([
