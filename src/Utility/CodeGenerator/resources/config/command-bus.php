@@ -6,6 +6,8 @@ use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiComma
 use Untek\Utility\CodeGeneratorApplication\Application\Handlers\GenerateApplicationCommandHandler;
 use Untek\Utility\CodeGeneratorRestApi\Application\Handlers\GenerateRestApiCommandHandler;
 
+\Untek\Core\Code\Helpers\DeprecateHelper::hardThrow();
+
 return function (CommandBusConfiguratorInterface $configurator) {
 
 };
