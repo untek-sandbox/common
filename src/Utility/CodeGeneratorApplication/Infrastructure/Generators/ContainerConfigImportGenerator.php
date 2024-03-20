@@ -13,13 +13,13 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Helpers\ApplicationPat
 class ContainerConfigImportGenerator
 {
 
-    public function __construct(protected GenerateResultCollection $collection)
+    public function __construct(protected GenerateResultCollection $collection, private ?string $moduleConfigFilePath = null, private ?string $appConfigFilePath = null)
     {
     }
 
-    public function generate(GenerateApplicationCommand $command): void
+    public function generate(object $command): void
     {
-        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
+//        $handlerClassName = ApplicationPathHelper::getHandlerClass($command);
         $path = ComposerHelper::getPsr4Path($command->getNamespace());
         if (realpath($path) === false) {
             $up = FilePathHelper::up($path);
@@ -27,8 +27,8 @@ class ContainerConfigImportGenerator
             $path = $up . '/' . $basename;
         }
         $relative = GeneratorFileHelper::fileNameTotoRelative($path);
-        $modulePath = $relative . '/resources/config/services/main.php';
+        $modulePath = $this->moduleConfigFilePath ? $relative . $this->moduleConfigFilePath : $relative . '/resources/config/services/main.php';
         $consoleLoadConfigGenerator = new ContainerLoadConfigGenerator($this->collection, $command->getNamespace());
-        $consoleLoadConfigGenerator->generate($modulePath);
+        $consoleLoadConfigGenerator->generate($modulePath, $this->appConfigFilePath);
     }
 }

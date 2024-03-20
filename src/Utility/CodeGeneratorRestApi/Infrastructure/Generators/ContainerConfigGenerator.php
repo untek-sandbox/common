@@ -24,7 +24,12 @@ class ContainerConfigGenerator
             UrlGeneratorInterface::class,
             ControllerAccessChecker::class,
         ];
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator(
+            $this->collection,
+            $command->getNamespace(),
+            null,
+            '/resources/config/services/rest-api.php'
+        );
         $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
     }
 }

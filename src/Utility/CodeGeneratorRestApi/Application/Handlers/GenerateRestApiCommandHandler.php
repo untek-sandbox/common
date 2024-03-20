@@ -7,6 +7,7 @@ use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
+use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerConfigImportGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
 use Untek\Utility\CodeGeneratorRestApi\Application\Validators\GenerateRestApiCommandValidator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ContainerConfigGenerator;
@@ -37,6 +38,7 @@ class GenerateRestApiCommandHandler
             new RestApiSchemeGenerator($this->collection),
             new ControllerTestGenerator($this->collection),
             new ContainerConfigGenerator($this->collection),
+            new ContainerConfigImportGenerator($this->collection, '/resources/config/services/rest-api.php', __DIR__ . '/../../../../../../../../config/rest-api/container.php'),
             new RoutConfigGenerator($this->collection),
             new RoutConfigImportGenerator($this->collection),
         ];

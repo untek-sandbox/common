@@ -28,8 +28,8 @@ class GenerateApplicationCommandHandler
             new CommandValidatorGenerator($this->collection),
             new ContainerConfigGenerator($this->collection),
             new ContainerConfigImportGenerator($this->collection),
-            new ContainerConfigBusGenerator($this->collection),
-            new ContainerConfigBusImportGenerator($this->collection),
+//            new ContainerConfigBusGenerator($this->collection),
+//            new ContainerConfigBusImportGenerator($this->collection),
         ];
 
         GeneratorHelper::generate($generators, $command);

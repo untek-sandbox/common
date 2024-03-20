@@ -36,10 +36,15 @@ class RestApiSchemeGenerator
         $params = [
             'commandClassName' => $commandClassName,
             'commandFullClassName' => $commandFullClassName,
-            'modelClassName' => $modelClassName,
+            'modelClassName' => $command->getModelName() ? $modelClassName : null,
             'properties' => $command->getProperties(),
         ];
+        /*if(empty($command->getModelName())) {
+            $template = $this->template;
+        } else {
+        }*/
         $template = $command->getParameter(self::class, 'template') ?: $this->template;
+//        dd($template);
         $code = $this->codeGenerator->generatePhpClassCode($schemaClassName, $template, $params);
         $fileName = GeneratorFileHelper::getFileNameByClass($schemaClassName);
         $this->collection->add(new FileResult($fileName, $code));

@@ -12,10 +12,10 @@ class ContainerLoadConfigGenerator
     {
     }
 
-    public function generate(string $modulePath): GenerateResultCollection
+    public function generate(string $modulePath, string $configFilePath = null): GenerateResultCollection
     {
         $codeForAppend = '$loader->load(__DIR__ . \'/../..' . $modulePath . '\');';
-        $configFile = __DIR__ . '/../../../../../../../../config/shared/container.php';
+        $configFile = $configFilePath ? $configFilePath : __DIR__ . '/../../../../../../../../config/shared/container.php';
         $templateFile = __DIR__ . '/../../resources/templates/container-load-config.tpl.php';
         $configGenerator = new PhpConfigGenerator($this->collection, $configFile, $templateFile);
         $resultCollection = new GenerateResultCollection();

@@ -6,6 +6,7 @@ use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
+use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerConfigImportGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Application\Validators\GenerateCliCommandValidator;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\CliCommandGenerator;
@@ -31,8 +32,9 @@ class GenerateCliCommandHandler
 
         $generators = [
             new CliCommandGenerator($this->collection),
-            new ConsoleCommandConfigGenerator($this->collection),
+//            new ConsoleCommandConfigGenerator($this->collection),
             new ContainerConfigGenerator($this->collection),
+            new ContainerConfigImportGenerator($this->collection, '/resources/config/services/console.php', __DIR__ . '/../../../../../../../../config/console/container.php'),
             new CliCommandShortcutGenerator($this->collection),
         ];
 

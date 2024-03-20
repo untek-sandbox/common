@@ -3,12 +3,15 @@
 namespace Untek\Utility\CodeGeneratorCli\Infrastructure\Generators;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Code\Helpers\PackageHelper;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\PhpConfigGenerator;
 use Untek\Utility\CodeGeneratorCli\Application\Commands\GenerateCliCommand;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Helpers\CliPathHelper;
+
+DeprecateHelper::hardThrow();
 
 class ConsoleCommandConfigGenerator
 {

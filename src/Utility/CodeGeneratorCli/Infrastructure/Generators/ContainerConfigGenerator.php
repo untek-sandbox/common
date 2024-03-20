@@ -20,7 +20,14 @@ class ContainerConfigGenerator
         $args = [
             CommandBusInterface::class,
         ];
-        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator($this->collection, $command->getNamespace());
-        $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args);
+        $consoleConfigGenerator = new \Untek\Utility\CodeGenerator\Infrastructure\Generator\ContainerConfigGenerator(
+            $this->collection,
+            $command->getNamespace(),
+            null,
+            '/resources/config/services/console.php'
+        );
+        $consoleConfigGenerator->generate($cliCommandClassName, $cliCommandClassName, $args, [
+            'console.command'
+        ]);
     }
 }
