@@ -9,7 +9,7 @@ use Untek\Domain\Service\Base\BaseCrudService;
 use Untek\Component\Office\Domain\Entities\DocXEntity;
 use Untek\Component\Office\Domain\Enums\AttributeEnum;
 use Untek\Component\Office\Domain\Interfaces\Services\DocXServiceInterface;
-use Untek\Lib\Components\Zip\Libs\Zip;
+use Untek\Component\Zip\Libs\Zip;
 
 /**
  * @method
