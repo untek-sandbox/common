@@ -165,8 +165,6 @@ class SocketDaemon implements SocketDaemonInterface
 
     private function sendToWebSocket(SocketEvent $socketEvent, ConnectionInterface $connection)
     {
-        $event = EntityHelper::toArray($socketEvent);
-
         $data = [
             'type' => $socketEvent->getName(),
         ];
