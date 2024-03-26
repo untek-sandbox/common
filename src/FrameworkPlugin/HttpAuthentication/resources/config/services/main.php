@@ -20,5 +20,6 @@ return static function (ContainerConfigurator $configurator): void {
                 service(TokenStorageInterface::class),
                 service(AuthorizationCheckerInterface::class),
             ]
-        );
+        )
+        ->tag('kernel.event_subscriber');
 };
