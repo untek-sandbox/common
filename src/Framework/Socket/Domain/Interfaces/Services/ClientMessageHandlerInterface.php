@@ -3,6 +3,9 @@
 namespace Untek\Framework\Socket\Domain\Interfaces\Services;
 
 use Exception;
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
 
 interface ClientMessageHandlerInterface
 {

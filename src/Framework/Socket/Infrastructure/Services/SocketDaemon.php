@@ -6,12 +6,15 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
-use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
+//use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
+use Untek\Framework\Socket\Infrastructure\Dto\NewMessageEvent;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
+use Untek\Framework\Socket\Infrastructure\Enums\WebSocketEventEnum;
 use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
 use Untek\Model\Entity\Helpers\EntityHelper;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Workerman\Connection\ConnectionInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Workerman\Worker;
 
 class SocketDaemon implements SocketDaemonInterface
@@ -22,9 +25,10 @@ class SocketDaemon implements SocketDaemonInterface
     private $wsWorker;
 
     public function __construct(
+        private EventDispatcherInterface $eventDispatcher,
         private ConnectionRamStorage $connectionRepository,
         private TokenServiceInterface $tokenService,
-        private ClientMessageHandlerInterface $clientMessageHanler,
+//        private ClientMessageHandlerInterface $clientMessageHanler,
         private string $localUrl,
         private string $clientUrl,
         private ?string $mode = null
@@ -47,6 +51,7 @@ class SocketDaemon implements SocketDaemonInterface
         try {
             $instance = stream_socket_client($this->localUrl);
             $serialized = serialize($eventEntity);
+
             // отправляем сообщение
             fwrite($instance, $serialized . "\n");
         } catch (\Exception $e) {
@@ -67,6 +72,9 @@ class SocketDaemon implements SocketDaemonInterface
     protected function auth($params)//: int
     {
         $credentials = $params['token'] ?? null;
+        /*if(str_starts_with($credentials, 'bearer ')) {
+            echo $credentials;
+        }*/
         if (empty($credentials)) {
             throw new AuthenticationException('Bad credentials.');
         }
@@ -87,25 +95,44 @@ class SocketDaemon implements SocketDaemonInterface
 
     public function onMessage(ConnectionInterface $connection, $data)
     {
-        $userId = $this->connectionRepository->userIdByConnection($connection);
-        //print_r(['$userId' , $userId]);
-        //echo "Received message: $data  \n";
-        $decoded = json_decode($data, true);
-        $decoded['userId'] = $userId;
+        try {
+            $fromUserId = $this->connectionRepository->userIdByConnection($connection);
+            $decoded = json_decode($data, true);
+            $decoded['userId'] = $fromUserId;
 
-        $message = $this->clientMessageHanler->onMessage($decoded);
 
-        if ($message || $this->mode == 'dev') {
-            $event = new SocketEvent();
-            $event->setUserId($userId);
-            $event->setName(SocketEventEnum::CLIENT_MESSAGE_RECEIVED);
-            $event->setPayload([
-                'data' => $data,
-            ]);
+            if($decoded['type'] != 'ping') {
+                // variant 1
+//                /*$message = */$this->clientMessageHanler->onMessage($decoded);
 
-            $this->sendToWebSocket($event, $connection);
-        }
+                // variant 2
+                $this->dispatchNewMessageEvent($fromUserId, $decoded);
+            }
 
+            if (/*$message || */$this->mode == 'dev') {
+                /*$event = new SocketEvent();
+                $event->setUserId($fromUserId);
+                $event->setName(SocketEventEnum::CLIENT_MESSAGE_RECEIVED);
+                $event->setPayload([
+                    'data' => $data,
+                ]);
+                $this->sendToWebSocket($event, $connection);*/
+
+                if($decoded['type'] != 'ping') {
+                    $payloadForPrint = json_encode($decoded, JSON_UNESCAPED_UNICODE);
+                    echo "Received message from user {$fromUserId}, payload: {$payloadForPrint}\n";
+                }
+            }
+        } catch (NotFoundException $e) {}
+    }
+
+    private function dispatchNewMessageEvent($fromUserId, array $decoded) {
+        $payload = $decoded;
+        unset($payload['userId']);
+        unset($payload['type']);
+        $newMessageEvent = new NewMessageEvent($fromUserId, $decoded['type'], $payload);
+        $this->eventDispatcher->dispatch($newMessageEvent, WebSocketEventEnum::NEW_MESSAGE);
+//        dump($newMessageEvent);
     }
 
     protected function sendConnectEventToClient($userId)
@@ -150,7 +177,7 @@ class SocketDaemon implements SocketDaemonInterface
     {
         $event = EntityHelper::toArray($socketEvent);
         $json = json_encode([
-            'name' => $socketEvent->getName(),
+            'type' => $socketEvent->getName(),
             'payload' => $socketEvent->getPayload(),
         ]);
         $connection->send($json);

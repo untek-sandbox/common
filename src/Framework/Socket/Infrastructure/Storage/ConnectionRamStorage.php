@@ -12,7 +12,11 @@ class ConnectionRamStorage {
     private $reversedConnectionTree = [];
 
     public function userIdByConnection(ConnectionInterface $connection) {
-        return $this->reversedConnectionTree[md5(json_encode($connection))];
+        $key = $this->generateKey($connection);
+        if(!array_key_exists($key, $this->reversedConnectionTree)) {
+            throw new NotFoundException();
+        }
+        return $this->reversedConnectionTree[$key];
     }
 
     public function allByUserId(/*int*/ $userId) {
@@ -35,7 +39,8 @@ class ConnectionRamStorage {
 
     public function addConnection(/*int*/ $userId, ConnectionInterface $connection) {
         $this->connectionTree[$userId][] = $connection;
-        $this->reversedConnectionTree[md5(json_encode($connection))] = $userId;
+        $key = $this->generateKey($connection);
+        $this->reversedConnectionTree[$key] = $userId;
         echo 'online ' . $this->formatMessage($userId) . PHP_EOL;
     }
     
@@ -56,6 +61,10 @@ class ConnectionRamStorage {
                 }
             }
         }
-        echo 'not remove ' . PHP_EOL;
+//        echo 'not remove ' . PHP_EOL;
+    }
+
+    private function generateKey(ConnectionInterface $connection): string {
+        return md5(json_encode($connection));
     }
 }

@@ -6,15 +6,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Untek\Framework\Socket\Application\Commands\SendMessageToWebSocketCommand;
 use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
+use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 
 class SendMessageToSocketCommand extends Command
 {
 
     private SocketDaemonInterface $socketDaemon;
 
-    public function __construct(SocketDaemonInterface $socketDaemon)
+    public function __construct(SocketDaemonInterface $socketDaemon, private CommandBusInterface $bus)
     {
         parent::__construct();
         $this->socketDaemon = $socketDaemon;
@@ -28,25 +30,25 @@ class SendMessageToSocketCommand extends Command
     protected function configure()
     {
         $this->addArgument('userId', InputArgument::REQUIRED);
-        $this->addArgument('message', InputArgument::REQUIRED);
+        $this->addArgument('eventName', InputArgument::REQUIRED);
+        $this->addArgument('payload', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $userId = $input->getArgument('userId');
-        $message = $input->getArgument('message');
+        $eventName = $input->getArgument('eventName');
+        $payload = $input->getArgument('payload');
 
-        $this->sendMessageToUser($userId, 'taxi.orderCreated', $message);
+        $command = new SendMessageToWebSocketCommand($eventName, 1, $userId, $payload);
+        $this->bus->handle($command);
 
-        return Command::SUCCESS;
-    }
-
-    protected function sendMessageToUser(int $userId, string $eventName, mixed $payload)
-    {
-        $event = new SocketEvent();
+        /*$event = new SocketEvent();
         $event->setUserId($userId);
         $event->setName($eventName);
         $event->setPayload($payload);
-        $this->socketDaemon->sendMessageToTcp($event);
+        $this->socketDaemon->sendMessageToTcp($event);*/
+
+        return Command::SUCCESS;
     }
 }
