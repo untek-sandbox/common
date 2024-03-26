@@ -7,6 +7,7 @@ use Untek\Framework\Socket\Domain\Enums\SocketEventStatusEnum;
 class SocketEvent {
 
     private $userId;
+    private $fromUserId;
     private $name;
     private $status = SocketEventStatusEnum::OK;
     private $payload;
@@ -19,6 +20,16 @@ class SocketEvent {
     public function setUserId(/*int*/ $userId): void
     {
         $this->userId = $userId;
+    }
+
+    public function getFromUserId()
+    {
+        return $this->fromUserId;
+    }
+
+    public function setFromUserId($fromUserId): void
+    {
+        $this->fromUserId = $fromUserId;
     }
 
     public function getName(): string

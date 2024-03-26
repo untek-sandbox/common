@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
-//use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
 use Untek\Framework\Socket\Infrastructure\Dto\NewMessageEvent;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 use Untek\Framework\Socket\Infrastructure\Enums\WebSocketEventEnum;
@@ -28,7 +27,6 @@ class SocketDaemon implements SocketDaemonInterface
         private EventDispatcherInterface $eventDispatcher,
         private ConnectionRamStorage $connectionRepository,
         private TokenServiceInterface $tokenService,
-//        private ClientMessageHandlerInterface $clientMessageHanler,
         private string $localUrl,
         private string $clientUrl,
         private ?string $mode = null
@@ -98,14 +96,9 @@ class SocketDaemon implements SocketDaemonInterface
         try {
             $fromUserId = $this->connectionRepository->userIdByConnection($connection);
             $decoded = json_decode($data, true);
-            $decoded['userId'] = $fromUserId;
 
 
             if($decoded['type'] != 'ping') {
-                // variant 1
-//                /*$message = */$this->clientMessageHanler->onMessage($decoded);
-
-                // variant 2
                 $this->dispatchNewMessageEvent($fromUserId, $decoded);
             }
 
@@ -127,12 +120,9 @@ class SocketDaemon implements SocketDaemonInterface
     }
 
     private function dispatchNewMessageEvent($fromUserId, array $decoded) {
-        $payload = $decoded;
-        unset($payload['userId']);
-        unset($payload['type']);
-        $newMessageEvent = new NewMessageEvent($fromUserId, $decoded['type'], $payload);
+        $toUserId = !empty($decoded['toUserId']) ? $decoded['toUserId'] : null;
+        $newMessageEvent = new NewMessageEvent($fromUserId, $toUserId, $decoded['type'], $decoded['payload']);
         $this->eventDispatcher->dispatch($newMessageEvent, WebSocketEventEnum::NEW_MESSAGE);
-//        dump($newMessageEvent);
     }
 
     protected function sendConnectEventToClient($userId)
@@ -176,10 +166,15 @@ class SocketDaemon implements SocketDaemonInterface
     private function sendToWebSocket(SocketEvent $socketEvent, ConnectionInterface $connection)
     {
         $event = EntityHelper::toArray($socketEvent);
-        $json = json_encode([
+
+        $data = [
             'type' => $socketEvent->getName(),
-            'payload' => $socketEvent->getPayload(),
-        ]);
+        ];
+        if($socketEvent->getFromUserId()) {
+            $data['fromUserId'] = $socketEvent->getFromUserId();
+        }
+        $data['payload'] = $socketEvent->getPayload();
+        $json = json_encode($data);
         $connection->send($json);
     }
 }

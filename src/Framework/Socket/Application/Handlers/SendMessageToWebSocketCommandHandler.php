@@ -17,12 +17,9 @@ class SendMessageToWebSocketCommandHandler
     {
         $event = new SocketEvent();
         $event->setUserId($command->getToUserId());
-
-        $payload = $command->getPayload();
-        $payload['fromUserId'] = $command->getFromUserId();
-
+        $event->setFromUserId($command->getFromUserId());
         $event->setName($command->getName());
-        $event->setPayload($payload);
+        $event->setPayload($command->getPayload());
         $this->socketDaemon->sendMessageToTcp($event);
     }
 }
