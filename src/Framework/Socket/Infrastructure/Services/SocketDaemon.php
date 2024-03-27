@@ -145,15 +145,20 @@ class SocketDaemon implements SocketDaemonInterface
     {
         /** @var SocketEvent $eventEntity */
         $eventEntity = unserialize($data);
-        $userId = $eventEntity->getUserId();
-        // отправляем сообщение пользователю по userId
-        try {
-            $userConnections = $this->connectionRepository->allByUserId($userId);
-            foreach ($userConnections as $userConnection) {
-                $this->sendToWebSocket($eventEntity, $userConnection);
-                echo 'send ' . hash('crc32b', $data) . ' to ' . $userId . PHP_EOL;
+        $userIds = $eventEntity->getUserId();
+        if(!is_array($userIds)) {
+            $userIds = [$userIds];
+        }
+        foreach ($userIds as $userId) {
+            try {
+                // отправляем сообщение пользователю по userId
+                $userConnections = $this->connectionRepository->allByUserId($userId);
+                foreach ($userConnections as $userConnection) {
+                    $this->sendToWebSocket($eventEntity, $userConnection);
+                    echo 'send ' . hash('crc32b', $data) . ' to ' . $userId . PHP_EOL;
+                }
+            } catch (NotFoundException $e) {
             }
-        } catch (NotFoundException $e) {
         }
     }
 
