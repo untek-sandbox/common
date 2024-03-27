@@ -2,10 +2,11 @@
 
 namespace Untek\Framework\Socket\Infrastructure\Services;
 
+use Untek\Framework\Socket\Application\Services\MessageTransportInterface;
 use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 
-class SocketDaemonTest implements SocketDaemonInterface
+class SocketDaemonTest implements SocketDaemonInterface, MessageTransportInterface
 {
 
     public function __construct()

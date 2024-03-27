@@ -7,19 +7,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Untek\Framework\Socket\Application\Commands\SendMessageToWebSocketCommand;
-use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
-use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 
 class SendMessageToSocketCommand extends Command
 {
 
-    private SocketDaemonInterface $socketDaemon;
-
-    public function __construct(SocketDaemonInterface $socketDaemon, private CommandBusInterface $bus)
+    public function __construct(private CommandBusInterface $bus)
     {
         parent::__construct();
-        $this->socketDaemon = $socketDaemon;
     }
 
     public static function getDefaultName(): ?string

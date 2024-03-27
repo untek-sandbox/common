@@ -3,20 +3,20 @@
 namespace Untek\Framework\Socket\Infrastructure\Services;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
+use Untek\Framework\Socket\Application\Services\MessageTransportInterface;
 use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 use Untek\Framework\Socket\Domain\Enums\SocketEventEnum;
 use Untek\Framework\Socket\Infrastructure\Dto\NewMessageEvent;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 use Untek\Framework\Socket\Infrastructure\Enums\WebSocketEventEnum;
 use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
-use Untek\Model\Entity\Helpers\EntityHelper;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Workerman\Connection\ConnectionInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Workerman\Worker;
 
-class SocketDaemon implements SocketDaemonInterface
+class SocketDaemon implements SocketDaemonInterface, MessageTransportInterface
 {
 
     private $users = [];
@@ -57,7 +57,7 @@ class SocketDaemon implements SocketDaemonInterface
         }
     }
 
-    public function onWsStart()
+    public function onWsStart(): void
     {
         // создаём локальный tcp-сервер, чтобы отправлять на него сообщения из кода нашего сайта
         $this->tcpWorker = new Worker($this->localUrl);
@@ -79,53 +79,39 @@ class SocketDaemon implements SocketDaemonInterface
         return $this->tokenService->getIdentityIdByToken($credentials);
     }
 
-    public function onWsConnect(ConnectionInterface $connection)
+    public function onWsConnect(ConnectionInterface $connection): void
     {
-        $connection->onWebSocketConnect = function ($connection) {
+        $connection->onWebSocketConnect = function (ConnectionInterface $connection): void {
             $userId = $this->auth($_GET);
-            // при подключении нового пользователя сохраняем get-параметр, который же сами и передали со страницы сайта
             $this->connectionRepository->addConnection($userId, $connection);
-            // вместо get-параметра можно также использовать параметр из cookie, например $_COOKIE['PHPSESSID']
-
 //           $this->sendConnectEventToClient($userId);
         };
     }
 
-    public function onMessage(ConnectionInterface $connection, $data)
+    public function onMessage(ConnectionInterface $connection, $data): void
     {
         try {
             $fromUserId = $this->connectionRepository->userIdByConnection($connection);
             $decoded = json_decode($data, true);
-
-
-            if($decoded['type'] != 'ping') {
+            if ($decoded['type'] != 'ping') {
                 $this->dispatchNewMessageEvent($fromUserId, $decoded);
-            }
-
-            if (/*$message || */$this->mode == 'dev') {
-                /*$event = new SocketEvent();
-                $event->setUserId($fromUserId);
-                $event->setName(SocketEventEnum::CLIENT_MESSAGE_RECEIVED);
-                $event->setPayload([
-                    'data' => $data,
-                ]);
-                $this->sendToWebSocket($event, $connection);*/
-
-                if($decoded['type'] != 'ping') {
+                if ($this->mode == 'dev') {
                     $payloadForPrint = json_encode($decoded, JSON_UNESCAPED_UNICODE);
                     echo "Received message from user {$fromUserId}, payload: {$payloadForPrint}\n";
                 }
             }
-        } catch (NotFoundException $e) {}
+        } catch (NotFoundException $e) {
+        }
     }
 
-    private function dispatchNewMessageEvent($fromUserId, array $decoded) {
+    private function dispatchNewMessageEvent($fromUserId, array $decoded): void
+    {
         $toUserId = !empty($decoded['toUserId']) ? $decoded['toUserId'] : null;
         $newMessageEvent = new NewMessageEvent($fromUserId, $toUserId, $decoded['type'], $decoded['payload']);
         $this->eventDispatcher->dispatch($newMessageEvent, WebSocketEventEnum::NEW_MESSAGE);
     }
 
-    protected function sendConnectEventToClient($userId)
+    protected function sendConnectEventToClient($userId): void
     {
         $event = new SocketEvent();
         $event->setUserId($userId);
@@ -136,17 +122,17 @@ class SocketDaemon implements SocketDaemonInterface
         $this->sendToWebSocket($event, $connection);
     }
 
-    public function onWsClose(ConnectionInterface $connection)
+    public function onWsClose(ConnectionInterface $connection): void
     {
         $this->connectionRepository->remove($connection);
     }
 
-    public function onTcpMessage(ConnectionInterface $connection, string $data)
+    public function onTcpMessage(ConnectionInterface $connection, string $data): void
     {
         /** @var SocketEvent $eventEntity */
         $eventEntity = unserialize($data);
         $userIds = $eventEntity->getUserId();
-        if(!is_array($userIds)) {
+        if (!is_array($userIds)) {
             $userIds = [$userIds];
         }
         foreach ($userIds as $userId) {
@@ -168,12 +154,12 @@ class SocketDaemon implements SocketDaemonInterface
         Worker::runAll();
     }
 
-    private function sendToWebSocket(SocketEvent $socketEvent, ConnectionInterface $connection)
+    private function sendToWebSocket(SocketEvent $socketEvent, ConnectionInterface $connection): void
     {
         $data = [
             'type' => $socketEvent->getName(),
         ];
-        if($socketEvent->getFromUserId()) {
+        if ($socketEvent->getFromUserId()) {
             $data['fromUserId'] = $socketEvent->getFromUserId();
         }
         $data['payload'] = $socketEvent->getPayload();

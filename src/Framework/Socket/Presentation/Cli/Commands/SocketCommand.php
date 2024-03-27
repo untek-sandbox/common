@@ -12,12 +12,9 @@ use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
 class SocketCommand extends Command
 {
 
-    private SocketDaemonInterface $socketDaemon;
-
-    public function __construct(SocketDaemonInterface $socketDaemon)
+    public function __construct(private SocketDaemonInterface $socketDaemon)
     {
         parent::__construct();
-        $this->socketDaemon = $socketDaemon;
     }
 
     public static function getDefaultName(): ?string

@@ -4,7 +4,9 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 //use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
 //use Untek\Framework\Socket\Infrastructure\Services\ClientMessageHandler;
+use Untek\Framework\Socket\Application\Services\MessageTransportInterface;
 use Untek\Framework\Socket\Infrastructure\Services\SocketDaemon;
+use Untek\Framework\Socket\Infrastructure\Services\SocketDaemonTest;
 use Untek\Framework\Socket\Infrastructure\Storage\ConnectionRamStorage;
 use Untek\Framework\Socket\Presentation\Cli\Commands\SendMessageToSocketCommand;
 use Untek\Framework\Socket\Presentation\Cli\Commands\SocketCommand;
@@ -27,7 +29,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(ConnectionRamStorage::class, ConnectionRamStorage::class);
 
     if (getenv('APP_MODE') === 'test') {
-        $services->set(SocketDaemon::class, \Untek\Framework\Socket\Infrastructure\Services\SocketDaemonTest::class);
+        $services->set(SocketDaemon::class, SocketDaemonTest::class);
     } else {
         $services->set(SocketDaemon::class, SocketDaemon::class)
             ->args([
@@ -42,6 +44,7 @@ return static function (ContainerConfigurator $configurator): void {
     }
     
     $services->alias(SocketDaemonInterface::class, SocketDaemon::class);
+    $services->alias(MessageTransportInterface::class, SocketDaemon::class);
 
     $services->set(SocketCommand::class, SocketCommand::class)
         ->args([
@@ -51,14 +54,13 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(SendMessageToSocketCommand::class, SendMessageToSocketCommand::class)
         ->args([
-            service(SocketDaemonInterface::class),
             service(CommandBusInterface::class),
         ])
         ->tag('console.command');
 
     $services->set(SendMessageToWebSocketCommandHandler::class, SendMessageToWebSocketCommandHandler::class)
         ->args([
-            service(SocketDaemonInterface::class),
+            service(MessageTransportInterface::class),
         ])
         ->tag('cqrs.handler');
 };

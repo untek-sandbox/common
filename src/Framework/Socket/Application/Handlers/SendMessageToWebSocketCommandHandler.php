@@ -3,13 +3,13 @@
 namespace Untek\Framework\Socket\Application\Handlers;
 
 use Untek\Framework\Socket\Application\Commands\SendMessageToWebSocketCommand;
-use Untek\Framework\Socket\Application\Services\SocketDaemonInterface;
+use Untek\Framework\Socket\Application\Services\MessageTransportInterface;
 use Untek\Framework\Socket\Infrastructure\Dto\SocketEvent;
 
 class SendMessageToWebSocketCommandHandler
 {
 
-    public function __construct(private SocketDaemonInterface $socketDaemon)
+    public function __construct(private MessageTransportInterface $socketDaemon)
     {
     }
 
