@@ -17,19 +17,15 @@ class RelationLoader
     private $repository;
     private RelationConfigurator $relations;
 
+    public function __construct(ObjectRepository $repository)
+    {
+        $this->repository = $repository;
+        $this->relations = $repository->relations();
+    }
+
     public function getRepository(): ObjectRepository
     {
         return $this->repository;
-    }
-
-    public function setRepository(ObjectRepository $repository): void
-    {
-        $this->repository = $repository;
-    }
-
-    public function setRelations(RelationConfigurator $relations): void
-    {
-        $this->relations = $relations;
     }
 
     private function getRelationTree($with): array
