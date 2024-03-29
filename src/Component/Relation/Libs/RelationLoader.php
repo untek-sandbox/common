@@ -23,6 +23,29 @@ class RelationLoader
         return $this->container ?: ContainerHelper::getContainer();
     }
 
+    public function load(ObjectRepository $repository, array $collection, array $with = []): void
+    {
+        $relationDefinition = $repository->relations();
+        $relations = $relationDefinition->toArray();
+        if ($with) {
+            $relationTree = $this->getRelationTree($with);
+            foreach ($relationTree as $attribute => $relParts) {
+                if (empty($relations[$attribute])) {
+                    throw new InvalidArgumentException('Relation "' . $attribute . '" not defined in repository "' . get_class($repository) . '"!');
+                }
+                /** @var RelationInterface $relation */
+                $relation = $relations[$attribute];
+                $relation->setContainer($this->getContainer());
+                if (is_object($relation)) {
+                    if ($relParts) {
+                        $relation->relations = $relParts;
+                    }
+                    $relation->run($collection);
+                }
+            }
+        }
+    }
+
     private function getRelationTree($with): array
     {
         $relationTree = [];
@@ -49,28 +72,5 @@ class RelationLoader
             }
         }
         return $relationTree;
-    }
-
-    public function load(ObjectRepository $repository, array $collection, array $with = []): void
-    {
-        $relationDefinition = $repository->relations();
-        $relations = $relationDefinition->toArray();
-        if ($with) {
-            $relationTree = $this->getRelationTree($with);
-            foreach ($relationTree as $attribute => $relParts) {
-                if (empty($relations[$attribute])) {
-                    throw new InvalidArgumentException('Relation "' . $attribute . '" not defined in repository "' . get_class($repository) . '"!');
-                }
-                /** @var RelationInterface $relation */
-                $relation = $relations[$attribute];
-                $relation->setContainer($this->getContainer());
-                if (is_object($relation)) {
-                    if ($relParts) {
-                        $relation->relations = $relParts;
-                    }
-                    $relation->run($collection);
-                }
-            }
-        }
     }
 }
