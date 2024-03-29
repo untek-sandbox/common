@@ -4,28 +4,23 @@ namespace Untek\Component\Relation\Libs;
 
 use Doctrine\Persistence\ObjectRepository;
 use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
 use Untek\Component\Relation\Interfaces\RelationInterface;
-use Untek\Component\Relation\Libs\Types\BaseRelation;
-use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Container\Helpers\ContainerHelper;
-use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Repository\Interfaces\RelationConfigInterface;
 
 class RelationLoader
 {
 
-    private $repository;
-    private RelationConfigurator $relations;
-
-    public function __construct(ObjectRepository $repository)
+    public function __construct(
+        private ?ContainerInterface $container = null,
+    )
     {
-        $this->repository = $repository;
-        $this->relations = $repository->relations();
     }
 
-    public function getRepository(): ObjectRepository
+    private function getContainer(): ContainerInterface
     {
-        return $this->repository;
+        return $this->container ?: ContainerHelper::getContainer();
     }
 
     private function getRelationTree($with): array
@@ -56,20 +51,19 @@ class RelationLoader
         return $relationTree;
     }
 
-    public function loadRelations(array $collection, array $with = [])
+    public function load(ObjectRepository $repository, array $collection, array $with = []): void
     {
-        $relations = $this->relations->toArray();
+        $relationDefinition = $repository->relations();
+        $relations = $relationDefinition->toArray();
         if ($with) {
             $relationTree = $this->getRelationTree($with);
-
             foreach ($relationTree as $attribute => $relParts) {
                 if (empty($relations[$attribute])) {
-                    throw new InvalidArgumentException('Relation "' . $attribute . '" not defined in repository "' . get_class($this->repository) . '"!');
+                    throw new InvalidArgumentException('Relation "' . $attribute . '" not defined in repository "' . get_class($repository) . '"!');
                 }
                 /** @var RelationInterface $relation */
                 $relation = $relations[$attribute];
-                $relation->setContainer(ContainerHelper::getContainer());
-
+                $relation->setContainer($this->getContainer());
                 if (is_object($relation)) {
                     if ($relParts) {
                         $relation->relations = $relParts;

@@ -29,7 +29,7 @@ trait RepositoryRelationTrait
         if ($relations->isEmpty()) {
             return;
         }
-        $relationLoader = new RelationLoader($this);
-        $relationLoader->loadRelations($collection, $with);
+        $relationLoader = new RelationLoader();
+        $relationLoader->load($this, $collection, $with);
     }
 }
