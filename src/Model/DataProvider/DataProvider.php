@@ -23,7 +23,6 @@ class DataProvider
     /**
      * @param object $query
      * @return CollectionData
-     * @throws GreaterMaxPageException
      */
     public function findAll(object $query): CollectionData
     {
@@ -59,10 +58,10 @@ class DataProvider
 
         $pageCount = $this->getPageCount($limit, $count);
 
-        if ($pageNumber > $pageCount) {
+        /*if ($pageNumber > $pageCount) {
             $message = "This value should be less than or equal to {$pageCount}.";
             throw new GreaterMaxPageException($message);
-        }
+        }*/
 
         $page = new PageResponse();
         $page->setPageSize($limit);

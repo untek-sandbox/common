@@ -18,7 +18,6 @@ use Forecast\Map\Example\Blog\Application\Validators\GetPostListQueryValidator;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\DataProvider;
 use Untek\Model\DataProvider\Dto\CollectionData;
-use Untek\Model\DataProvider\Exceptions\GreaterMaxPageException;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 
 class <?= $className ?>
@@ -49,10 +48,6 @@ class <?= $className ?>
     protected function findAll(object $query): CollectionData
     {
         $dataProvider = new DataProvider($this->repository);
-        try {
-            return $dataProvider->findAll($query);
-        } catch (GreaterMaxPageException $e) {
-            UnprocessableEntityException::throwException($e->getMessage(), '[page][number]');
-        }
+        return $dataProvider->findAll($query);
     }
 }
