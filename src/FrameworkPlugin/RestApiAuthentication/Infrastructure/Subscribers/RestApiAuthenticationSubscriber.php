@@ -3,6 +3,7 @@
 namespace Untek\FrameworkPlugin\RestApiAuthentication\Infrastructure\Subscribers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
@@ -20,7 +21,7 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
         private IdentityRepositoryInterface $identityRepository,
         private TokenServiceInterface $tokenService,
         private TokenStorageInterface $tokenStorage,
-        private string $headerKeyName = 'Authorization'
+        private array $headerKeyNames = ['Authorization', 'Authorization-Token']
     )
     {
     }
@@ -34,7 +35,7 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event)
     {
-        $credentials = $event->getRequest()->headers->get($this->headerKeyName);
+        $credentials = $this->getTokenFromRequest($event->getRequest());
 
         if (empty($credentials)) {
             $token = new NullToken();
@@ -45,7 +46,7 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
         try {
             $userId = $this->tokenService->getIdentityIdByToken($credentials);
             $identity = $this->identityRepository->getUserById($userId);
-            if(!$identity->isEnabled()) {
+            if (!$identity->isEnabled()) {
                 throw new AuthenticationException('User is disabled.');
             }
 
@@ -54,5 +55,16 @@ class RestApiAuthenticationSubscriber implements EventSubscriberInterface
         } catch (UserNotFoundException | NotFoundException $e) {
             throw new AuthenticationException('Bad token');
         }
+    }
+
+    private function getTokenFromRequest(Request $request): ?string
+    {
+        foreach ($this->headerKeyNames as $headerKeyName) {
+            $credentials = $request->headers->get($headerKeyName);
+            if (!empty($credentials)) {
+                return $credentials;
+            }
+        }
+        return null;
     }
 }
