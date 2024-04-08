@@ -3,6 +3,7 @@
 namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Text\Libs\RandomString;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
@@ -10,6 +11,8 @@ use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Entities\TokenValueEntity;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Untek\User\Authentication\Domain\Model\Token;
+
+DeprecateHelper::hardThrow();
 
 class TokenRepository extends AbstractDoctrineCrudRepository implements TokenServiceInterface
 {

@@ -2,9 +2,12 @@
 
 namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\User\Authentication\Application\Services\UserAssignedRolesRepositoryInterface;
 use Untek\User\Authentication\Domain\Model\UserAssignedRoles;
+
+DeprecateHelper::hardThrow();
 
 class UserAssignedRolesRepository extends AbstractDoctrineCrudRepository implements UserAssignedRolesRepositoryInterface
 {

@@ -2,11 +2,14 @@
 
 namespace Untek\User\Authentication\Infrastructure\Persistence\Doctrine\Repository;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
+
+DeprecateHelper::hardThrow();
 
 class UserCredentialRepository extends AbstractDoctrineCrudRepository implements CredentialServiceInterface
 {

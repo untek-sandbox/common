@@ -6,12 +6,15 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Untek\Component\Relation\Interfaces\RelationConfigInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\User\Authentication\Application\Services\UserAssignedRolesRepositoryInterface;
 use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 use Untek\User\Authentication\Infrastructure\Persistence\Relation\IdentityRelation;
 use Untek\User\Identity\Domain\Model\InMemoryUser;
+
+DeprecateHelper::hardThrow();
 
 class IdentityRepository extends AbstractDoctrineCrudRepository implements IdentityRepositoryInterface, ObjectRepository
 {
