@@ -5,7 +5,7 @@ namespace Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Component\Package\Helpers\PackageHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Framework\Console\Infrastructure\Validators\ClassNameValidator;
 use Untek\Framework\Console\Infrastructure\Validators\EnglishValidator;

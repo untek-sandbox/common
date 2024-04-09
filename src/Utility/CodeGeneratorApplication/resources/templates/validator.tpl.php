@@ -24,13 +24,14 @@ class <?= $className ?> extends AbstractObjectValidator
     public function getConstraint(): Constraint
     {
         return new Assert\Collection([
+<?php if ($properties): ?>
             'fields' => [
+<?php endif; ?>
 <?php foreach ($properties as $attribute):
     $propertyName = $attribute->getName();
     $propertyType = $attribute->getType()->generate();
     $reflection = new \Laminas\Code\Reflection\PropertyReflection($attribute->getType(), 'nullable');
     $nullable = $reflection->getValue($attribute->getType());
-//    dd($nullable);
     ?>
                 '<?= $propertyName ?>' => [
                     new Assert\NotBlank(),
@@ -48,7 +49,9 @@ class <?= $className ?> extends AbstractObjectValidator
 
                 ],
 <?php endforeach; ?>
+<?php if ($properties): ?>
             ]
+<?php endif; ?>
         ]);
     }
 }

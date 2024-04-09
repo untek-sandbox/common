@@ -2,7 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators;
 
-use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Component\Package\Helpers\PackageHelper;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Generator\CodeGenerator;

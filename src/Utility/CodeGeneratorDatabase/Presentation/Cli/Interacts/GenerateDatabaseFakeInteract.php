@@ -5,7 +5,7 @@ namespace Untek\Utility\CodeGeneratorDatabase\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\DeprecateHelper;
-use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Component\Package\Helpers\PackageHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorDatabase\Application\Commands\GenerateDatabaseCommand;
 use Untek\Utility\CodeGenerator\Application\Interfaces\InteractInterface;

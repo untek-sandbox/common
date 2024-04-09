@@ -83,14 +83,4 @@ return static function (ContainerConfigurator $configurator): void {
                 service(PersistingStoreInterface::class),
             ]
         );
-
-    $services->set(LongPullCommand::class, LongPullCommand::class)
-        ->args(
-            [
-                service(LongPullService::class),
-                service(ConfigRepository::class),
-                service(LockFactory::class),
-                service(ContainerInterface::class),
-            ]
-        );
 };

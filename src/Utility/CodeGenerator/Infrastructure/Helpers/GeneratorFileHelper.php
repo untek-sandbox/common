@@ -3,7 +3,7 @@
 namespace Untek\Utility\CodeGenerator\Infrastructure\Helpers;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Component\Package\Helpers\PackageHelper;
 use Untek\Core\FileSystem\Helpers\FileHelper;
 
 class GeneratorFileHelper

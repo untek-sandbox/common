@@ -5,7 +5,7 @@ namespace Untek\Utility\CodeGeneratorRestApi\Presentation\Cli\Interacts;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Untek\Core\Code\Helpers\DeprecateHelper;
-use Untek\Core\Code\Helpers\PackageHelper;
+use Untek\Component\Package\Helpers\PackageHelper;
 use Untek\Framework\Console\Symfony4\Style\SymfonyStyle;
 use Untek\Utility\CodeGeneratorApplication\Application\Enums\TypeEnum;
 use Untek\Utility\CodeGeneratorRestApi\Application\Commands\GenerateRestApiCommand;
