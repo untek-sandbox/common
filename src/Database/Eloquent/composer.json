@@ -1,0 +1,23 @@
+{
+  "name": "untek-database/eloquent",
+  "type": "extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ZnDeveloper",
+      "email": "untek.developer@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "untek-database/base": "0.1.x-dev",
+    "../../../../../doctrine/dbal": "^2.10",
+    "../../../../../illuminate/database": "7.30.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Untek\\Database\\Eloquent\\": "src",
+      "Untek\\Database\\Eloquent\\Tests\\": "tests"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "untek-kaz/iin",
+  "type": "extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Zn Developer",
+      "email": "zndev@ya.ru"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "untek-pack/core": "0.x-dev",
+    "untek-pack/domain": "0.x-dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Untek\\Kaz\\Iin\\": "src",
+      "Untek\\Kaz\\Iin\\Tests\\": "tests"
+    }
+  }
+}
