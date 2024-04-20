@@ -2,6 +2,10 @@
 
 namespace Untek\Database\Base\Hydrator;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
+
 class DefaultHydrator extends AbstractHydrator implements HydratorInterface
 {
 

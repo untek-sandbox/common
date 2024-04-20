@@ -2,7 +2,10 @@
 
 namespace Untek\Database\Base\Hydrator;
 
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Model\Entity\Helpers\EntityHelper;
+
+DeprecateHelper::hardThrow();
 
 interface HydratorInterface
 {

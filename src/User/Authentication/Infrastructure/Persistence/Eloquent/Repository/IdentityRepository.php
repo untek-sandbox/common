@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Untek\Component\Relation\Interfaces\RelationConfigInterface;
-use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Doctrine\Domain\Base\AbstractDoctrineCrudRepository;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use Untek\Database\Eloquent\Infrastructure\Abstract\AbstractEloquentCrudRepository;
