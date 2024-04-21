@@ -8,12 +8,14 @@ use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Database\Base\Hydrator\Traits\HydratorTrait;
+use Untek\Database\Base\Hydrator\Traits\NormalizerTrait;
 
 abstract class AbstractMemoryRepository implements ObjectRepository
 {
 
     use RepositoryRelationTrait;
     use HydratorTrait;
+    use NormalizerTrait;
 
     abstract protected function getItems(): array;
 

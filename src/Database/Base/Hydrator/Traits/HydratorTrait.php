@@ -18,10 +18,10 @@ trait HydratorTrait
         return new DefaultHydrator($this->getClassName());
     }*/
 
-    protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
+    /*protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
     {
         return new DatabaseItemNormalizer();
-    }
+    }*/
 
     protected function dehydrate(object $entity): array
     {
