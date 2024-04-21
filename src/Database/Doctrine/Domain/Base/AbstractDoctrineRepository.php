@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Base\Hydrator\Traits\HydratorTrait;
+use Untek\Database\Base\Hydrator\Traits\NormalizerTrait;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
 abstract class AbstractDoctrineRepository implements ObjectRepository
@@ -16,6 +17,7 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
 
     use RepositoryRelationTrait;
     use HydratorTrait;
+    use NormalizerTrait;
 
     private Connection $connection;
 
