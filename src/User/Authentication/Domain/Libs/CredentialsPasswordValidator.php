@@ -3,6 +3,7 @@
 namespace Untek\User\Authentication\Domain\Libs;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\EventDispatcher\Traits\EventDispatcherTrait;
 use Untek\Crypt\Base\Domain\Exceptions\InvalidPasswordException;
@@ -17,7 +18,8 @@ class CredentialsPasswordValidator
 
     public function __construct(
         private PasswordService $passwordService,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        private TranslatorInterface $translator,
     ) {
         $this->setEventDispatcher($eventDispatcher);
     }
@@ -30,7 +32,7 @@ class CredentialsPasswordValidator
                 return $credentialEntity;
             }
         }
-        throw new BadPasswordException('Incorrect password');
+        throw new BadPasswordException($this->translator->trans('incorrectPassword', [], 'user'));
     }
 
     protected function isValidPasswordByCredential(CredentialEntity $credentialEntity, string $password): bool

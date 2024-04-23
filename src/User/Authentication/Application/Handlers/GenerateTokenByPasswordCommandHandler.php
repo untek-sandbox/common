@@ -66,7 +66,7 @@ class GenerateTokenByPasswordCommandHandler
         $userEntity = $this->getIdentityByForm($command);
 
         if(!$userEntity->isEnabled()) {
-            throw new BlockedUserException('This user is blocked.');
+            throw new BlockedUserException($this->translator->trans('userBlocked', [], 'user'));
         }
 
         $this->logger->info('auth tokenByForm');
@@ -93,7 +93,7 @@ class GenerateTokenByPasswordCommandHandler
         $credentials = $this->credentialService->findByCredential($command->getLogin(), $this->credentialTypes);
 
         if(empty($credentials)) {
-            throw new UserNotFoundException('User not found.');
+            throw new UserNotFoundException($this->translator->trans('userNotFound', [], 'user'));
         }
 
         $credentialEntity = $this->credentialsPasswordValidator->isValidPassword(

@@ -107,6 +107,7 @@ return static function (ContainerConfigurator $configurator): void {
             [
                 service(PasswordService::class),
                 service(EventDispatcherInterface::class),
+                service(TranslatorInterface::class),
             ]
         );
 
