@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\User\Authentication\Application\Handlers\GenerateTokenByPasswordCommandHandler;
 use Untek\User\Authentication\Presentation\Http\RestApi\Controllers\GenerateTokenByPasswordController;
@@ -50,6 +51,7 @@ return static function (ContainerConfigurator $configurator): void {
         service(ValidatorInterface::class),
 //        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
         service(IdentityRepositoryInterface::class),
+        service(TranslatorInterface::class),
         ['login', 'phone'],
     ])
         ->tag('cqrs.handler')

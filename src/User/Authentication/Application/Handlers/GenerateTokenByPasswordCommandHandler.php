@@ -3,6 +3,7 @@
 namespace Untek\User\Authentication\Application\Handlers;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
 use Untek\User\Authentication\Application\Validators\GenerateTokenByPasswordCommandValidator;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
@@ -44,6 +45,7 @@ class GenerateTokenByPasswordCommandHandler
         private LoggerInterface $logger,
         private ValidatorInterface $validator,
         private IdentityRepositoryInterface $identityRepository,
+        private TranslatorInterface $translator,
         private array $credentialTypes
 //        EventDispatcherInterface $eventDispatcher,
 
@@ -58,7 +60,7 @@ class GenerateTokenByPasswordCommandHandler
      */
     public function __invoke(GenerateTokenByPasswordCommand $command): Token
     {
-        $validator = new GenerateTokenByPasswordCommandValidator();
+        $validator = new GenerateTokenByPasswordCommandValidator($this->translator);
         $validator->validate($command);
 
         $userEntity = $this->getIdentityByForm($command);
