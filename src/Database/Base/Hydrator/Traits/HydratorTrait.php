@@ -23,6 +23,12 @@ trait HydratorTrait
         return new DatabaseItemNormalizer();
     }*/
 
+    /**
+     * @param object $entity
+     * @return array
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @todo rename to normalize
+     */
     protected function dehydrate(object $entity): array
     {
         return $this->getNormalizer()->normalize($entity);
@@ -33,6 +39,12 @@ trait HydratorTrait
         }*/
     }
 
+    /**
+     * @param array $item
+     * @return object
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @todo rename to denormalize
+     */
     protected function hydrate(array $item): object
     {
         return $this->getNormalizer()->denormalize($item, $this->getClassName());
@@ -43,6 +55,12 @@ trait HydratorTrait
         }*/
     }
 
+    /**
+     * @param array $data
+     * @return array
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @todo rename to denormalizeCollection
+     */
     protected function hydrateCollection(array $data): array
     {
         foreach ($data as $key => $item) {
