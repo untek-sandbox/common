@@ -61,7 +61,7 @@ class ControllerAccessChecker
 
     protected function createAuthenticationException(\Throwable $previous = null): AuthenticationException
     {
-        $message = $this->translator->trans('userNotAuthenticated', [], 'user');
+        $message = $this->translator->trans('unauthorizedMessage', [], 'user');
         $exception = new AuthenticationException($message, 0, $previous);
 //        $exception->setToken($this->getToken());
         return $exception;
