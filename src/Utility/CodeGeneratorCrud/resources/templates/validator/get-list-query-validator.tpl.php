@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Positive;
 use Untek\Model\Validator\Libs\AbstractObjectValidator;
+use Untek\Model\Pagination\Factories\PageConstraintFactory;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class <?= $className ?> extends AbstractObjectValidator
@@ -58,7 +59,7 @@ class <?= $className ?> extends AbstractObjectValidator
                 ]),
                 'sort' => new SortConstraint(['id']),
                 'expand' => new ExpandConstraint([]),
-                'page' => new PageConstraint(20),
+                'page' => PageConstraintFactory::getConstraint(20),
             ]
         ]);
     }

@@ -66,6 +66,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
         ->args([
             service(ContainerInterface::class),
+            service(TranslatorInterface::class),
         ]);
 
     /*$services->set(AuthIdentityController::class, AuthIdentityController::class)

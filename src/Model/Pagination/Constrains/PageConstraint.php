@@ -3,6 +3,9 @@
 namespace Untek\Model\Pagination\Constrains;
 
 use Symfony\Component\Validator\Constraint;
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
 
 class PageConstraint extends Constraint
 {

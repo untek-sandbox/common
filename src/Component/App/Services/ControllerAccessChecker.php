@@ -9,11 +9,13 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ControllerAccessChecker
 {
     public function __construct(
         protected ContainerInterface $container,
+        private TranslatorInterface $translator,
 //        private TokenStorageInterface $tokenStorage,
 //        private AccessDecisionManagerInterface $accessDecisionManager
     ) {
@@ -50,15 +52,16 @@ class ControllerAccessChecker
         }
     }
 
-    public function denyAccessUnlessAuthenticated(string $message = 'User not authenticated.'): void
+    public function denyAccessUnlessAuthenticated(): void
     {
         if($this->getToken() == null || $this->getToken()->getUser() == null) {
-            throw $this->createAuthenticationException($message);
+            throw $this->createAuthenticationException();
         }
     }
 
-    protected function createAuthenticationException(string $message = 'User not authenticated.', \Throwable $previous = null): AuthenticationException
+    protected function createAuthenticationException(\Throwable $previous = null): AuthenticationException
     {
+        $message = $this->translator->trans('userNotAuthenticated', [], 'user');
         $exception = new AuthenticationException($message, 0, $previous);
 //        $exception->setToken($this->getToken());
         return $exception;

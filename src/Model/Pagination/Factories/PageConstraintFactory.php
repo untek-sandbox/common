@@ -1,19 +1,16 @@
 <?php
 
-namespace Untek\Model\Pagination\Constrains;
+namespace Untek\Model\Pagination\Factories;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\Positive;
-use Untek\Core\Code\Helpers\DeprecateHelper;
 
-DeprecateHelper::hardThrow();
-
-class PageConstraintValidator extends AbstractConstraintValidator
+class PageConstraintFactory
 {
 
-    protected function getConstraint(Constraint $constraint): Constraint
+    public static function getConstraint($max): Constraint
     {
         return new Collection([
             'fields' => [
@@ -22,7 +19,7 @@ class PageConstraintValidator extends AbstractConstraintValidator
                 ],
                 'size' => [
                     new Positive(),
-                    new LessThanOrEqual($constraint->max)
+                    new LessThanOrEqual($max)
                 ],
             ]
         ], null, null, null, true);

@@ -9,8 +9,8 @@ return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public();
     $parameters = $configurator->parameters();
 
-    $services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
+    /*$services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
         ->args([
             service(ContainerInterface::class),
-        ]);
+        ]);*/
 };
