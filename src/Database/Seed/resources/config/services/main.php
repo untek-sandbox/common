@@ -30,18 +30,6 @@ return static function (ContainerConfigurator $configurator): void {
         ->tag('cqrs.handler')
     ;
     
-    $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
-    ->args([
-        service(CommandBusInterface::class),
-    ])
-        ->tag('console.command');
-
-    $services->set(ExportSeedCliCommand::class, ExportSeedCliCommand::class)
-        ->args([
-            service(CommandBusInterface::class),
-        ])
-        ->tag('console.command');
-
     $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
     ->args([
         service(Connection::class),

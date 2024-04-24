@@ -18,24 +18,16 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public();
-
-    $services->set(SchemaRepository::class, SchemaRepository::class)
+    
+    $services->set(DownCommand::class, DownCommand::class)
         ->args([
-            service(Connection::class)
-        ]);
+            service(MigrationService::class)
+        ])
+        ->tag('console.command');
 
-    $services->set(SourceRepository::class, SourceRepository::class);
-
-    $services->set(HistoryRepository::class, HistoryRepository::class)
+    $services->set(UpCommand::class, UpCommand::class)
         ->args([
-            service(EntityManagerInterface::class),
-            service(Manager::class),
-            service(ContainerInterface::class),
-        ]);
-
-    $services->set(MigrationService::class, MigrationService::class)
-        ->args([
-            service(SourceRepository::class),
-            service(HistoryRepository::class),
-        ]);
+            service(MigrationService::class)
+        ])
+        ->tag('console.command');
 };
