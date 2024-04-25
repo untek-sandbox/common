@@ -38,6 +38,7 @@ class GenerateTokenByPasswordCommandHandler
     }*/
 
     public function __construct(
+        private TranslatorInterface $translator,
         private UserProviderInterface $userProvider,
         private CredentialsPasswordValidator $credentialsPasswordValidator,
         private TokenServiceInterface $tokenService,
@@ -45,7 +46,6 @@ class GenerateTokenByPasswordCommandHandler
         private LoggerInterface $logger,
         private ValidatorInterface $validator,
         private IdentityRepositoryInterface $identityRepository,
-        private TranslatorInterface $translator,
         private array $credentialTypes
 //        EventDispatcherInterface $eventDispatcher,
 

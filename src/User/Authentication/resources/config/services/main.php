@@ -43,6 +43,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(GenerateTokenByPasswordCommandHandler::class, GenerateTokenByPasswordCommandHandler::class)
     ->args([
+        service(TranslatorInterface::class),
         service(UserProviderInterface::class),
         service(CredentialsPasswordValidator::class),
         service(TokenServiceInterface::class),
@@ -51,7 +52,6 @@ return static function (ContainerConfigurator $configurator): void {
         service(ValidatorInterface::class),
 //        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
         service(IdentityRepositoryInterface::class),
-        service(TranslatorInterface::class),
         ['login', 'phone'],
     ])
         ->tag('cqrs.handler')
