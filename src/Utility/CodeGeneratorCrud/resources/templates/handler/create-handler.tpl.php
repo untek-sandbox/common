@@ -15,13 +15,15 @@ namespace <?= $namespace ?>;
 use Untek\Model\Contract\Interfaces\RepositoryCreateInterface;
 use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class <?= $className ?>
 
 {
 
     public function __construct(
-        private RepositoryCreateInterface $repository
+        private TranslatorInterface $translator,
+        private RepositoryCreateInterface $repository,
     )
     {
     }
@@ -33,7 +35,7 @@ class <?= $className ?>
      */
     public function __invoke(\<?= $commandClassName ?> $command): object
     {
-        $validator = new \<?= $validatorClassName ?>();
+        $validator = new \<?= $validatorClassName ?>($this->translator);
         $validator->validate($command);
 
         $entity = new \<?= $modelClass ?>();

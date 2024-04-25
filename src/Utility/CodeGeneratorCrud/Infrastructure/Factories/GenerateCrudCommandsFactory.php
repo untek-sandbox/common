@@ -12,6 +12,7 @@ use Untek\Utility\CodeGeneratorCrud\Infrastructure\Enums\CrudOperationEnum;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Factories\GenerateRestApiCommandFactory;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\ControllerGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RestApiSchemeGenerator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GenerateCrudCommandsFactory
 {

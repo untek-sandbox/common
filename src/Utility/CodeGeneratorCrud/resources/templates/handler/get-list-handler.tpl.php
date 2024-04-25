@@ -19,12 +19,16 @@ use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\DataProvider;
 use Untek\Model\DataProvider\Dto\CollectionData;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class <?= $className ?>
 
 {
 
-    public function __construct(private ObjectRepository|RepositoryCountByInterface $repository)
+    public function __construct(
+        private TranslatorInterface $translator,
+        private ObjectRepository|RepositoryCountByInterface $repository,
+    )
     {
     }
 
@@ -35,7 +39,7 @@ class <?= $className ?>
      */
     public function __invoke(\<?= $commandClassName ?> $query)
     {
-        $validator = new \<?= $validatorClassName ?>();
+        $validator = new \<?= $validatorClassName ?>($this->translator);
         $validator->validate($query);
         return $this->findAll($query);
     }

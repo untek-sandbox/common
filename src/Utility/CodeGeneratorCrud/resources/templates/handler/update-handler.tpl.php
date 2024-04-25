@@ -17,13 +17,15 @@ use Untek\Core\Instance\Helpers\PropertyHelper;
 use Untek\Model\Contract\Interfaces\RepositoryFindOneByIdInterface;
 use Untek\Model\Contract\Interfaces\RepositoryUpdateInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class <?= $className ?>
 
 {
 
     public function __construct(
-        private RepositoryFindOneByIdInterface|RepositoryUpdateInterface $repository
+        private TranslatorInterface $translator,
+        private RepositoryFindOneByIdInterface|RepositoryUpdateInterface $repository,
     )
     {
     }
@@ -35,7 +37,7 @@ class <?= $className ?>
      */
     public function __invoke(\<?= $commandClassName ?> $command): void
     {
-        $validator = new \<?= $validatorClassName ?>();
+        $validator = new \<?= $validatorClassName ?>($this->translator);
         $validator->validate($command);
 
         $entity = $this->repository->findOneById($command->getId());

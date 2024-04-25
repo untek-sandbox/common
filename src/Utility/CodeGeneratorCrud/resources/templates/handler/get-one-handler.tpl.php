@@ -15,12 +15,16 @@ namespace <?= $namespace ?>;
 use Untek\Model\Contract\Interfaces\RepositoryFindOneByIdInterface;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class <?= $className ?>
 
 {
 
-    public function __construct(private RepositoryFindOneByIdInterface $repository)
+    public function __construct(
+        private TranslatorInterface $translator,
+        private RepositoryFindOneByIdInterface $repository,
+    )
     {
     }
 
@@ -32,7 +36,7 @@ class <?= $className ?>
      */
     public function __invoke(\<?= $commandClassName ?> $query): object
     {
-        $validator = new \<?= $validatorClassName ?>();
+        $validator = new \<?= $validatorClassName ?>($this->translator);
         $validator->validate($query);
         return $this->repository->findOneById($query->getId(), $query->getExpand());
     }
