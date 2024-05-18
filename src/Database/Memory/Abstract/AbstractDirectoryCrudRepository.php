@@ -34,7 +34,7 @@ abstract class AbstractDirectoryCrudRepository extends AbstractMemoryRepository 
             foreach ($files as $file) {
                 $fileName = $directory . '/' . $file;
                 $item = (new StoreFile($fileName))->load();
-                $this->collection[] = $this->hydrate($item);
+                $this->collection[] = $this->denormalize($item);
             }
         }
     }

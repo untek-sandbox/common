@@ -16,7 +16,7 @@ abstract class AbstractFileCrudRepository extends AbstractMemoryCrudRepository
             $items = $this->getStoreFile()->load();
             if($items) {
                 foreach ($items as $item) {
-                    $this->collection[] = $this->hydrate($item);
+                    $this->collection[] = $this->denormalize($item);
                 }
             }
         }
