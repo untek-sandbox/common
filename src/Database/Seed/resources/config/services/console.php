@@ -7,7 +7,6 @@ use Untek\Database\Base\Domain\Repositories\Eloquent\SchemaRepository;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Untek\Database\Seed\Presentation\Cli\Commands\ImportSeedCliCommand;
-use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\Database\Seed\Application\Handlers\GetTablesQueryHandler;
 use Untek\Database\Seed\Presentation\Cli\Commands\ExportSeedCliCommand;
