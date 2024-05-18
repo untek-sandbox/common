@@ -43,19 +43,4 @@ class UserCredentialRepository extends AbstractEloquentCrudRepository implements
         }
         return $this->findBy($criteria);
     }
-
-    protected function hydrate(array $item): object
-    {
-//        $item['identity_id'] = $item['user_id'];
-        return parent::denormalize($item);
-    }
-
-    protected function dehydrate(object $entity): array
-    {
-        $item = parent::normalize($entity);
-//        $item['user_id'] = $item['identity_id'];
-//        unset($item['identity_id']);
-        $item['created_at'] = (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601);
-        return $item;
-    }
 }
