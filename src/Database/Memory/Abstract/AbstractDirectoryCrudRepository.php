@@ -52,7 +52,7 @@ abstract class AbstractDirectoryCrudRepository extends AbstractMemoryRepository 
         $entity->setId($id);
         $directory = $this->directory;
         $fileName = $directory . '/' . $id . '.json';
-        $itemsRaw = $this->dehydrate($entity);
+        $itemsRaw = $this->normalize($entity);
         $storeFile = new StoreFile($fileName);
         $storeFile->save($itemsRaw);
     }
