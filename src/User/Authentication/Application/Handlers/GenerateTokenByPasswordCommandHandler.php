@@ -100,7 +100,7 @@ class GenerateTokenByPasswordCommandHandler
             $credentials,
             $command->getPassword()
         );
-        $userEntity = $this->identityRepository->getUserById($credentialEntity->getIdentityId());
+        $userEntity = $this->identityRepository->getUserById($credentialEntity->getUserId());
 
         /*if (!$isValidPassword) {
             $this->logger->warning('auth verificationPassword');

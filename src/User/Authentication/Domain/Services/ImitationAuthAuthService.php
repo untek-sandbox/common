@@ -47,7 +47,7 @@ class ImitationAuthAuthService extends AuthService implements ImitationAuthServi
             UnprocessableHelper::throwItem('login', $message);
         }
 
-        $userEntity = $this->findOneIdentityById($credentialEntity->getIdentityId());
+        $userEntity = $this->findOneIdentityById($credentialEntity->getUserId());
 //        $userEntity = $this->identityRepository->findOneById($credentialEntity->getIdentityId());
         return $userEntity;
     }

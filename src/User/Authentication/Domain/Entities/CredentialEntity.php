@@ -9,7 +9,7 @@ use Untek\Model\Entity\Interfaces\EntityIdInterface;
 use Untek\Model\Entity\Interfaces\UniqueInterface;
 use Untek\Model\Validator\Interfaces\ValidationByMetadataInterface;
 
-class CredentialEntity implements ValidationByMetadataInterface, EntityIdInterface, UniqueInterface
+class CredentialEntity //implements ValidationByMetadataInterface, EntityIdInterface, UniqueInterface
 {
 
     private $id = null;
@@ -31,21 +31,6 @@ class CredentialEntity implements ValidationByMetadataInterface, EntityIdInterfa
         $this->createdAt = new DateTime();
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('identityId', new Assert\NotBlank);
-        $metadata->addPropertyConstraint('type', new Assert\NotBlank);
-        $metadata->addPropertyConstraint('credential', new Assert\NotBlank);
-        $metadata->addPropertyConstraint('validation', new Assert\NotBlank);
-    }
-
-    public function unique(): array
-    {
-        return [
-            ['type', 'credential']
-        ];
-    }
-
     public function setId($value) : void
     {
         $this->id = $value;
@@ -56,12 +41,12 @@ class CredentialEntity implements ValidationByMetadataInterface, EntityIdInterfa
         return $this->id;
     }
 
-    public function setIdentityId($value) : void
+    public function setUserId($value) : void
     {
         $this->identityId = $value;
     }
 
-    public function getIdentityId()
+    public function getUserId()
     {
         return $this->identityId;
     }

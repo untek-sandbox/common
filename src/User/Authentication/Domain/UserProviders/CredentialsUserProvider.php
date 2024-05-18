@@ -55,7 +55,7 @@ class CredentialsUserProvider extends BaseUserProvider implements UserProviderIn
                 $identifier,
                 $this->types
             );
-            $userId = $credentialsEntity->getIdentityId();
+            $userId = $credentialsEntity->getUserId();
             /** @var IdentityEntityInterface $userEntity */
             $userEntity = $this->findOneIdentityById($userId);
         } catch (NotFoundException $e) {
