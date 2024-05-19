@@ -10,7 +10,6 @@ use Illuminate\Database\Query\Builder;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
 use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Database\Base\Domain\Traits\TableNameTrait;
-use Untek\Database\Base\Hydrator\Traits\HydratorTrait;
 use Untek\Database\Base\Hydrator\Traits\NormalizerTrait;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use Untek\Database\Eloquent\Domain\Traits\EloquentTrait;
@@ -22,7 +21,6 @@ abstract class AbstractEloquentRepository implements ObjectRepository
     use RepositoryRelationTrait;
     use EloquentTrait;
     use TableNameTrait;
-    use HydratorTrait;
     use NormalizerTrait;
 
     private Connection $connection;

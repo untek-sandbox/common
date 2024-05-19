@@ -43,23 +43,6 @@ class TokenRepository extends AbstractEloquentCrudRepository implements TokenSer
         throw new NotFoundException('Token not found.');
     }
 
-//    protected function hydrate(array $item): object
-//    {
-//        $token = new Token($item['user_id'], $item['value'], $item['type']);
-//        return $token;
-//    }
-//
-//    protected function dehydrate(object $entity): array
-//    {
-//        /** @var Token $entity */
-//        return [
-//            'user_id' => $entity->getIdentityId(),
-//            'type' => $entity->getType(),
-//            'value' => $entity->getValue(),
-//            'created_at' => (new \DateTime())->format(\DateTime::ISO8601),
-//        ];
-//    }
-
     protected function denormalize(array $item): object
     {
         $token = new Token($item['user_id'], $item['value'], $item['type']);
@@ -76,7 +59,6 @@ class TokenRepository extends AbstractEloquentCrudRepository implements TokenSer
             'created_at' => (new \DateTime())->format(\DateTime::ISO8601),
         ];
     }
-
 
     protected function generateToken(UserInterface $identityEntity): string
     {

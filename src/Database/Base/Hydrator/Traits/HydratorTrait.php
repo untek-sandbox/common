@@ -4,7 +4,10 @@ namespace Untek\Database\Base\Hydrator\Traits;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Database\Base\Hydrator\DatabaseItemNormalizer;
+
+DeprecateHelper::hardThrow();
 
 trait HydratorTrait
 {
