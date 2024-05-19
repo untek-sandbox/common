@@ -45,21 +45,21 @@ class IdentityRepository extends AbstractEloquentCrudRepository implements Ident
         return $identity;
     }
 
-    protected function hydrate(array $item): object
-    {
-        return new InMemoryUser($item['id'], $item['username'], [], $item['status_id'] == 100, $item['avatar'] ?? null);
-    }
-
-    protected function dehydrate(object $entity): array
-    {
-        /** @var InMemoryUser $entity */
-        return [
-            'username' => $entity->getUsername(),
-            'avatar' => $entity->getAvatar(),
-            'status_id' => $entity->isEnabled() ? 100 : 0,
-            'created_at' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601),
-        ];
-    }
+//    protected function hydrate(array $item): object
+//    {
+//        return new InMemoryUser($item['id'], $item['username'], [], $item['status_id'] == 100, $item['avatar'] ?? null);
+//    }
+//
+//    protected function dehydrate(object $entity): array
+//    {
+//        /** @var InMemoryUser $entity */
+//        return [
+//            'username' => $entity->getUsername(),
+//            'avatar' => $entity->getAvatar(),
+//            'status_id' => $entity->isEnabled() ? 100 : 0,
+//            'created_at' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601),
+//        ];
+//    }
 
     protected function denormalize(array $item): object
     {

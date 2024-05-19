@@ -17,10 +17,10 @@ trait HydratorTrait
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      * @todo rename to normalize
      */
-    protected function dehydrate(object $entity): array
+    /*protected function dehydrate(object $entity): array
     {
         return $this->getNormalizer()->normalize($entity);
-    }
+    }*/
 
     /**
      * @param array $item
@@ -28,10 +28,10 @@ trait HydratorTrait
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      * @todo rename to denormalize
      */
-    protected function hydrate(array $item): object
+    /*protected function hydrate(array $item): object
     {
         return $this->getNormalizer()->denormalize($item, $this->getClassName());
-    }
+    }*/
 
     /**
      * @param array $data
@@ -39,11 +39,11 @@ trait HydratorTrait
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      * @todo rename to denormalizeCollection
      */
-    protected function hydrateCollection(array $data): array
+    /*protected function hydrateCollection(array $data): array
     {
         foreach ($data as $key => $item) {
             $data[$key] = $this->hydrate((array)$item);
         }
         return $data;
-    }
+    }*/
 }

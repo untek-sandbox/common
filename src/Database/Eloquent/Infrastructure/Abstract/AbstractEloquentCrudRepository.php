@@ -78,7 +78,7 @@ abstract class AbstractEloquentCrudRepository extends AbstractEloquentRepository
         $existEntity = $this->findOneById($entity->getId());
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->where('id', OperatorEnum::EQUAL, $existEntity->getId());
-        $data = $this->dehydrate($entity);
+        $data = $this->normalize($entity);
         $queryBuilder->update($data);
     }
 
@@ -89,7 +89,7 @@ abstract class AbstractEloquentCrudRepository extends AbstractEloquentRepository
     public function create(object $entity): void
     {
         $queryBuilder = $this->createQueryBuilder();
-        $data = $this->dehydrate($entity);
+        $data = $this->normalize($entity);
         unset($data['id']);
         $lastId = $queryBuilder->insertGetId($data);
         if ($lastId) {
