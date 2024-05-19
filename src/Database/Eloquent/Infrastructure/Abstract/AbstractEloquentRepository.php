@@ -107,7 +107,7 @@ abstract class AbstractEloquentRepository implements ObjectRepository
     protected function executeFindQuery(Builder $queryBuilder): array
     {
         $data = $queryBuilder->get()->toArray();
-        return $this->hydrateCollection($data);
+        return $this->denormalizeCollection($data);
     }
 
     protected function makeFindQueryBuilder(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): Builder
