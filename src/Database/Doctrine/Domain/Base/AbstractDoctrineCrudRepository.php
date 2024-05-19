@@ -76,7 +76,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
         $queryBuilder->update($this->getTableName());
 
 //        $data = EntityHelper::toArrayForTablize($entity);
-        $data = $this->dehydrate($entity);
+        $data = $this->normalize($entity);
         unset($data['id']);
         foreach ($data as $column => $value) {
             $queryBuilder->set($column, ":$column");
@@ -96,7 +96,7 @@ abstract class AbstractDoctrineCrudRepository extends AbstractDoctrineRepository
     {
         $queryBuilder = $this->createQueryBuilder();
 //        $data = EntityHelper::toArrayForTablize($entity);
-        $data = $this->dehydrate($entity);
+        $data = $this->normalize($entity);
         unset($data['id']);
         $columns = [];
         foreach ($data as $column => $value) {
