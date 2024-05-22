@@ -49,5 +49,4 @@ class PageResponse
     {
         $this->itemsTotalCount = $itemsTotalCount;
     }
-
 }

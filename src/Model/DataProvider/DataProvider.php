@@ -8,6 +8,7 @@ use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\Dto\CollectionData;
 use Untek\Model\DataProvider\Dto\PageResponse;
 use Untek\Model\DataProvider\Exceptions\GreaterMaxPageException;
+use Untek\Model\DataProvider\Helpers\DataProviderHelper;
 use Untek\Model\DataProvider\Interfaces\ExpandQueryInterface;
 use Untek\Model\DataProvider\Interfaces\FilterQueryInterface;
 use Untek\Model\DataProvider\Interfaces\PageQueryInterface;
@@ -26,37 +27,19 @@ class DataProvider
      */
     public function findAll(object $query): CollectionData
     {
-        if($query instanceof SortQueryInterface) {
-            $orderBy = $query->getSort();
-        } else {
-            $orderBy = [];
-        }
+        $pageNumber = $query->getPage()->getNumber() ?? 1;
+        $queryParameters = DataProviderHelper::extractParams($query);
+        
+        $collection = $this->repository->findBy(
+            $queryParameters->getCriteria(), 
+            $queryParameters->getOrderBy(), 
+            $queryParameters->getLimit(), 
+            $queryParameters->getOffset(), 
+            $queryParameters->getExpand()
+        );
+        $count = $this->repository->countBy($queryParameters->getCriteria());
 
-        if($query instanceof FilterQueryInterface) {
-            $criteria = $query->getFilter();
-        } else {
-            $criteria = [];
-        }
-
-        if($query instanceof PageQueryInterface) {
-            $limit = $query->getPage()->getSize();
-            $pageNumber = $query->getPage()->getNumber();
-        } else {
-            $limit = null;
-            $pageNumber = 1;
-        }
-
-        if($query instanceof ExpandQueryInterface) {
-            $expand = $query->getExpand();
-        } else {
-            $expand = null;
-        }
-
-        $offset = $this->calculateOffset($query);
-        $collection = $this->repository->findBy($criteria, $orderBy, $limit, $offset, $expand);
-        $count = $this->repository->countBy($criteria);
-
-        $pageCount = $this->getPageCount($limit, $count);
+        $pageCount = DataProviderHelper::getPageCount($queryParameters->getLimit(), $count);
 
         /*if ($pageNumber > $pageCount) {
             $message = "This value should be less than or equal to {$pageCount}.";
@@ -64,21 +47,12 @@ class DataProvider
         }*/
 
         $page = new PageResponse();
-        $page->setPageSize($limit);
-        $page->setPageNumber($pageNumber);
+        $page->setPageSize($queryParameters->getLimit());
+        $page->setPageNumber($queryParameters->getPageNumber());
         $page->setItemsTotalCount($count);
         $page->setPageCount($pageCount);
 
         return new CollectionData($collection, $page);
-    }
-
-    protected function getPageCount(int $pageSize, int $totalCount): int
-    {
-        $pageCount = intval(ceil($totalCount / $pageSize));
-        if ($pageCount < 1) {
-            $pageCount = 1;
-        }
-        return $pageCount;
     }
 
     /**
@@ -93,17 +67,5 @@ class DataProvider
             throw new NotFoundException('Entity not found!');
         }
         return $entity;
-    }
-
-    protected function calculateOffset(object $query): ?int
-    {
-        $limit = $query->getPage()->getSize();
-        $pageNumber = $query->getPage()->getNumber();
-        $offset = null;
-
-        if (!$offset && $pageNumber) {
-            $offset = $limit * ($pageNumber - 1);
-        }
-        return $offset;
     }
 }
