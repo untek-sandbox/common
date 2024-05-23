@@ -38,6 +38,11 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return $serializer->denormalize($data, $type, $format, $context);
     }
 
+    protected function ignoreFields(): array
+    {
+        return [];
+    }
+
     protected function relationFields(): array
     {
         return [];
@@ -75,8 +80,9 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
 
     protected function removeRelationFields(array $normalized): array
     {
-        if ($this->relationFields()) {
-            foreach ($this->relationFields() as $field) {
+        $ignoreFields = $this->relationFields() ? $this->relationFields() : $this->ignoreFields();
+        if ($ignoreFields) {
+            foreach ($ignoreFields as $field) {
                 unset($normalized[$field]);
             }
         }
