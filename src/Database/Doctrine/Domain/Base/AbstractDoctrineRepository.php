@@ -7,7 +7,6 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 use Untek\Component\Relation\Traits\RepositoryRelationTrait;
-use Untek\Database\Base\Hydrator\HydratorInterface;
 use Untek\Database\Base\Hydrator\Traits\NormalizerTrait;
 use Untek\Database\Doctrine\Domain\Helpers\QueryBuilder\DoctrineQueryBuilderHelper;
 
@@ -21,12 +20,9 @@ abstract class AbstractDoctrineRepository implements ObjectRepository
 
     abstract public function getTableName(): string;
 
-    public function __construct(Connection $connection, HydratorInterface $mapper = null)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        if ($mapper != null) {
-            $this->mapper = $mapper;
-        }
     }
 
     protected function getConnection(): Connection
