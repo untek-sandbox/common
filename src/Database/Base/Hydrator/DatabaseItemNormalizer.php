@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Untek\Core\Text\Helpers\Inflector;
+use function Symfony\Component\String\u;
 
 /**
  * @method array getSupportedTypes(?string $format)
