@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\Test;
 
+use Doctrine\DBAL\Connection;
 use Untek\Database\Seed\Application\Commands\ImportSeedCommand;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 
@@ -18,7 +19,15 @@ trait FixtureTrait
             $importCommand->setTables($fixtures);
             /** @var CommandBusInterface $bus */
             $bus = $this->get(CommandBusInterface::class);
-            $bus->handle($importCommand);
+            /** @var Connection $connection */
+            $connection = $this->get(Connection::class);
+            try {
+                $bus->handle($importCommand);
+                $connection->close();
+            } catch (\Exception $e) {
+                $connection->close();
+                throw $e;
+            }
         }
     }
 

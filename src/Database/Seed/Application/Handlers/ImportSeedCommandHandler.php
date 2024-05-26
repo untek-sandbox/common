@@ -75,6 +75,7 @@ class ImportSeedCommandHandler
         if(!empty($data)) {
             $this->insert($tableName, $data);
         }
+        $this->resetAutoIncrement($tableName);
 
         /*foreach ($data as $row) {
             $this->connection->insert($tableName, $row);
@@ -118,9 +119,9 @@ class ImportSeedCommandHandler
 //            $max = $queryBuilder->max('id');
             if ($max) {
                 $pkName = 'id';
-                $sql = 'SELECT setval(\'' . $targetTableName . '_' . $pkName . '_seq\', ' . ($max) . ')';
+                $sql = 'SELECT setval(\'' . $tableName . '_' . $pkName . '_seq\', ' . ($max) . ')';
                 $connection = $queryBuilder->getConnection();
-                $connection->statement($sql);
+                $connection->executeQuery($sql);
             }
         }
     }

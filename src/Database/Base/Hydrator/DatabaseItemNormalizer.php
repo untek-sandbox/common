@@ -51,15 +51,18 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
     protected function denormalizeTime($data, string $type): array
     {
         foreach ($data as $key => &$value) {
+            if(u($key)->endsWith('_at') && is_string($data[$key])) {
+                $data[$key] = new DateTime($data[$key]);
+            }
 //            $r = new \ReflectionMethod("$type::get".Inflector::camelize($key));
 //            $isTime = is_subclass_of($r->getReturnType(), \DateTimeInterface::class);
-            $isTime = $value && is_string($value);
+            /*$isTime = $value && is_string($value);
             if ($isTime) {
                 $denormalized = DateTime::createFromFormat(DateTime::RFC3339, $value);
                 if ($denormalized) {
                     $value = $denormalized;
                 }
-            }
+            }*/
         }
         return $data;
     }
