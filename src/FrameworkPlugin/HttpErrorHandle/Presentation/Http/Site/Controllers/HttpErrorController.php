@@ -25,7 +25,7 @@ class HttpErrorController
         $this->logger = $logger;
     }
 
-    public function handleError(Request $request, Exception $exception): Response
+    public function handleError(Request $request, \Throwable $exception): Response
     {
         $data = [
             'attributes' => $request->attributes->all(),
