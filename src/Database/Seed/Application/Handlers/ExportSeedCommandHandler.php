@@ -10,7 +10,10 @@ use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 class ExportSeedCommandHandler
 {
 
-    public function __construct(private Manager $manager)
+    public function __construct(
+        private Manager $manager,
+        private string $seedDirectory,
+    )
     {
     }
 
@@ -31,7 +34,7 @@ class ExportSeedCommandHandler
             $data = $qb->select('*')->get()->toArray();
             $data = ArrayHelper::toArray($data);
 
-            $filePath = getenv('SEED_DIRECTORY') . '/' . $table . '.php';
+            $filePath = $this->seedDirectory . '/' . $table . '.php';
             (new StoreFile($filePath))->save($data);
 
             $cb($table);

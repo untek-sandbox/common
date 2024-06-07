@@ -33,14 +33,15 @@ class DatabaseAssert extends Assert
         return $this;
     }
 
-    public function assertRow(string $table, array $condition, array $attributes): self
+    public function assertRow(string $table, array $condition, array $expectedAttributes): self
     {
         $first = $this->getFirst($table, $condition);
-        $ff = [];
-        foreach ($attributes as $name => $value) {
-            $ff[$name] = $first[$name];
+        $this->assertNotEmpty($first, 'Record not found.');
+        $actualAttributes = [];
+        foreach ($expectedAttributes as $name => $value) {
+            $actualAttributes[$name] = $first[$name];
         }
-        $this->assertEquals($ff, $attributes);
+        $this->assertEquals($expectedAttributes, $actualAttributes);
         return $this;
     }
 
