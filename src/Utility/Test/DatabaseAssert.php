@@ -44,6 +44,16 @@ class DatabaseAssert extends Assert
         $this->assertEquals($expectedAttributes, $actualAttributes);
         return $this;
     }
+    
+    public function truncateTable(string $table): self
+    {
+        $queryBuilder = $this->manager
+            ->getConnection()
+            ->table($table)
+            ->truncate()
+        ;
+        return $this;
+    }
 
     protected function getFirst(string $table, array $condition): array
     {
