@@ -27,9 +27,9 @@ class DatabaseAssert extends Assert
         return $this;
     }
 
-    public function assertRowById(string $table, mixed $id, array $attributes): self
+    public function assertRowById(string $table, mixed $id, array $expectedAttributes): self
     {
-        $this->assertRow($table, ['id' => $id], $attributes);
+        $this->assertRow($table, ['id' => $id], $expectedAttributes);
         return $this;
     }
 
