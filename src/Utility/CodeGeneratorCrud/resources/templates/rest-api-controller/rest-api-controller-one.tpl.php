@@ -33,7 +33,7 @@ class <?= $className ?> extends AbstractRestApiController
     {
         $query = new <?= $commandClassName ?>();
         $query->setId($id);
-        QueryParameterHelper::fillQuery($request->query->all(), $query);
+        QueryParameterHelper::fillQueryFromRequest($request, $query);
 
         $result = $this->bus->handle($query);
         $data = $this->encodeObject($result);

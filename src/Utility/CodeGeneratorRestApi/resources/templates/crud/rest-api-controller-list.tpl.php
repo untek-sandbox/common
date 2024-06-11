@@ -32,7 +32,7 @@ class <?= $className ?> extends AbstractGetListRestApiController
     public function __invoke(Request $request): JsonResponse
     {
         $query = new <?= $commandClassName ?>();
-        QueryParameterHelper::fillQuery($request->query->all(), $query);
+        QueryParameterHelper::fillQueryFromRequest($request, $query);
         $collectionData = $this->bus->handle($query);
         return $this->createResponse($collectionData);
     }
