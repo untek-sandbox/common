@@ -2,8 +2,6 @@
 
 namespace Untek\Model\DataProvider\Interfaces;
 
-use Forecast\Map\Modules\Driver\Application\Queries\GetDriverOrderHistoryListQuery;
-
 interface DataProviderWithQueryInterface
 {
 

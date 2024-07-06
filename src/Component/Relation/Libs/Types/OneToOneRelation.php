@@ -3,13 +3,10 @@
 namespace Untek\Component\Relation\Libs\Types;
 
 use Doctrine\Persistence\ObjectRepository;
-use Forecast\Map\Modules\Driver\Domain\Model\DriverSettings;
-use Forecast\Map\Modules\Driver\Infrastructure\Persistence\Eloquent\Repository\DriverSettingsRepository;
 use Untek\Component\Relation\Interfaces\RelationInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Core\Code\Factories\PropertyAccess;
 use Untek\Core\Collection\Helpers\CollectionHelper;
-use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
 
 class OneToOneRelation extends BaseRelation implements RelationInterface
 {
@@ -72,7 +69,7 @@ class OneToOneRelation extends BaseRelation implements RelationInterface
     {
         // count($ids)
         $limit = null;
-        if(count($criteria) === 1) {
+        if (count($criteria) === 1) {
             $firstCriteria = ArrayHelper::first($criteria);
             $limit = count($firstCriteria);
         }
