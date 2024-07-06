@@ -14,8 +14,8 @@ namespace <?= $namespace ?>;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\QueryParameterHelper;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Controllers\AbstractGetListRestApiController;
+use Untek\Framework\RestApi\Presentation\Http\Symfony\Helpers\QueryParameterHelper;
+use Untek\Framework\RestApi\Presentation\Http\Symfony\Controllers\AbstractGetListRestApiController;
 use <?= $commandFullClassName ?>;
 use <?= $schemaClassName ?>;
 

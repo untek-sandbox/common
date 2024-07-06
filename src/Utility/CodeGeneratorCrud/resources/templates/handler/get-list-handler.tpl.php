@@ -13,8 +13,6 @@
 namespace <?= $namespace ?>;
 
 use Doctrine\Persistence\ObjectRepository;
-use Forecast\Map\Example\Blog\Application\Queries\GetPostListQuery;
-use Forecast\Map\Example\Blog\Application\Validators\GetPostListQueryValidator;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 use Untek\Model\DataProvider\DataProvider;
 use Untek\Model\DataProvider\Dto\CollectionData;

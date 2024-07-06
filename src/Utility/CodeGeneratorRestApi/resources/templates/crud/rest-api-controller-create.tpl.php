@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Untek\Component\App\Services\ControllerAccessChecker;
-use Forecast\Map\Shared\Infrastructure\Http\RestApi\Controllers\AbstractCreateRestApiController;
+use Untek\Framework\RestApi\Presentation\Http\Symfony\Controllers\AbstractCreateRestApiController;
 use <?= $commandFullClassName ?>;
 use <?= $schemaClassName ?>;
 
