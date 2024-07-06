@@ -19,6 +19,8 @@ abstract class AbstractAppKernel extends BaseKernel
     protected bool $isTest;
     protected bool $booted = false;
 
+    abstract protected function build(ContainerBuilder $container): void;
+
     public function __construct(
         ConfigDirectory $configDirectory,
         string $context,
@@ -52,11 +54,6 @@ abstract class AbstractAppKernel extends BaseKernel
         $this->initializeContainer();
 
         $this->booted = true;
-    }
-
-    protected function build(ContainerBuilder $container): void
-    {
-        
     }
 
     /**
