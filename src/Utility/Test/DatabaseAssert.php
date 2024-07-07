@@ -22,15 +22,29 @@ class DatabaseAssert extends Assert
 
     public function assertHasRow(string $table, array $condition): self
     {
-        $first = $this->getFirst($table, $condition);
+        $first = $this->findFirst($table, $condition);
         $this->assertNotEmpty($first);
+        return $this;
+    }
+
+    public function assertAll(string $table, array $condition, array $expectedCollection): self
+    {
+        $collectionFromDb = $this->findAll($table, $condition);
+        $this->assertEquals(count($expectedCollection), count($collectionFromDb));
+        $new = [];
+        foreach ($expectedCollection as $index => $expectedAttributes) {
+            $rowFromDb = (array)$collectionFromDb[$index];
+            $actualAttributes = $this->extractAttributes($expectedAttributes, $rowFromDb);
+            $new[] = $actualAttributes;
+        }
+        $this->assertEquals($expectedCollection, $new);
         return $this;
     }
 
     public function findRowById(string $table, mixed $id): array
     {
         $condition = ['id' => $id];
-        return $this->getFirst($table, $condition);
+        return $this->findFirst($table, $condition);
     }
 
     public function assertRowById(string $table, mixed $id, array $expectedAttributes): self
@@ -39,14 +53,23 @@ class DatabaseAssert extends Assert
         return $this;
     }
 
+    public function updateRowById(string $table, mixed $id, array $values): self
+    {
+        $condition = ['id' => $id];
+        $queryBuilder = $this->manager
+            ->getConnection()
+            ->table($table)
+        ;
+        EloquentQueryBuilderHelper::setWhere($condition, $queryBuilder);
+        $queryBuilder->update($values);
+        return $this;
+    }
+
     public function assertRow(string $table, array $condition, array $expectedAttributes): self
     {
-        $first = $this->getFirst($table, $condition);
-        $this->assertNotEmpty($first, 'Record not found.');
-        $actualAttributes = [];
-        foreach ($expectedAttributes as $name => $value) {
-            $actualAttributes[$name] = $first[$name];
-        }
+        $rowFromDb = $this->findFirst($table, $condition);
+        $this->assertNotEmpty($rowFromDb, 'Record not found.');
+        $actualAttributes = $this->extractAttributes($expectedAttributes, $rowFromDb);
         $this->assertEquals($expectedAttributes, $actualAttributes);
         return $this;
     }
@@ -61,13 +84,21 @@ class DatabaseAssert extends Assert
         return $this;
     }
 
-    protected function getFirst(string $table, array $condition): array
+    protected function extractAttributes(array $expectedAttributes, array $rowFromDb): array {
+        $actualAttributes = [];
+        foreach ($expectedAttributes as $name => $value) {
+            $actualAttributes[$name] = $rowFromDb[$name];
+        }
+        return $actualAttributes;
+    }
+
+    protected function findFirst(string $table, array $condition): array
     {
-        $collection = $this->getAll($table, $condition);
+        $collection = $this->findAll($table, $condition);
         return (array) $collection->first();
     }
 
-    protected function getAll(string $table, array $condition): Collection
+    protected function findAll(string $table, array $condition): Collection
     {
         $queryBuilder = $this->manager
             ->getConnection()
