@@ -65,6 +65,18 @@ class DatabaseAssert extends Assert
         return $this;
     }
 
+    public function deleteRowById(string $table, mixed $id): self
+    {
+        $condition = ['id' => $id];
+        $queryBuilder = $this->manager
+            ->getConnection()
+            ->table($table)
+        ;
+        EloquentQueryBuilderHelper::setWhere($condition, $queryBuilder);
+        $queryBuilder->delete();
+        return $this;
+    }
+
     public function assertRow(string $table, array $condition, array $expectedAttributes): self
     {
         $rowFromDb = $this->findFirst($table, $condition);
