@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args(
             [
                 service(UrlGeneratorInterface::class),
-                service(TranslatorInterface::class),
+                service(TranslatorInterface::class)->nullOnInvalid(),
             ]
         );
 
