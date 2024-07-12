@@ -5,6 +5,7 @@ namespace Untek\FrameworkPlugin\HttpErrorHandle\Presentation\Http\Site\Controlle
 use axy\backtrace\helpers\Represent;
 use axy\backtrace\Trace;
 use Exception;
+use Error;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class HttpErrorController
         $this->logger = $logger;
     }
 
-    public function handleError(Request $request, Exception $exception): Response
+    public function handleError(Request $request, \Throwable $exception): Response
     {
         $data = [
             'attributes' => $request->attributes->all(),

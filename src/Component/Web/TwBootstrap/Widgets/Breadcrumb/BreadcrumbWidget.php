@@ -19,7 +19,7 @@ class BreadcrumbWidget extends MenuWidget
         $this->items = $items;
     }
 
-    public function add(string $label, string $url)
+    public function add(string $label, ?string $url = null)
     {
         $this->items[] = [
             'label' => $label,
