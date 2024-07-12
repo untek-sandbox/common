@@ -47,6 +47,11 @@ class DatabaseAssert extends Assert
         return $this->findFirst($table, $condition);
     }
 
+    public function findRow(string $table, array $condition): array
+    {
+        return $this->findFirst($table, $condition);
+    }
+
     public function assertRowById(string $table, mixed $id, array $expectedAttributes): self
     {
         $this->assertRow($table, ['id' => $id], $expectedAttributes);
