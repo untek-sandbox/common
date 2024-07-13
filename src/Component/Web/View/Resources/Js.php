@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Lib\Web\View\Resources;
+namespace Untek\Component\Web\View\Resources;
 
 use Untek\Core\Arr\Helpers\ArrayHelper;
 

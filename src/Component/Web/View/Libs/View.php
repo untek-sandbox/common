@@ -1,14 +1,14 @@
 <?php
 
-namespace Untek\Lib\Web\View\Libs;
+namespace Untek\Component\Web\View\Libs;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Lib\I18Next\Facades\I18Next;
-use Untek\Lib\Web\View\Helpers\RenderHelper;
-use Untek\Lib\Web\View\Resources\Css;
-use Untek\Lib\Web\View\Resources\Js;
+use Untek\Component\Web\View\Helpers\RenderHelper;
+use Untek\Component\Web\View\Resources\Css;
+use Untek\Component\Web\View\Resources\Js;
 
 class View
 {
