@@ -2,9 +2,9 @@
 
 namespace Untek\Component\Web\Widget\Widgets\Toastr;
 
-use Untek\Bundle\Notify\Domain\Entities\ToastrEntity;
+use Untek\Bundle\Notify\Domain\Model\ToastrEntity;
 use Untek\Bundle\Notify\Domain\Enums\FlashMessageTypeEnum;
-use Untek\Bundle\Notify\Domain\Interfaces\Services\ToastrServiceInterface;
+use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
 use Untek\Component\Web\HtmlRender\Application\Services\JsResourceInterface;
 use Untek\Component\Web\Widget\Base\BaseWidget2;
 use Untek\Core\Collection\Interfaces\Enumerable;

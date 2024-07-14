@@ -1,10 +1,10 @@
 <?php
 
-namespace Untek\Bundle\Notify\Domain\Repositories\Symfony;
+namespace Untek\Bundle\Notify\Infrastructure\Drivers\Symfony;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Untek\Bundle\Notify\Domain\Entities\ToastrEntity;
-use Untek\Bundle\Notify\Domain\Interfaces\Repositories\ToastrRepositoryInterface;
+use Untek\Bundle\Notify\Domain\Model\ToastrEntity;
+use Untek\Bundle\Notify\Application\Services\ToastrRepositoryInterface;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Core\Collection\Libs\Collection;
 use Untek\Model\Validator\Helpers\ValidationHelper;

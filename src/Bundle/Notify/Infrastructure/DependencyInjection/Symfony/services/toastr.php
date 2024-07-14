@@ -2,10 +2,10 @@
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Untek\Bundle\Notify\Domain\Interfaces\Repositories\ToastrRepositoryInterface;
-use Untek\Bundle\Notify\Domain\Interfaces\Services\ToastrServiceInterface;
-use Untek\Bundle\Notify\Domain\Repositories\Symfony\ToastrRepository;
-use Untek\Bundle\Notify\Domain\Services\ToastrService;
+use Untek\Bundle\Notify\Application\Services\ToastrRepositoryInterface;
+use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
+use Untek\Bundle\Notify\Infrastructure\Drivers\Symfony\ToastrRepository;
+use Untek\Bundle\Notify\Infrastructure\Services\ToastrService;
 use Untek\Component\Web\HtmlRender\Application\Services\JsResourceInterface;
 use Untek\Component\Web\Widget\Widgets\Toastr\ToastrAsset;
 use Untek\Component\Web\Widget\Widgets\Toastr\ToastrWidget;
@@ -21,7 +21,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(ToastrRepositoryInterface::class, ToastrRepository::class)
         ->args(
             [
-//                service(EntityManagerInterface::class),
                 service(SessionInterface::class),
             ]
         );

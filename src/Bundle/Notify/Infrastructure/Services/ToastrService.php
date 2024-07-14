@@ -1,11 +1,11 @@
 <?php
 
-namespace Untek\Bundle\Notify\Domain\Services;
+namespace Untek\Bundle\Notify\Infrastructure\Services;
 
-use Untek\Bundle\Notify\Domain\Entities\ToastrEntity;
+use Untek\Bundle\Notify\Domain\Model\ToastrEntity;
 use Untek\Bundle\Notify\Domain\Enums\FlashMessageTypeEnum;
-use Untek\Bundle\Notify\Domain\Interfaces\Repositories\ToastrRepositoryInterface;
-use Untek\Bundle\Notify\Domain\Interfaces\Services\ToastrServiceInterface;
+use Untek\Bundle\Notify\Application\Services\ToastrRepositoryInterface;
+use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
 use Untek\Core\Collection\Interfaces\Enumerable;
 use Untek\Model\Service\Base\BaseService;
 use Untek\Component\I18Next\Facades\I18Next;

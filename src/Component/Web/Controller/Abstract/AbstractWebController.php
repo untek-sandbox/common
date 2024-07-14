@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Untek\Bundle\Notify\Domain\Interfaces\Services\ToastrServiceInterface;
+use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
 use Untek\Component\Web\HtmlRender\Application\Services\HtmlRenderInterface;
 use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Core\Container\Helpers\ContainerHelper;

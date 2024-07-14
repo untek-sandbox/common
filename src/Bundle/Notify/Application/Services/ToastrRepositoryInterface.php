@@ -1,8 +1,8 @@
 <?php
 
-namespace Untek\Bundle\Notify\Domain\Interfaces\Repositories;
+namespace Untek\Bundle\Notify\Application\Services;
 
-use Untek\Bundle\Notify\Domain\Entities\ToastrEntity;
+use Untek\Bundle\Notify\Domain\Model\ToastrEntity;
 use Untek\Model\Validator\Exceptions\UnprocessibleEntityException;
 use Untek\Core\Collection\Interfaces\Enumerable;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Bundle\Notify\Domain\Entities;
+namespace Untek\Bundle\Notify\Domain\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
