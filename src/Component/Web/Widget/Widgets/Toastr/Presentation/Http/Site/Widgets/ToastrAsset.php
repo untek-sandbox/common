@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Component\Web\Widget\Widgets\Toastr;
+namespace Untek\Component\Web\Widget\Widgets\Toastr\Presentation\Http\Site\Widgets;
 
 use Untek\Component\Web\Asset\Base\BaseAsset;
 use Untek\Component\Web\HtmlRender\Application\Services\HtmlRenderInterface;

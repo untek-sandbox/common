@@ -2,13 +2,13 @@
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Untek\Bundle\Notify\Application\Services\ToastrRepositoryInterface;
-use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
-use Untek\Bundle\Notify\Infrastructure\Drivers\Symfony\ToastrRepository;
-use Untek\Bundle\Notify\Infrastructure\Services\ToastrService;
+use Untek\Component\Web\Widget\Widgets\Toastr\Application\Services\ToastrRepositoryInterface;
+use Untek\Component\Web\Widget\Widgets\Toastr\Application\Services\ToastrServiceInterface;
+use Untek\Component\Web\Widget\Widgets\Toastr\Infrastructure\Drivers\Symfony\ToastrRepository;
+use Untek\Component\Web\Widget\Widgets\Toastr\Infrastructure\Services\ToastrService;
 use Untek\Component\Web\HtmlRender\Application\Services\JsResourceInterface;
-use Untek\Component\Web\Widget\Widgets\Toastr\ToastrAsset;
-use Untek\Component\Web\Widget\Widgets\Toastr\ToastrWidget;
+use Untek\Component\Web\Widget\Widgets\Toastr\Presentation\Http\Site\Widgets\ToastrAsset;
+use Untek\Component\Web\Widget\Widgets\Toastr\Presentation\Http\Site\Widgets\ToastrWidget;
 use Untek\Model\EntityManager\Interfaces\EntityManagerInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

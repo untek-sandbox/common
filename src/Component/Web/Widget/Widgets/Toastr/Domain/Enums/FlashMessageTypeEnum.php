@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Bundle\Notify\Domain\Enums;
+namespace Untek\Component\Web\Widget\Widgets\Toastr\Domain\Enums;
 
 class FlashMessageTypeEnum
 {

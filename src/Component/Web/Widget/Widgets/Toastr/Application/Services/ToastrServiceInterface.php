@@ -1,8 +1,8 @@
 <?php
 
-namespace Untek\Bundle\Notify\Application\Services;
+namespace Untek\Component\Web\Widget\Widgets\Toastr\Application\Services;
 
-use Untek\Bundle\Notify\Domain\Model\ToastrEntity;
+use Untek\Component\Web\Widget\Widgets\Toastr\Domain\Model\ToastrEntity;
 use Untek\Core\Collection\Interfaces\Enumerable;
 
 interface ToastrServiceInterface

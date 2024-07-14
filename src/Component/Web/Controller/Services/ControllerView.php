@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Untek\Bundle\Notify\Application\Services\ToastrServiceInterface;
+use Untek\Component\Web\Widget\Widgets\Toastr\Application\Services\ToastrServiceInterface;
 use Untek\Component\Web\HtmlRender\Application\Services\HtmlRenderInterface;
 use Untek\Core\Container\Helpers\ContainerHelper;
 use Untek\Core\Text\Helpers\TemplateHelper;
