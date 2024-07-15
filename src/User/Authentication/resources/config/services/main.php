@@ -42,32 +42,32 @@ return static function (ContainerConfigurator $configurator): void {
     $services->alias('security.token_storage', TokenStorageInterface::class);
 
     $services->set(GenerateTokenByPasswordCommandHandler::class, GenerateTokenByPasswordCommandHandler::class)
-    ->args([
-        service(TranslatorInterface::class),
-        service(UserProviderInterface::class),
-        service(CredentialsPasswordValidator::class),
-        service(TokenServiceInterface::class),
-        service(CredentialServiceInterface::class),
-        service(LoggerInterface::class),
-        service(ValidatorInterface::class),
+        ->args([
+            service(TranslatorInterface::class),
+            service(UserProviderInterface::class),
+            service(CredentialsPasswordValidator::class),
+            service(TokenServiceInterface::class),
+            service(CredentialServiceInterface::class),
+            service(LoggerInterface::class),
+            service(ValidatorInterface::class),
 //        service(\Psr\EventDispatcher\EventDispatcherInterface::class),
-        service(IdentityRepositoryInterface::class),
-        ['login', 'phone'],
-    ])
+            service(IdentityRepositoryInterface::class),
+            ['login', 'phone'],
+        ])
         ->tag('cqrs.handler')
     ;
-    
+
     $services->set(GenerateTokenByPasswordController::class, GenerateTokenByPasswordController::class)
         ->args([
             service(CommandBusInterface::class),
         ]);
 
 
-    $services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
+    /*$services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
         ->args([
             service(ContainerInterface::class),
             service(TranslatorInterface::class),
-        ]);
+        ]);*/
 
     /*$services->set(AuthIdentityController::class, AuthIdentityController::class)
         ->args(
