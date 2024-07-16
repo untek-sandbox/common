@@ -51,7 +51,7 @@ class FormErrorRender extends BaseRender
         if($errorMessages) {
             $errorMessageText = implode('<br/>', $errorMessages);
             $content =
-                '<h5 class="alert-heading">'.I18Next::t('core', 'message.errors_found').'</h5>' .
+                '<h5 class="alert-heading">Has errors</h5>' .
                 $errorMessageText;
             return Html::tag('div', $content, [
                 'class' => 'alert alert-danger',
