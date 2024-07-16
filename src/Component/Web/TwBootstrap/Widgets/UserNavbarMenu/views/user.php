@@ -25,7 +25,7 @@ use Untek\Component\I18Next\Facades\I18Next;
         <?= $userMenuHtml ?>
         <a class="dropdown-item" href="#" onclick="$('#logout-form').submit()">
             <i class="fas fa-sign-out-alt"></i>
-            <?= I18Next::t('authentication', 'auth.logout_title') ?>
+            Logout
         </a>
     </div>
 </li>

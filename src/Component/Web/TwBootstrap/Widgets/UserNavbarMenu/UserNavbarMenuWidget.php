@@ -12,15 +12,16 @@ use Untek\User\Rbac\Domain\Interfaces\Services\MyAssignmentServiceInterface;
 class UserNavbarMenuWidget extends BaseWidget2
 {
 
-    public $loginUrl = '/example/auth';
-    public $logoutUrl = '/example/logout';
+    
     public $userMenuHtml = '';
 
 //    private $myAssignmentService;
 
     public function __construct(
 //        MyAssignmentServiceInterface $myAssignmentService,
-        private TokenStorageInterface $tokenStorage
+        private TokenStorageInterface $tokenStorage,
+        public $loginUrl = '/example/auth',
+        public $logoutUrl = '/example/logout',
     ) {
 //        $this->myAssignmentService = $myAssignmentService;
     }
