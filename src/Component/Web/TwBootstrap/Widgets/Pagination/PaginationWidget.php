@@ -33,9 +33,9 @@ class PaginationWidget extends BaseWidget2
         </nav>';
     public $pageSizeWrapperTemplate = '
         <li class="page-item ">
-            <a class="page-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!--<a class="page-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {pageSize}
-            </a>
+            </a>-->
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <h6 class="dropdown-header">Page size</h6>
                 {items}

@@ -17,6 +17,7 @@ return static function (ContainerConfigurator $configurator): void {
                 service(LoggerInterface::class)
             ]
         );
+    
     $services->set(HttpHandleSubscriber::class, HttpHandleSubscriber::class)
         ->args(
             [

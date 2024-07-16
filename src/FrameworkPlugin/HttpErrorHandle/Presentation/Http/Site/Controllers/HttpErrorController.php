@@ -6,21 +6,24 @@ use axy\backtrace\helpers\Represent;
 use axy\backtrace\Trace;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Untek\Component\Http\Enums\HttpStatusCodeEnum;
 use Untek\Core\Contract\Common\Exceptions\InvalidConfigException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Env\Helpers\EnvHelper;
 
 class HttpErrorController
 {
-    protected $logger;
-
-    public function __construct(LoggerInterface $logger)
+    public function __construct(
+        private LoggerInterface $logger,
+        private ?string $loginUrl = null,
+    )
     {
         $this->logger = $logger;
     }
@@ -112,7 +115,11 @@ class HttpErrorController
 
     private function unauthorized(Request $request, Exception $exception): Response
     {
-        return $this->commonRender('Unauthorized', 'Unauthorized', $exception, 401);
+        if($this->loginUrl) {
+            return new RedirectResponse($this->loginUrl, HttpStatusCodeEnum::MOVED_TEMPORARILY);
+        } else {
+            return $this->commonRender('Unauthorized', 'Unauthorized', $exception, 401);
+        }
     }
 
     private function forbidden(Request $request, Exception $exception): Response
