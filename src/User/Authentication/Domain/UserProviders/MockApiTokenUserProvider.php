@@ -43,8 +43,15 @@ class MockApiTokenUserProvider implements UserProviderInterface
             throw new UserNotFoundException();
         }*/
 
+
+
         try {
-            $userId = $this->tokenService->getIdentityIdByToken($token);
+            if(is_numeric($token)) {
+                $userId = (int)$token;
+            } else {
+                $userId = $this->tokenService->getIdentityIdByToken($token);
+            }
+            
             $user = $this->identityRepository->getUserById($userId);
             $user->eraseCredentials();
             return $user;

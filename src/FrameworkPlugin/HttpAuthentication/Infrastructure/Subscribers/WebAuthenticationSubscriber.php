@@ -19,7 +19,8 @@ class WebAuthenticationSubscriber implements EventSubscriberInterface
         private UserProviderInterface $userProvider,
         private TokenStorageInterface $tokenStorage,
         private AuthorizationCheckerInterface $authorizationChecker
-    ) {
+    )
+    {
     }
 
     public static function getSubscribedEvents(): array
@@ -33,7 +34,7 @@ class WebAuthenticationSubscriber implements EventSubscriberInterface
     {
         $identity = $this->webAuthentication->getUser($event->getRequest());
         if (!empty($identity)) {
-            $token = new TestBrowserToken([], $identity);
+            $token = new TestBrowserToken($identity->getRoles(), $identity);
         } else {
             $token = new NullToken();
         }

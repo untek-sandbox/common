@@ -112,7 +112,7 @@ class WebAuthentication
     protected function saveToSession(UserInterface $user): void
     {
         $data = [
-            'identifier' => $user->getUserIdentifier(),
+            'identifier' => $user->getId(),
             'roles' => $user->getRoles(),
         ];
         $this->session->set(self::SESSION_NAME, $data);

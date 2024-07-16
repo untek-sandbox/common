@@ -4,14 +4,12 @@ namespace Untek\Component\Web\TwBootstrap\Widgets\Pagination;
 
 use Symfony\Component\HttpFoundation\Request;
 use Untek\Core\Text\Helpers\TemplateHelper;
-use Untek\Model\DataProvider\Dto\CollectionData;
 use Untek\Model\DataProvider\Entities\DataProviderEntity;
-//use Untek\Model\DataProvider\Libs\DataProvider;
-use Untek\Model\DataProvider\DataProvider;
+use Untek\Model\DataProvider\Libs\DataProvider;
 use Untek\Component\Web\Widget\Base\BaseWidget2;
 use Untek\Component\Web\TwBootstrap\Widgets\Menu\MenuWidget;
 
-class PaginationWidget extends BaseWidget2
+class PaginationWidgetOld extends BaseWidget2
 {
 
     /** @var DataProvider */
@@ -43,7 +41,7 @@ class PaginationWidget extends BaseWidget2
         </li>';
     public $pageSizeItemTemplate = '<a class="dropdown-item" href="{url}">{size}</a>';
 
-    public function __construct(private CollectionData $collectionData/*, Request $request = null*/)
+    public function __construct(DataProvider $dataProvider = null/*, Request $request = null*/)
     {
         $request = /*$request ?: */
             Request::createFromGlobals();
@@ -64,16 +62,16 @@ class PaginationWidget extends BaseWidget2
         $this->showPages = $showPages;
     }
 
-    /*public function init()
+    public function init()
     {
         $this->dataProviderEntity = $this->dataProvider->getEntity();
         $this->dataProviderEntity->setTotalCount($this->dataProvider->getTotalCount());
-    }*/
+    }
 
     public function run(): string
     {
-//        $this->init();
-        if ($this->collectionData->getPage()->getPageCount() == 1) {
+        $this->init();
+        if ($this->dataProviderEntity->getPageCount() == 1) {
             return '';
         }
         $itemsHtml = $this->renderItems();
@@ -86,10 +84,8 @@ class PaginationWidget extends BaseWidget2
     private function generateUrl(int $page = 1)
     {
         $queryParams = $this->request->query->all();
-
-        $queryParams['page']['size'] = $this->collectionData->getPage()->getPageSize();
-        $queryParams['page']['number'] = $page;
-
+        $queryParams['per-page'] = $this->dataProviderEntity->getPageSize();
+        $queryParams['page'] = $page;
         $queryString = http_build_query($queryParams);
         return '?' . $queryString;
     }
@@ -98,7 +94,7 @@ class PaginationWidget extends BaseWidget2
     {
         $items = [];
         for ($page = $pageStart; $page <= $pageEnd; $page++) {
-            $isActive = $this->collectionData->getPage()->getPageNumber() == $page;
+            $isActive = $this->dataProviderEntity->getPage() == $page;
             $items[] = $this->generateItem($page);
             /*$items[] = [
                 'label' => $page,
@@ -111,7 +107,7 @@ class PaginationWidget extends BaseWidget2
 
     private function generateItem(int $page, $label = null, bool $isDisable = false): array
     {
-        $isActive = $this->collectionData->getPage()->getPageNumber() == $page && $isDisable == false;
+        $isActive = $this->dataProviderEntity->getPage() == $page && $isDisable == false;
         return [
             'label' => $label ?: $page,
             'url' => $this->generateUrl($page),
@@ -135,14 +131,14 @@ class PaginationWidget extends BaseWidget2
         ];*/
 
         $pageStart = 1;
-        $pageCount = $this->collectionData->getPage()->getPageCount();
+        $pageCount = $this->dataProviderEntity->getPageCount();
         $pageEnd = $pageCount;
 
         $showPages = $this->getShowPages();
 
         $jumpStep = $showPages;
 
-        $page = $this->collectionData->getPage()->getPageNumber();
+        $page = $this->dataProviderEntity->getPage();
         $showPagesHalf = intval(floor($showPages / 2));
 
         $pageStart = $page - $showPagesHalf;
@@ -157,9 +153,8 @@ class PaginationWidget extends BaseWidget2
 
         $items = [];
 
-        $prevPage = $page > 1 ? $page - 1 : 1;
-        $isFirstPage = $page == 1;
-        $items[] = $this->generateItem($prevPage, $this->leftArrowHtml, $isFirstPage);
+        $prevPage = $this->dataProviderEntity->getPrevPage() > 0 ? $this->dataProviderEntity->getPrevPage() : 1;
+        $items[] = $this->generateItem($prevPage, $this->leftArrowHtml, $this->dataProviderEntity->isFirstPage());
 
         /*$items[] = [
             'label' => '&laquo;',
@@ -226,9 +221,8 @@ class PaginationWidget extends BaseWidget2
             ];*/
         }
 
-        $nextPage = $page < $pageCount ? $page + 1 : $pageCount;
-        $isLastPage = $page == $pageCount;
-        $items[] = $this->generateItem($nextPage, $this->rightArrowHtml, $isLastPage);
+        $nextPage = $this->dataProviderEntity->getNextPage() < $pageCount ? $this->dataProviderEntity->getNextPage() : $pageCount;
+        $items[] = $this->generateItem($nextPage, $this->rightArrowHtml, $this->dataProviderEntity->isLastPage());
 
         /*$items[] = [
             'label' => '&raquo;',
@@ -260,8 +254,8 @@ class PaginationWidget extends BaseWidget2
         $html = '';
         $queryParams = $this->request->query->all();
         foreach ($this->perPageOptions as $size) {
-            $queryParams['page']['size'] = $size;
-            $queryParams['page']['number'] = 1;
+            $queryParams['per-page'] = $size;
+            $queryParams['page'] = 1;
             $queryString = '?' . http_build_query($queryParams);
             $html .= TemplateHelper::render($this->pageSizeItemTemplate, [
                 'url' => $queryString,
@@ -269,7 +263,7 @@ class PaginationWidget extends BaseWidget2
             ]);
         }
         return TemplateHelper::render($this->pageSizeWrapperTemplate, [
-            'pageSize' => $this->collectionData->getPage()->getPageSize(),
+            'pageSize' => $this->dataProviderEntity->getPageSize(),
             'items' => $html,
         ]);
     }

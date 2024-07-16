@@ -73,7 +73,7 @@ class GenerateTokenByPasswordCommandHandler
         $tokenEntity = $this->tokenService->getTokenByIdentity($userEntity);
         $tokenEntity->setIdentity($userEntity);
 
-        return new Token(null, $tokenEntity->getToken(), $tokenEntity->getType());
+        return new Token($userEntity->getId(), $tokenEntity->getToken(), $tokenEntity->getType());
     }
 
     /**
