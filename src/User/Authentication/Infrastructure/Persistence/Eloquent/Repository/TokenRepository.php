@@ -34,11 +34,14 @@ class TokenRepository extends AbstractEloquentCrudRepository implements TokenSer
 
     public function getIdentityIdByToken(string $token): int
     {
-        list($type, $value) = explode(' ', $token);
-        $value = trim($value);
-        $item = $this->findOneBy(['value' => $value]);
-        if($item) {
-            return $item->getIdentityId();
+        $parts = explode(' ', $token);
+        if(count($parts) > 1) {
+            list($type, $value) = $parts;
+            $value = trim($value);
+            $item = $this->findOneBy(['value' => $value]);
+            if($item) {
+                return $item->getIdentityId();
+            }
         }
         throw new NotFoundException('Token not found.');
     }
