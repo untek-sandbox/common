@@ -139,9 +139,11 @@ $rowClasses = [
                 </a>
             </td>
             <td>
-                <a href="<?= $url ?>">
-                    <?= isset($filter['message']) ? str_replace($filter['message'], '<b>' . $filter['message'] . '</b>', $item->getMessage()) : $item->getMessage() ?>
-                </a>
+                <small>
+                    <a href="<?= $url ?>">
+                        <?= isset($filter['message']) ? str_replace($filter['message'], '<b>' . $filter['message'] . '</b>', $item->getMessage()) : $item->getMessage() ?>
+                    </a>
+                </small>
             </td>
             <td>
                 <a href="<?= $url ?>">
