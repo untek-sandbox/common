@@ -39,8 +39,8 @@ class GenerateRestApiCommandHandler
             new ControllerTestGenerator($this->collection),
             new ContainerConfigGenerator($this->collection),
             new ContainerConfigImportGenerator($this->collection, '/resources/config/services/rest-api.php', __DIR__ . '/../../../../../../../../config/rest-api/container.php'),
-            new RoutConfigGenerator($this->collection),
-            new RoutConfigImportGenerator($this->collection),
+//            new RoutConfigGenerator($this->collection),
+//            new RoutConfigImportGenerator($this->collection),
         ];
 
         GeneratorHelper::generate($generators, $command);

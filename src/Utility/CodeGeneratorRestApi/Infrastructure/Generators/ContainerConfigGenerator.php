@@ -30,6 +30,18 @@ class ContainerConfigGenerator
             null,
             '/resources/config/services/rest-api.php'
         );
-        $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args);
+        $uri = 'v' . $command->getVersion() . '/' . $command->getUri();
+        $routeName = $command->getHttpMethod() . '_' . $uri;
+        $tags = [
+            [
+                'name' => 'http.controller',
+                'data' => [
+                    'name' => $routeName,
+                    'path' => '/rest-api/' . $uri,
+                    'methods' => [$command->getHttpMethod()],
+                ],
+            ],
+        ];
+        $consoleConfigGenerator->generate($controllerClassName, $controllerClassName, $args, $tags);
     }
 }

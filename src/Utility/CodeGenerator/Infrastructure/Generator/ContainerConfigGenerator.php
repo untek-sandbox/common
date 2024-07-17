@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGenerator\Infrastructure\Generator;
 
+use Untek\Component\FormatAdapter\Store;
 use Untek\Core\Code\Helpers\ComposerHelper;
 use Untek\Core\Instance\Helpers\ClassHelper;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
@@ -60,8 +61,19 @@ class ContainerConfigGenerator
 
         if($tags) {
             foreach ($tags as $tag) {
-                $codeForAppend .= '
+                if(is_string($tag)) {
+                    $codeForAppend .= '
         ->tag(\''.$tag.'\')';
+                } else {
+                    $data = (new Store('php'))->encode($tag['data']);
+                    $dataLines = explode(PHP_EOL, $data);
+                    foreach ($dataLines as &$line) {
+                        $line = "\t\t" . $line;
+                    }
+                    $data = trim(implode(PHP_EOL, $dataLines));
+                    $codeForAppend .= '
+        ->tag(\''.$tag['name'].'\', '.$data.')';
+                }
             }
         }
 
