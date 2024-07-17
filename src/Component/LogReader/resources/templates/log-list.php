@@ -94,7 +94,7 @@ $rowClasses = [
     </div>
     <div class="form-group mx-sm-3 mb-2">
         <label for="inputMessage" class="sr-only">Message</label>
-        <input class="form-control" id="inputMessage" name="filter[message]" title="Message" value="<?= $filter['message'] ?? '' ?>"/>
+        <input class="form-control" id="inputMessage" name="filter[message]" title="Message" placeholder="Message" value="<?= $filter['message'] ?? '' ?>"/>
     </div>
     <button type="submit" class="btn btn-primary mb-2">Filter</button>
     &nbsp;

@@ -90,7 +90,7 @@ class FormManager
     {
         try {
             ValidationHelper::validateEntity($buildForm->getData());
-        } catch (UnprocessibleEntityException $e) {
+        } catch (UnprocessableEntityException $e) {
             $this->setUnprocessableErrorsToForm($buildForm, $e);
         }
     }

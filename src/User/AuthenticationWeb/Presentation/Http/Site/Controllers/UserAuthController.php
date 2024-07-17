@@ -2,6 +2,7 @@
 
 namespace Untek\User\AuthenticationWeb\Presentation\Http\Site\Controllers;
 
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Untek\User\AuthenticationWeb\Presentation\Http\Site\Forms\AuthForm;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -68,9 +69,14 @@ class UserAuthController extends AbstractWebController
             } catch (\Untek\User\Authentication\Domain\Exceptions\BadPasswordException $e) {
                 $this->setErrorToForm($buildForm, 'password', $e->getMessage());
 //                $buildForm->addError(new FormError($e->getMessage()));
+            } catch (UserNotFoundException $e) {
+                $this->setErrorToForm($buildForm, 'login', $e->getMessage());
+            } /*catch (UnprocessableEntityException $e) {
+                dd(66);
             } catch (UnprocessibleEntityException $e) {
+                dd(44);
                 $this->setUnprocessableErrorsToForm($buildForm, $e);
-            }
+            }*/
         }
         return $this->render([
             'formRender' => $this->formManager->createFormRender($buildForm),
