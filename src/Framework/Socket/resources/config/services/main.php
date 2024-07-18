@@ -58,9 +58,9 @@ return static function (ContainerConfigurator $configurator): void {
         ])
         ->tag('console.command');
 
-    $services->set(SendMessageToWebSocketCommandHandler::class, SendMessageToWebSocketCommandHandler::class)
+    /*$services->set(SendMessageToWebSocketCommandHandler::class, SendMessageToWebSocketCommandHandler::class)
         ->args([
             service(MessageTransportInterface::class),
         ])
-        ->tag('cqrs.handler');
+        ->tag('cqrs.handler');*/
 };
