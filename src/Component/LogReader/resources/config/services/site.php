@@ -9,15 +9,15 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(LogListController::class, LogListController::class)
         ->tag('http.controller', [
-            'name' => 'log-list',
+//            'name' => 'log-list',
             'path' => '/log',
-            'methods' => ['GET'],
+//            'methods' => ['GET'],
         ]);
 
     $services->set(GetLogByIdController::class, GetLogByIdController::class)
         ->tag('http.controller', [
-            'name' => 'log-details',
+//            'name' => 'log-details',
             'path' => '/log/{date}/{id}',
-            'methods' => ['GET'],
+//            'methods' => ['GET'],
         ]);
 };
