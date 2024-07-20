@@ -2,11 +2,13 @@
 
 namespace Untek\Component\Web\Controller\Abstract;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Service\Attribute\Required;
 use Untek\Component\Web\Controller\Traits\ControllerUrlGeneratorTrait;
 use Untek\Component\Web\Form\Traits\ControllerFormTrait;
 use Untek\Component\Web\TwBootstrap\Widgets\Breadcrumb\BreadcrumbWidget;
@@ -22,6 +24,16 @@ abstract class AbstractNewWebController extends AbstractController
     protected $baseUri;
     protected $toastrService;
     protected $breadcrumbWidget;
+
+    /**
+     * @required
+     */
+    #[Required]
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $this->container = $container;
+        return $container;
+    }
 
     /**
      * @return ToastrServiceInterface
