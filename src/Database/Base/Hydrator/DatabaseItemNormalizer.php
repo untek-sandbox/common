@@ -31,7 +31,7 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         throw new NotImplementedMethodException();
     }
 
-    public function denormalize(mixed $data, string $type)
+    public function denormalize(array $data, string $type): object
     {
         $data = $this->denormalizeTime($data, $type);
         $serializer = $this->getSerializer();
@@ -77,7 +77,7 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         return $serializer->supportsDenormalization($data, $type, $format);
     }
 
-    public function normalize(mixed $object): float|array|ArrayObject|bool|int|string|null
+    public function normalize(object $object): array
     {
         $serializer = $this->getSerializer();
         $normalized = $serializer->normalize($object);

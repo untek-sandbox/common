@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 interface DbNormalizerInterface //extends DenormalizerInterface, NormalizerInterface
 {
 
-    public function denormalize(mixed $data, string $type);
+    public function denormalize(array $data, string $type): object;
 
-    public function normalize(mixed $object);
+    public function normalize(object $object): array;
 }

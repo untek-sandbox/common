@@ -15,7 +15,7 @@ use ArrayObject;
 class <?= $className ?> extends DatabaseItemNormalizer
 {
 
-    public function normalize(mixed $object): float|array|ArrayObject|bool|int|string|null
+    public function normalize(object $object): array
     {
         $data = parent::normalize($object);
 <?php foreach ($properties as $attribute){
@@ -29,7 +29,7 @@ class <?= $className ?> extends DatabaseItemNormalizer
         return $data;
     }
 
-    public function denormalize(mixed $data, string $type)
+    public function denormalize(array $data, string $type): object
     {
 <?php foreach ($properties as $attribute){
     $propertyName = $attribute['name'];
