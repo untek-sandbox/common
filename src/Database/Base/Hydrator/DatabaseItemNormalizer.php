@@ -26,10 +26,10 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         return new Serializer($normalizers);
     }
 
-    public function getSupportedTypes(?string $format): array
+    /*public function getSupportedTypes(?string $format): array
     {
         throw new NotImplementedMethodException();
-    }
+    }*/
 
     public function denormalize(array $data, string $type): object
     {
@@ -71,11 +71,11 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         return $data;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
+    /*public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsDenormalization($data, $type, $format);
-    }
+    }*/
 
     public function normalize(object $object): array
     {
@@ -96,9 +96,9 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         return $normalized;
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
+    /*public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsNormalization($data, $format);
-    }
+    }*/
 }
