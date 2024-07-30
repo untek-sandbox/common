@@ -3,21 +3,17 @@
 namespace Untek\Database\Base\Hydrator;
 
 use ArrayObject;
-use DateTimeImmutable;
 use DateTime;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Untek\Core\Contract\Common\Exceptions\NotImplementedMethodException;
-use Untek\Core\Text\Helpers\Inflector;
 use function Symfony\Component\String\u;
 
-class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterface
+class DatabaseItemNormalizer implements DbNormalizerInterface
 {
 
     protected function getSerializer(): SerializerInterface
@@ -59,7 +55,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
     protected function denormalizeTime($data, string $type): array
     {
         foreach ($data as $key => &$value) {
-            if(u($key)->endsWith('_at') && is_string($data[$key])) {
+            if (u($key)->endsWith('_at') && is_string($data[$key])) {
                 $data[$key] = new DateTime($data[$key]);
             }
 //            $r = new \ReflectionMethod("$type::get".Inflector::camelize($key));
@@ -75,7 +71,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return $data;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = [] ): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsDenormalization($data, $type, $format);
@@ -100,7 +96,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return $normalized;
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = [] ): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsNormalization($data, $format);

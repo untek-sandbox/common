@@ -2,22 +2,14 @@
 
 namespace Untek\Component\LogReader\Infrastructure\Persistence\JsonFile;
 
-use Casbin\Log\Log;
 use Doctrine\Persistence\ObjectRepository;
-use Untek\Component\LogReader\Domain\Model\LogItem;
-use Untek\Component\LogReader\Infrastructure\Persistence\Normalizer\LogItemNormalizer;
 use LimitIterator;
 use SplFileObject;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use UnexpectedValueException;
+use Untek\Component\LogReader\Domain\Model\LogItem;
+use Untek\Component\LogReader\Infrastructure\Persistence\Normalizer\LogItemNormalizer;
 use Untek\Core\Arr\Helpers\ArrayHelper;
-use Untek\Core\Collection\Interfaces\Enumerable;
-use Untek\Core\Collection\Libs\Collection;
+use Untek\Database\Base\Hydrator\DbNormalizerInterface;
 use Untek\Database\Base\Hydrator\Traits\NormalizerTrait;
-use Untek\Domain\EntityManager\Traits\EntityManagerAwareTrait;
-use Untek\Domain\Query\Entities\Query;
-use Untek\Model\Components\ArrayRepository\Base\BaseArrayCrudRepository;
 use Untek\Model\Contract\Interfaces\RepositoryCountByInterface;
 
 class LogRepository implements ObjectRepository, RepositoryCountByInterface
@@ -30,7 +22,7 @@ class LogRepository implements ObjectRepository, RepositoryCountByInterface
     {
     }
 
-    protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
+    protected function getNormalizer(): DbNormalizerInterface
     {
         return new LogItemNormalizer();
     }
@@ -103,8 +95,8 @@ class LogRepository implements ObjectRepository, RepositoryCountByInterface
         }
         if ($criteria) {
             foreach ($criteria as $field => $value) {
-                if($field == 'message') {
-                    if(!str_contains($item[$field], $value)) {
+                if ($field == 'message') {
+                    if (!str_contains($item[$field], $value)) {
                         return false;
                     }
                 } elseif ($item[$field] != $value) {

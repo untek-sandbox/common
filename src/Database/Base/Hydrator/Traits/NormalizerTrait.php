@@ -2,16 +2,15 @@
 
 namespace Untek\Database\Base\Hydrator\Traits;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Database\Base\Hydrator\DatabaseItemNormalizer;
+use Untek\Database\Base\Hydrator\DbNormalizerInterface;
 
 trait NormalizerTrait
 {
 
     abstract public function getClassName(): string;
 
-    protected function getNormalizer(): NormalizerInterface|DenormalizerInterface
+    protected function getNormalizer(): DbNormalizerInterface
     {
         return new DatabaseItemNormalizer();
     }
