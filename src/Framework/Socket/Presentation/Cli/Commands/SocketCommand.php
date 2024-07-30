@@ -22,7 +22,7 @@ class SocketCommand extends Command
         return 'socket:worker';
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('workerCommand', InputArgument::OPTIONAL);
         $this->addOption(
