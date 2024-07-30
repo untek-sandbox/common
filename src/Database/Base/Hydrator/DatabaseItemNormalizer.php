@@ -31,11 +31,11 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         throw new NotImplementedMethodException();
     }
 
-    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type)
     {
         $data = $this->denormalizeTime($data, $type);
         $serializer = $this->getSerializer();
-        return $serializer->denormalize($data, $type, $format, $context);
+        return $serializer->denormalize($data, $type);
     }
 
     protected function ignoreFields(): array
@@ -77,10 +77,10 @@ class DatabaseItemNormalizer implements DbNormalizerInterface
         return $serializer->supportsDenormalization($data, $type, $format);
     }
 
-    public function normalize(mixed $object, string $format = null, array $context = []): float|array|ArrayObject|bool|int|string|null
+    public function normalize(mixed $object): float|array|ArrayObject|bool|int|string|null
     {
         $serializer = $this->getSerializer();
-        $normalized = $serializer->normalize($object, $format, $context);
+        $normalized = $serializer->normalize($object);
         $normalized = $this->removeIgnoreFields($normalized);
         return $normalized;
     }

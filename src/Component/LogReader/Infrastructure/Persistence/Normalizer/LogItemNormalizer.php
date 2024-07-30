@@ -8,9 +8,9 @@ use Untek\Database\Base\Hydrator\DatabaseItemNormalizer;
 class LogItemNormalizer extends DatabaseItemNormalizer
 {
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type)
     {
         $data['created_at'] = new DateTime($data['datetime'] ?? null);
-        return parent::denormalize($data, $type, $format, $context);
+        return parent::denormalize($data, $type);
     }
 }
