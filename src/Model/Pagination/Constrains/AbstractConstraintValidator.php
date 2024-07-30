@@ -15,7 +15,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof Constraint) {
             throw new UnexpectedTypeException($constraint, Constraint::class);

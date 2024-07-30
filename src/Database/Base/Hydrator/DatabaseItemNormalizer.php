@@ -13,12 +13,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Untek\Core\Contract\Common\Exceptions\NotImplementedMethodException;
 use Untek\Core\Text\Helpers\Inflector;
 use function Symfony\Component\String\u;
 
-/**
- * @method array getSupportedTypes(?string $format)
- */
 class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterface
 {
 
@@ -32,7 +30,12 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return new Serializer($normalizers);
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function getSupportedTypes(?string $format): array
+    {
+        throw new NotImplementedMethodException();
+    }
+
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
         $data = $this->denormalizeTime($data, $type);
         $serializer = $this->getSerializer();
@@ -72,7 +75,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return $data;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = [] ): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsDenormalization($data, $type, $format);
@@ -97,7 +100,7 @@ class DatabaseItemNormalizer implements DenormalizerInterface, NormalizerInterfa
         return $normalized;
     }
 
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = [] ): bool
     {
         $serializer = $this->getSerializer();
         return $serializer->supportsNormalization($data, $format);
