@@ -22,7 +22,7 @@ class MockApiTokenUserProvider implements UserProviderInterface
         // TODO: Implement refreshUser() method.
     }
 
-    public function supportsClass(string $class)
+    public function supportsClass(string $class): bool
     {
         return true;
     }

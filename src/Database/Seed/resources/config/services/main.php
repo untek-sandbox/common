@@ -17,11 +17,15 @@ return static function (ContainerConfigurator $configurator): void {
             service(SchemaRepository::class),
         ]);
 
+//    $seedDirectory = getenv('SEED_DIRECTORY');
+//    $seedDirectory = '/app/tests/fixtures/seeds';
+    $seedDirectory = getenv('SEED_DIRECTORY') ?: $_SERVER['SEED_DIRECTORY'];
+    
     $services->set(ImportSeedCommandHandler::class, ImportSeedCommandHandler::class)
         ->args([
             service(Dependency::class),
             service(Connection::class),
-            getenv('SEED_DIRECTORY'),
+            $seedDirectory,
         ])
         ->tag('cqrs.handler');
     
@@ -37,7 +41,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
         ->args([
             service(Manager::class),
-            getenv('SEED_DIRECTORY'),
+            $seedDirectory,
         ])
         ->tag('cqrs.handler');
 };
