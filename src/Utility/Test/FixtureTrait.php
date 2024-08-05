@@ -9,7 +9,7 @@ use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 trait FixtureTrait
 {
 
-    abstract protected function get(string $id): object;
+//    abstract protected function get(string $id): object;
 
     protected function loadFixtures()
     {
@@ -18,9 +18,9 @@ trait FixtureTrait
             $importCommand = new ImportSeedCommand();
             $importCommand->setTables($fixtures);
             /** @var CommandBusInterface $bus */
-            $bus = $this->get(CommandBusInterface::class);
+            $bus = static::getContainer()->get(CommandBusInterface::class);
             /** @var Connection $connection */
-            $connection = $this->get(Connection::class);
+            $connection = static::getContainer()->get(Connection::class);
             try {
                 $bus->handle($importCommand);
                 $connection->close();

@@ -7,12 +7,12 @@ use Illuminate\Database\Capsule\Manager;
 trait DatabaseAssertTrait
 {
 
-    abstract protected function get(string $id): object;
+//    abstract protected function get(string $id): object;
 
     protected function getDatabaseAssert(): DatabaseAssert
     {
         /** @var Manager $capsule */
-        $capsule = $this->get(Manager::class);
+        $capsule = static::getContainer()->get(Manager::class);
         return new DatabaseAssert($capsule);
     }
 }
