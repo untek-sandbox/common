@@ -8,7 +8,7 @@ use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(RestApiAuthenticationSubscriber::class, RestApiAuthenticationSubscriber::class)
         ->args(
@@ -17,6 +17,5 @@ return static function (ContainerConfigurator $configurator): void {
                 service(TokenServiceInterface::class),
                 service(TokenStorageInterface::class),
             ]
-        )
-        ->tag('kernel.event_subscriber');
+        );
 };

@@ -9,7 +9,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $languageCodes = LanguageEnum::all();
 
@@ -22,8 +22,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(TranslatorInterface::class),
             service(LanguageService::class),
-        ])
-        ->tag('kernel.event_subscriber');
+        ]);
 
     $services->set(AttributeTranslatorService::class, AttributeTranslatorService::class)
         ->args([

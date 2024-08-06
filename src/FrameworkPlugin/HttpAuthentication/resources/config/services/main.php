@@ -11,7 +11,7 @@ use Untek\FrameworkPlugin\HttpAuthentication\Infrastructure\Subscribers\WebAuthe
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(WebAuthentication::class, WebAuthentication::class)
         ->args(
@@ -31,6 +31,5 @@ return static function (ContainerConfigurator $configurator): void {
                 service(TokenStorageInterface::class),
                 service(AuthorizationCheckerInterface::class),
             ]
-        )
-        ->tag('kernel.event_subscriber');
+        );
 };
