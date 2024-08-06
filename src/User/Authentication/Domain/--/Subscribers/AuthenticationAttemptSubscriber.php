@@ -38,7 +38,7 @@ class AuthenticationAttemptSubscriber implements EventSubscriberInterface
         $this->notifyService = $notifyService;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             AuthEventEnum::BEFORE_AUTH => 'onBeforeAuth',

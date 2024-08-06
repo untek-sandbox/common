@@ -31,7 +31,7 @@ class SymfonyAuthenticationIdentitySubscriber implements EventSubscriberInterfac
         $this->setEntityManager($em);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             AuthEventEnum::BEFORE_GET_IDENTITY => 'onBeforeGetIdentity',
