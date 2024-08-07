@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorApplication\Application\Handlers;
 
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
 use Untek\Utility\CodeGeneratorApplication\Application\Commands\GenerateApplicationCommand;
@@ -13,7 +14,7 @@ use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerCo
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerConfigGenerator;
 use Untek\Utility\CodeGeneratorApplication\Infrastructure\Generators\ContainerConfigImportGenerator;
 
-class GenerateApplicationCommandHandler
+class GenerateApplicationCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(protected GenerateResultCollection $collection)

@@ -36,7 +36,7 @@ use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryI
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(TokenStorageInterface::class, TokenStorage::class);
     $services->alias('security.token_storage', TokenStorageInterface::class);
@@ -54,7 +54,7 @@ return static function (ContainerConfigurator $configurator): void {
             service(IdentityRepositoryInterface::class),
             ['login', 'phone'],
         ])
-        ->tag('cqrs.handler')
+//        ->tag('cqrs.handler')
     ;
 
     $services->set(GenerateTokenByPasswordController::class, GenerateTokenByPasswordController::class)

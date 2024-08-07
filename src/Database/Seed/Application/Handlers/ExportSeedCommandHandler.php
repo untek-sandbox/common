@@ -5,9 +5,10 @@ namespace Untek\Database\Seed\Application\Handlers;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Core\Arr\Helpers\ArrayHelper;
 use Untek\Database\Eloquent\Domain\Capsule\Manager;
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 
-class ExportSeedCommandHandler
+class ExportSeedCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(

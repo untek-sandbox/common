@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorCli\Application\Handlers;
 
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Application\Dto\InfoResult;
@@ -14,7 +15,7 @@ use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\CliCommandShortcutG
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\ConsoleCommandConfigGenerator;
 use Untek\Utility\CodeGeneratorCli\Infrastructure\Generators\ContainerConfigGenerator;
 
-class GenerateCliCommandHandler
+class GenerateCliCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(protected GenerateResultCollection $collection)

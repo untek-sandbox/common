@@ -4,6 +4,7 @@ namespace Untek\User\Authentication\Application\Handlers;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
 use Untek\User\Authentication\Application\Validators\GenerateTokenByPasswordCommandValidator;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
@@ -28,7 +29,7 @@ use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
 use Untek\User\Authentication\Domain\Libs\CredentialsPasswordValidator;
 use Untek\User\Identity\Domain\Interfaces\UserIdentityInterface;
 
-class GenerateTokenByPasswordCommandHandler
+class GenerateTokenByPasswordCommandHandler implements CqrsHandlerInterface
 {
 
 //    use EventDispatcherTrait;

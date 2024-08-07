@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorDatabase\Application\Handlers;
 
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use Untek\Utility\CodeGenerator\Infrastructure\Helpers\GeneratorHelper;
@@ -18,7 +19,7 @@ use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryGene
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\RepositoryInterfaceGenerator;
 use Untek\Utility\CodeGeneratorDatabase\Infrastructure\Generators\SeedGenerator;
 
-class GenerateDatabaseCommandHandler
+class GenerateDatabaseCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(protected GenerateResultCollection $collection)

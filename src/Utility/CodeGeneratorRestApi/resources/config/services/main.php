@@ -6,11 +6,12 @@ use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(GenerateRestApiCommandHandler::class, GenerateRestApiCommandHandler::class)
         ->args([
             service(GenerateResultCollection::class)
         ])
-        ->tag('cqrs.handler');
+//        ->tag('cqrs.handler')
+    ;
 };

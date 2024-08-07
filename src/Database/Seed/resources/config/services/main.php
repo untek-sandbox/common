@@ -10,7 +10,7 @@ use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(Dependency::class, Dependency::class)
         ->args([
@@ -27,7 +27,8 @@ return static function (ContainerConfigurator $configurator): void {
             service(Connection::class),
             $seedDirectory,
         ])
-        ->tag('cqrs.handler');
+//        ->tag('cqrs.handler')
+    ;
     
     $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
         ->args([
@@ -36,12 +37,14 @@ return static function (ContainerConfigurator $configurator): void {
                 'eq_migration',
             ],
         ])
-        ->tag('cqrs.handler');
+//        ->tag('cqrs.handler')
+    ;
 
     $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
         ->args([
             service(Manager::class),
             $seedDirectory,
         ])
-        ->tag('cqrs.handler');
+//        ->tag('cqrs.handler')
+    ;
 };

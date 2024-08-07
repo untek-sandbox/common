@@ -2,6 +2,7 @@
 
 namespace Untek\Utility\CodeGeneratorRestApi\Application\Handlers;
 
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\Utility\CodeGenerator\Application\Dto\FileResult;
 use Untek\Utility\CodeGenerator\Application\Dto\GenerateResultCollection;
@@ -17,7 +18,7 @@ use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RestApiSchemeGe
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RoutConfigGenerator;
 use Untek\Utility\CodeGeneratorRestApi\Infrastructure\Generators\RoutConfigImportGenerator;
 
-class GenerateRestApiCommandHandler
+class GenerateRestApiCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(protected GenerateResultCollection $collection)

@@ -18,7 +18,7 @@ use Untek\Framework\Socket\Application\Handlers\SendMessageToWebSocketCommandHan
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     /*try {
         $services->get(ClientMessageHandlerInterface::class);

@@ -9,9 +9,10 @@ use Untek\Core\FileSystem\Helpers\FilePathHelper;
 use Untek\Database\Base\Domain\Libs\Dependency;
 use Untek\Database\Seed\Application\Commands\ImportSeedCommand;
 use Untek\Database\Seed\Application\Validators\ImportSeedCommandValidator;
+use Untek\Model\Cqrs\Application\Abstract\CqrsHandlerInterface;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 
-class ImportSeedCommandHandler
+class ImportSeedCommandHandler implements CqrsHandlerInterface
 {
 
     public function __construct(
