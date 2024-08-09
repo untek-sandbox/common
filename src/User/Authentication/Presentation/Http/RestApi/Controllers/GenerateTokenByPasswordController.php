@@ -2,6 +2,7 @@
 
 namespace Untek\User\Authentication\Presentation\Http\RestApi\Controllers;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Untek\Model\Cqrs\Application\Services\CommandBusInterface;
 use Untek\User\Authentication\Application\Commands\GenerateTokenByPasswordCommand;
@@ -12,6 +13,7 @@ use Untek\Framework\RestApi\Presentation\Http\Symfony\Controllers\AbstractRestAp
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\User\Authentication\Domain\Exceptions\BlockedUserException;
 
+#[Route('/generate-token-by-password', methods: ['POST'])]
 class GenerateTokenByPasswordController extends AbstractRestApiController
 {
 
