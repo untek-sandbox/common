@@ -27,16 +27,15 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(TokenStorageInterface::class, TokenStorage::class);
     $services->alias('security.token_storage', TokenStorageInterface::class);
 
-    $services->set(PasswordHasherInterface::class, NativePasswordHasher::class);
+    $services->set(NativePasswordHasher::class);
+    $services->alias(PasswordHasherInterface::class, NativePasswordHasher::class);
     $services->set(PasswordService::class);
-    $services->set(CredentialsPasswordValidator::class);
-    $services->set(MockApiTokenUserProvider::class);
-    $services->set(UserProviderInterface::class, ChainUserProvider::class)
-        ->args(
+
+    $services->set(ChainUserProvider::class)
+        ->args([
             [
-                [
-                    service(MockApiTokenUserProvider::class),
-                ]
+                service(MockApiTokenUserProvider::class),
             ]
-        );
+        ]);
+    $services->alias(UserProviderInterface::class, ChainUserProvider::class);
 };

@@ -9,7 +9,7 @@ use Untek\Model\Entity\Interfaces\EntityIdInterface;
 use Untek\Model\Entity\Interfaces\UniqueInterface;
 use Untek\Model\Validator\Interfaces\ValidationByMetadataInterface;
 
-class CredentialEntity //implements ValidationByMetadataInterface, EntityIdInterface, UniqueInterface
+class CredentialEntity
 {
 
     private $id = null;
@@ -100,6 +100,4 @@ class CredentialEntity //implements ValidationByMetadataInterface, EntityIdInter
     {
         $this->expiredAt = $expiredAt;
     }
-
 }
-
