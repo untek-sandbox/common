@@ -10,7 +10,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "untek-database/base": "0.1.x-dev",
+    "untek-database/base": "0.2.x-dev",
     "../../../../../doctrine/dbal": "^2.10",
     "../../../../../illuminate/database": "7.30.6"
   },

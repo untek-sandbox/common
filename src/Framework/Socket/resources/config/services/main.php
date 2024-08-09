@@ -2,8 +2,6 @@
 
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-//use Untek\Framework\Socket\Domain\Interfaces\Services\ClientMessageHandlerInterface;
-//use Untek\Framework\Socket\Infrastructure\Services\ClientMessageHandler;
 use Untek\Framework\Socket\Application\Services\MessageTransportInterface;
 use Untek\Framework\Socket\Infrastructure\Services\SocketDaemon;
 use Untek\Framework\Socket\Infrastructure\Services\SocketDaemonTest;
@@ -18,35 +16,36 @@ use Untek\Framework\Socket\Application\Handlers\SendMessageToWebSocketCommandHan
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public()->autoconfigure();
+    $services = $configurator->services()->defaults()->public()->autowire()->autoconfigure();
 
-    /*try {
-        $services->get(ClientMessageHandlerInterface::class);
-    } catch (ServiceNotFoundException $e) {
-        $services->set(ClientMessageHandlerInterface::class, ClientMessageHandler::class);
-    }*/
+    $services
+        ->load('Untek\Framework\Socket\\', __DIR__ . '/../../..')
+        ->exclude([
+            __DIR__ . '/../../../{resources,Domain,Application/Commands,Application/Queries,Application/Validators}',
+            __DIR__ . '/../../../**/*{Event.php,Helper.php,Message.php,Task.php,Relation.php,Schema.php,Normalizer.php}',
+            __DIR__ . '/../../../**/{Dto,Enums}',
+        ]);
 
-    $services->set(ConnectionRamStorage::class, ConnectionRamStorage::class);
+    $services->set(ConnectionRamStorage::class);
 
     if (getenv('APP_MODE') === 'test') {
         $services->set(SocketDaemon::class, SocketDaemonTest::class);
     } else {
-        $services->set(SocketDaemon::class, SocketDaemon::class)
+        $services->set(SocketDaemon::class)
             ->args([
                 service(EventDispatcherInterface::class),
                 service(ConnectionRamStorage::class),
                 service(TokenServiceInterface::class),
-//                service(ClientMessageHandlerInterface::class),
                 getenv('WEB_SOCKET_LOCAL_URL'),
                 getenv('WEB_SOCKET_CLIENT_URL'),
                 getenv('APP_ENV'),
             ]);
     }
-    
+
     $services->alias(SocketDaemonInterface::class, SocketDaemon::class);
     $services->alias(MessageTransportInterface::class, SocketDaemon::class);
 
-    $services->set(SocketCommand::class, SocketCommand::class)
+    /*$services->set(SocketCommand::class, SocketCommand::class)
         ->args([
             service(SocketDaemonInterface::class),
         ])
@@ -56,11 +55,5 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(CommandBusInterface::class),
         ])
-        ->tag('console.command');
-
-    /*$services->set(SendMessageToWebSocketCommandHandler::class, SendMessageToWebSocketCommandHandler::class)
-        ->args([
-            service(MessageTransportInterface::class),
-        ])
-        ->tag('cqrs.handler');*/
+        ->tag('console.command');*/
 };

@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->exclude([
             __DIR__ . '/../../../{resources,Domain,Application/Commands,Application/Queries,Application/Validators}',
             __DIR__ . '/../../../**/*{Event.php,Helper.php,Message.php,Task.php,Relation.php,Schema.php,Normalizer.php}',
-            __DIR__ . '/../../../**/{Dto}',
+            __DIR__ . '/../../../**/{Dto,Enums}',
         ]);
 
     $services->set(TokenStorage::class);

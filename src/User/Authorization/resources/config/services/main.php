@@ -43,7 +43,6 @@ return static function (ContainerConfigurator $configurator): void {
         );*/
 
     $services->set(AuthorizationChecker::class);
-
     $services->alias(AuthorizationCheckerInterface::class, AuthorizationChecker::class);
     $services->alias('security.authorization_checker', AuthorizationChecker::class);
 };
