@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Domain\Libs;
+namespace Untek\User\Authentication\Infrastructure\Libs;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

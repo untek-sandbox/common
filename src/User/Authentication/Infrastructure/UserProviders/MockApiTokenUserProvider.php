@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\User\Authentication\Domain\UserProviders;
+namespace Untek\User\Authentication\Infrastructure\UserProviders;
 
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;

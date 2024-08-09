@@ -26,7 +26,7 @@ use Untek\User\Authentication\Domain\Forms\AuthForm;
 use Untek\User\Authentication\Domain\Interfaces\Services\AuthServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
 use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
-use Untek\User\Authentication\Domain\Libs\CredentialsPasswordValidator;
+use Untek\User\Authentication\Infrastructure\Libs\CredentialsPasswordValidator;
 use Untek\User\Identity\Domain\Interfaces\UserIdentityInterface;
 
 class GenerateTokenByPasswordCommandHandler implements CqrsHandlerInterface
