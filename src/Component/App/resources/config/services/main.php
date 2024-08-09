@@ -7,11 +7,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autowire();
 
-    $services->set(ControllerAccessChecker::class, ControllerAccessChecker::class)
-        ->args([
-            service(ContainerInterface::class),
-            service(TranslatorInterface::class),
-        ]);
+    $services->set(ControllerAccessChecker::class);
 };
