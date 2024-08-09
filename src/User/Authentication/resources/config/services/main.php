@@ -23,8 +23,9 @@ return static function (ContainerConfigurator $configurator): void {
             __DIR__ . '/../../../**/{Dto}',
         ]);
 
-    $services->set(TokenStorageInterface::class, TokenStorage::class);
-    $services->alias('security.token_storage', TokenStorageInterface::class);
+    $services->set(TokenStorage::class);
+    $services->alias(TokenStorageInterface::class, TokenStorage::class);
+    $services->alias('security.token_storage', TokenStorage::class);
 
     $services->set(NativePasswordHasher::class);
     $services->alias(PasswordHasherInterface::class, NativePasswordHasher::class);
