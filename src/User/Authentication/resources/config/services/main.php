@@ -33,7 +33,6 @@ return static function (ContainerConfigurator $configurator): void {
             __DIR__ . '/../../../**/{Dto}',
             __DIR__ . '/../../../Infrastructure/Services',
             __DIR__ . '/../../../Infrastructure/UserProviders',
-
         ]);
 
     $services->set(TokenStorageInterface::class, TokenStorage::class);
