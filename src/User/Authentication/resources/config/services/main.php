@@ -27,9 +27,9 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(TokenStorageInterface::class, TokenStorage::class);
     $services->alias('security.token_storage', TokenStorageInterface::class);
 
+    $services->set(PasswordService::class);
     $services->set(NativePasswordHasher::class);
     $services->alias(PasswordHasherInterface::class, NativePasswordHasher::class);
-    $services->set(PasswordService::class);
 
     $services->set(ChainUserProvider::class)
         ->args([
