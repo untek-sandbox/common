@@ -9,6 +9,15 @@ use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Untek\User\Authentication\Infrastructure\Libs\CredentialsPasswordValidator;
 use Untek\User\Authentication\Infrastructure\UserProviders\MockApiTokenUserProvider;
+use Forecast\Map\Supporting\User\Identity\Infrastructure\Persistence\Eloquent\Repository\IdentityRepository;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use Untek\User\Authentication\Application\Services\UserAssignedRolesRepositoryInterface;
+use Untek\User\Authentication\Domain\Interfaces\Repositories\IdentityRepositoryInterface;
+use Untek\User\Authentication\Domain\Interfaces\Services\CredentialServiceInterface;
+use Untek\User\Authentication\Domain\Interfaces\Services\TokenServiceInterface;
+use Untek\User\Authentication\Infrastructure\Persistence\Eloquent\Repository\TokenRepository;
+use Untek\User\Authentication\Infrastructure\Persistence\Eloquent\Repository\UserAssignedRolesRepository;
+use Untek\User\Authentication\Infrastructure\Persistence\Eloquent\Repository\UserCredentialRepository;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
@@ -37,4 +46,8 @@ return static function (ContainerConfigurator $configurator): void {
             ]
         ]);
     $services->alias(UserProviderInterface::class, ChainUserProvider::class);
+
+    $services->alias(CredentialServiceInterface::class, UserCredentialRepository::class);
+    $services->alias(TokenServiceInterface::class, TokenRepository::class);
+    $services->alias(UserAssignedRolesRepositoryInterface::class, UserAssignedRolesRepository::class);
 };
