@@ -40,12 +40,12 @@ class GenerateTokenByPasswordCommandHandler implements CqrsHandlerInterface
 
     public function __construct(
         private TranslatorInterface $translator,
-        private UserProviderInterface $userProvider,
+//        private UserProviderInterface $userProvider,
         private CredentialsPasswordValidator $credentialsPasswordValidator,
         private TokenServiceInterface $tokenService,
         private CredentialServiceInterface $credentialService,
         private LoggerInterface $logger,
-        private ValidatorInterface $validator,
+//        private ValidatorInterface $validator,
         private IdentityRepositoryInterface $identityRepository,
         private array $credentialTypes
 //        EventDispatcherInterface $eventDispatcher,
