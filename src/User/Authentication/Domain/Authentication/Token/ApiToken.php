@@ -4,6 +4,9 @@ namespace Untek\User\Authentication\Domain\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Untek\Core\Code\Helpers\DeprecateHelper;
+
+DeprecateHelper::hardThrow();
 
 class ApiToken extends AbstractToken
 {
