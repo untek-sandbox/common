@@ -2,46 +2,29 @@
 
 namespace Untek\User\Authentication\Infrastructure\Libs;
 
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Untek\Core\Collection\Interfaces\Enumerable;
-use Untek\Core\EventDispatcher\Traits\EventDispatcherTrait;
-use Untek\Crypt\Base\Domain\Exceptions\InvalidPasswordException;
-use Untek\Crypt\Base\Domain\Services\PasswordService;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Exceptions\BadPasswordException;
 
 class CredentialsPasswordValidator
 {
 
-    use EventDispatcherTrait;
-
     public function __construct(
-        private PasswordService $passwordService,
-        EventDispatcherInterface $eventDispatcher,
+        private PasswordHasherInterface $passwordHasher,
         private TranslatorInterface $translator,
-    ) {
-        $this->setEventDispatcher($eventDispatcher);
+    )
+    {
     }
 
     public function isValidPassword(array $credentials, string $password): CredentialEntity
     {
         foreach ($credentials as $credentialEntity) {
-            $isValid = $this->isValidPasswordByCredential($credentialEntity, $password);
+            $isValid = $this->passwordHasher->verify(trim($credentialEntity->getValidation()), trim($password));
             if ($isValid) {
                 return $credentialEntity;
             }
         }
         throw new BadPasswordException($this->translator->trans('incorrectPassword', [], 'user'));
-    }
-
-    protected function isValidPasswordByCredential(CredentialEntity $credentialEntity, string $password): bool
-    {
-        try {
-            $this->passwordService->validate($password, $credentialEntity->getValidation());
-            return true;
-        } catch (InvalidPasswordException $e) {
-            return false;
-        }
     }
 }

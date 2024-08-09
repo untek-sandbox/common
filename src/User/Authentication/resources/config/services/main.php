@@ -7,7 +7,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Untek\Crypt\Base\Domain\Services\PasswordService;
 use Untek\User\Authentication\Infrastructure\Libs\CredentialsPasswordValidator;
 use Untek\User\Authentication\Infrastructure\UserProviders\MockApiTokenUserProvider;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -27,7 +26,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(TokenStorageInterface::class, TokenStorage::class);
     $services->alias('security.token_storage', TokenStorageInterface::class);
 
-    $services->set(PasswordService::class);
     $services->set(NativePasswordHasher::class);
     $services->alias(PasswordHasherInterface::class, NativePasswordHasher::class);
 
