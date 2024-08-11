@@ -9,14 +9,12 @@ use Untek\Model\EntityManager\Interfaces\TransactionInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autowire();
 
-    $services->set(TransactionInterface::class, EloquentOrm::class)
-        ->args([
-            service(Manager::class),
-        ]);
+    $services->set(EloquentOrm::class);
+    $services->alias(TransactionInterface::class, EloquentOrm::class);
 
-    $services->set(Manager::class, Manager::class)
+    $services->set(Manager::class)
         ->factory([ManagerFactory::class, 'createManagerFromEnv']);
 
 

@@ -18,7 +18,7 @@ class ImportSeedCommandHandler implements CqrsHandlerInterface
     public function __construct(
         private Dependency $dependency,
         private Connection $connection,
-        private string $directory
+        private string $seedDirectory
     )
     {
     }
@@ -34,7 +34,7 @@ class ImportSeedCommandHandler implements CqrsHandlerInterface
 
         $tables = $command->getTables();
 
-        $seeds = FileHelper::findFiles($this->directory);
+        $seeds = FileHelper::findFiles($this->seedDirectory);
         $seedList = [];
         foreach ($seeds as $seedFile) {
             $seedName = FilePathHelper::fileNameOnly($seedFile);

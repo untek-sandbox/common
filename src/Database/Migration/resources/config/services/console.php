@@ -19,7 +19,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public();
     
-    $services->set(DownCommand::class, DownCommand::class)
+    /*$services->set(DownCommand::class, DownCommand::class)
         ->args([
             service(MigrationService::class)
         ])
@@ -29,5 +29,5 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(MigrationService::class)
         ])
-        ->tag('console.command');
+        ->tag('console.command');*/
 };

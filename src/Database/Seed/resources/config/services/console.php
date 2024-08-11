@@ -14,7 +14,7 @@ use Untek\Database\Seed\Presentation\Cli\Commands\ExportSeedCliCommand;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public();
     
-    $services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
+    /*$services->set(ImportSeedCliCommand::class, ImportSeedCliCommand::class)
         ->args([
             service(CommandBusInterface::class),
         ])
@@ -24,5 +24,5 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(CommandBusInterface::class),
         ])
-        ->tag('console.command');
+        ->tag('console.command');*/
 };

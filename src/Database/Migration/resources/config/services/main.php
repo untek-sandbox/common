@@ -17,14 +17,23 @@ use Doctrine\DBAL\Connection;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autowire()->autoconfigure();
+
+    $services
+        ->load('Untek\Database\Migration\\', __DIR__ . '/../../..')
+        ->exclude([
+            __DIR__ . '/../../../{resources,Domain,Application/Commands,Application/Queries,Application/Validators}',
+            __DIR__ . '/../../../**/*{Event.php,Helper.php,Message.php,Task.php,Relation.php,Schema.php,Normalizer.php}',
+            __DIR__ . '/../../../**/{Dto,Enums}',
+            __DIR__ . '/../../../**/Persistence/Memory/Repository/*',
+        ]);
 
     $services->set(SchemaRepository::class, SchemaRepository::class)
         ->args([
             service(Connection::class)
         ]);
 
-    $services->set(SourceRepository::class, SourceRepository::class);
+    /*$services->set(SourceRepository::class, SourceRepository::class);
 
     $services->set(HistoryRepository::class, HistoryRepository::class)
         ->args([
@@ -37,5 +46,5 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(SourceRepository::class),
             service(HistoryRepository::class),
-        ]);
+        ]);*/
 };

@@ -10,7 +10,22 @@ use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public()->autoconfigure();
+    $seedDirectory = getenv('SEED_DIRECTORY') ?: $_SERVER['SEED_DIRECTORY'];
+    $services = $configurator->services()->defaults()->public()->autowire()->autoconfigure()
+    ->bind('$seedDirectory', $seedDirectory)
+    ->bind('$excludeTables', [
+        'eq_migration',
+    ]);
+
+    $services
+        ->load('Untek\Database\Seed\\', __DIR__ . '/../../..')
+        ->exclude([
+            __DIR__ . '/../../../{resources,Domain,Application/Commands,Application/Queries,Application/Validators}',
+            __DIR__ . '/../../../**/*{Event.php,Helper.php,Message.php,Task.php,Relation.php,Schema.php,Normalizer.php}',
+            __DIR__ . '/../../../**/{Dto,Enums}',
+            __DIR__ . '/../../../**/Persistence/Memory/Repository/*',
+        ]);
+
 
     $services->set(Dependency::class, Dependency::class)
         ->args([
@@ -19,18 +34,18 @@ return static function (ContainerConfigurator $configurator): void {
 
 //    $seedDirectory = getenv('SEED_DIRECTORY');
 //    $seedDirectory = '/app/tests/fixtures/seeds';
-    $seedDirectory = getenv('SEED_DIRECTORY') ?: $_SERVER['SEED_DIRECTORY'];
+
     
-    $services->set(ImportSeedCommandHandler::class, ImportSeedCommandHandler::class)
+    /*$services->set(ImportSeedCommandHandler::class, ImportSeedCommandHandler::class)
         ->args([
             service(Dependency::class),
             service(Connection::class),
             $seedDirectory,
         ])
 //        ->tag('cqrs.handler')
-    ;
+    ;*/
     
-    $services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
+    /*$services->set(GetTablesQueryHandler::class, GetTablesQueryHandler::class)
         ->args([
             service(Connection::class),
             [
@@ -38,13 +53,13 @@ return static function (ContainerConfigurator $configurator): void {
             ],
         ])
 //        ->tag('cqrs.handler')
-    ;
+    ;*/
 
-    $services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
+    /*$services->set(\Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class, \Untek\Database\Seed\Application\Handlers\ExportSeedCommandHandler::class)
         ->args([
             service(Manager::class),
             $seedDirectory,
         ])
 //        ->tag('cqrs.handler')
-    ;
+    ;*/
 };
