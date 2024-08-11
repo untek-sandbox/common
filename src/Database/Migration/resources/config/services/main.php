@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(SourceRepository::class)
     ->args([
-        param('database.migration.config_path')
+        param('database.migration.config_path'),
     ]);
 
     /*$services->set(HistoryRepository::class, HistoryRepository::class)
