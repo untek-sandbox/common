@@ -5,12 +5,14 @@ namespace Untek\Component\Translator\Infrastructure\DependencyInjection;
 use Symfony\Component\Translation\Loader\PhpFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 
 class TranslatorFactory
 {
 
     public static function create(string $configFile): Translator
     {
+        DeprecateHelper::hardThrow();
         $defaultLanguage = getenv('TRANSLATOR_DEFAULT_LANGUAGE');
         if (getenv('APP_ENV') === 'prod') {
             $cacheDirectory = getenv('TRANSLATOR_CACHE_DIRECTORY');
