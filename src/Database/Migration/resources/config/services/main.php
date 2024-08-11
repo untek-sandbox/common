@@ -15,6 +15,7 @@ use Untek\Model\EntityManager\Libs\EntityManager;
 use Untek\Model\EntityManager\Libs\EntityManagerConfigurator;
 use Doctrine\DBAL\Connection;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public()->autowire()->autoconfigure();
@@ -28,14 +29,14 @@ return static function (ContainerConfigurator $configurator): void {
             __DIR__ . '/../../../**/Persistence/Memory/Repository/*',
         ]);
 
-    $services->set(SchemaRepository::class, SchemaRepository::class)
-        ->args([
-            service(Connection::class)
-        ]);
+    $services->set(SchemaRepository::class);
 
-    /*$services->set(SourceRepository::class, SourceRepository::class);
+    $services->set(SourceRepository::class)
+    ->args([
+        param('database.migration.config_path')
+    ]);
 
-    $services->set(HistoryRepository::class, HistoryRepository::class)
+    /*$services->set(HistoryRepository::class, HistoryRepository::class)
         ->args([
             service(EntityManagerInterface::class),
             service(Manager::class),

@@ -12,11 +12,13 @@ use Untek\Database\Migration\Domain\Model\Migration;
 class SourceRepository
 {
 
+    public function __construct(private string $configPath)
+    {
+    }
+
     public function getAll(): array
     {
-        $migrationConfigFile = getenv('MIGRATION_CONFIG_FILE');
-
-        $directories = include $migrationConfigFile;
+        $directories = include $this->configPath;
 
         if (empty($directories)) {
             throw new InvalidConfigException('Empty directories configuration for migration!');

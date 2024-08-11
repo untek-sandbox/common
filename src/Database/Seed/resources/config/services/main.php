@@ -10,9 +10,10 @@ use Untek\Database\Seed\Application\Handlers\ImportSeedCommandHandler;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $seedDirectory = getenv('SEED_DIRECTORY') ?: $_SERVER['SEED_DIRECTORY'];
+//    dd($configurator);
+//    $seedDirectory = getenv('SEED_DIRECTORY') ?: $_SERVER['SEED_DIRECTORY'];
     $services = $configurator->services()->defaults()->public()->autowire()->autoconfigure()
-    ->bind('$seedDirectory', $seedDirectory)
+    ->bind('$seedDirectory', '%database.seed.path%')
     ->bind('$excludeTables', [
         'eq_migration',
     ]);

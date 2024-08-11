@@ -11,6 +11,14 @@ class DatabaseExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        foreach ($configs as $config) {
+            if(isset($config['migration']['config_path'])) {
+                $container->setParameter('database.migration.config_path', $config['migration']['config_path']);
+            }
+            if(isset($config['seed']['path'])) {
+                $container->setParameter('database.seed.path', $config['seed']['path']);
+            }
+        }
 
         $fileLocator = new FileLocator(__DIR__);
         $loader = new PhpFileLoader($container, $fileLocator);
