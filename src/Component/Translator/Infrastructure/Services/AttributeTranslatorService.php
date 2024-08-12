@@ -10,7 +10,7 @@ class AttributeTranslatorService
 
     public function __construct(
         private TranslatorInterface $translator,
-        private array $languageCodes,
+        private array $locales,
     )
     {
     }
@@ -21,7 +21,7 @@ class AttributeTranslatorService
         if (!empty($value[$languageCode])) {
             return $value[$languageCode];
         }
-        foreach ($this->languageCodes as $code) {
+        foreach ($this->locales as $code) {
             if (!empty($value[$code])) {
                 return $value[$code];
             }
