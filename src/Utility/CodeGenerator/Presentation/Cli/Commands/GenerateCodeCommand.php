@@ -62,7 +62,7 @@ class GenerateCodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $inputFile = $input->getOption('inputFile');
         if ($inputFile) {
-            $renderParams = ['directory' => $_SERVER['OLDPWD']];
+            $renderParams = ['directory' => $_SERVER['OLDPWD'] ?? null];
             $inputFile = TemplateHelper::render($inputFile, $renderParams, '{{', '}}');
             $store = new StoreFile($inputFile);
             $commands = $store->load();
