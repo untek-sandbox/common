@@ -4,6 +4,7 @@ namespace Untek\Database\Eloquent\Domain\Helpers\QueryBuilder;
 
 use Illuminate\Database\Query\Builder;
 //use Illuminate\Support\Str;
+use Untek\Core\Code\Helpers\DeprecateHelper;
 use Untek\Model\Query\Entities\Join;
 use Untek\Model\Query\Enums\OperatorEnum;
 use Untek\Database\Base\Domain\Enums\DbDriverEnum;
@@ -11,6 +12,8 @@ use Untek\Database\Base\Domain\Helpers\DbHelper;
 use Untek\Database\Base\Domain\Interfaces\QueryBuilderInterface;
 use Untek\Model\Query\Entities\Query;
 use Untek\Model\Query\Entities\Where;
+
+DeprecateHelper::hardThrow();
 
 class EloquentQueryBuilderHelper implements QueryBuilderInterface
 {

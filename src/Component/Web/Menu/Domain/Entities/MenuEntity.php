@@ -8,7 +8,7 @@ use Untek\Model\Validator\Interfaces\ValidationByMetadataInterface;
 use Untek\Core\Collection\Helpers\CollectionHelper;
 use Untek\Model\Entity\Interfaces\EntityIdInterface;
 
-class MenuEntity implements ValidationByMetadataInterface, EntityIdInterface
+class MenuEntity //implements ValidationByMetadataInterface, EntityIdInterface
 {
 
     private $id = null;

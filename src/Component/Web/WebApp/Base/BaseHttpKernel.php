@@ -33,7 +33,7 @@ DeprecateHelper::hardThrow();
 abstract class BaseHttpKernel implements HttpKernelInterface, TerminableInterface
 {
 
-    use EventDispatcherTrait;
+//    use EventDispatcherTrait;
 
     protected $resolver;
     protected $requestStack;
