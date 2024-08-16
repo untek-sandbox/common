@@ -18,7 +18,7 @@ use Untek\Database\Eloquent\Domain\Capsule\Manager;
 use Untek\Database\Eloquent\Domain\Helpers\QueryBuilder\EloquentQueryBuilderHelper;
 use Untek\Database\Eloquent\Domain\Traits\EloquentTrait;
 
-abstract class BaseEloquentRepository implements GetEntityClassInterface
+abstract class BaseEloquentRepository //implements GetEntityClassInterface
 {
 
     use EloquentTrait;
@@ -26,7 +26,14 @@ abstract class BaseEloquentRepository implements GetEntityClassInterface
     use EntityManagerAwareTrait;
     use RepositoryMapperTrait;
 //    use DispatchEventTrait;
-    use ForgeQueryTrait;
+//    use ForgeQueryTrait;
+
+    protected function forgeQuery(Query $query = null): Query
+    {
+        $query = Query::forge($query);
+//        $this->dispatchQueryEvent($query, EventEnum::BEFORE_FORGE_QUERY);
+        return $query;
+    }
 
     public function __construct(EntityManagerInterface $em, Manager $capsule)
     {

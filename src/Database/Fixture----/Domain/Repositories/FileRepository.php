@@ -21,7 +21,7 @@ use Untek\Database\Fixture\Domain\Libs\FixtureInterface;
 use Untek\Component\FormatAdapter\StoreFile;
 use Untek\Sandbox\Sandbox\Generator\Domain\Services\GeneratorService;
 
-class FileRepository implements RepositoryInterface, GetEntityClassInterface
+class FileRepository //implements RepositoryInterface//, GetEntityClassInterface
 {
 
     protected $config;

@@ -8,7 +8,7 @@ use Untek\Model\Repository\Interfaces\CrudRepositoryInterface;
 use Untek\User\Authentication\Domain\Entities\CredentialEntity;
 use Untek\User\Authentication\Domain\Enums\CredentialTypeEnum;
 
-interface CredentialRepositoryInterface extends CrudRepositoryInterface
+interface CredentialRepositoryInterface //extends CrudRepositoryInterface
 {
 
     /**

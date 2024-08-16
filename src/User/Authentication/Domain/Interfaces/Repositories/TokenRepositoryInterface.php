@@ -6,7 +6,7 @@ use Untek\User\Authentication\Domain\Entities\TokenEntity;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Model\Repository\Interfaces\CrudRepositoryInterface;
 
-interface TokenRepositoryInterface extends CrudRepositoryInterface
+interface TokenRepositoryInterface //extends CrudRepositoryInterface
 {
 
     /**
