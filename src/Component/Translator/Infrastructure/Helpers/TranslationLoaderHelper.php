@@ -8,6 +8,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Translation\Translator;
 
+\Untek\Core\Code\Helpers\DeprecateHelper::hardThrow();
+
 class TranslationLoaderHelper
 {
 

@@ -7,6 +7,8 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
 use Untek\Core\Code\Helpers\DeprecateHelper;
 
+\Untek\Core\Code\Helpers\DeprecateHelper::hardThrow();
+
 class TranslatorFactory
 {
 

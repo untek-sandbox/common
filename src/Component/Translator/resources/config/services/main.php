@@ -1,12 +1,14 @@
 <?php
 
-use Untek\Component\Translator\Infrastructure\Services\AttributeTranslatorService;
-use Untek\Component\Translator\Infrastructure\Services\LanguageService;
-use Untek\Component\Translator\Infrastructure\Subscribers\RestApiLocaleSubscriber;
 use Forecast\Map\Shared\Infrastructure\Enums\LanguageEnum;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Untek\Component\Translator\Infrastructure\Services\AttributeTranslatorService;
+use Untek\Component\Translator\Infrastructure\Services\LanguageService;
+use Untek\Component\Translator\Infrastructure\Subscribers\RestApiLocaleSubscriber;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+\Untek\Core\Code\Helpers\DeprecateHelper::hardThrow();
 
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services()->defaults()->public()->autoconfigure();
