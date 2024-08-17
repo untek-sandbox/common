@@ -3,9 +3,7 @@
 namespace Untek\Component\App\Services;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,9 +14,8 @@ class ControllerAccessChecker
     public function __construct(
         protected ContainerInterface $container,
         private TranslatorInterface $translator,
-//        private TokenStorageInterface $tokenStorage,
-//        private AccessDecisionManagerInterface $accessDecisionManager
-    ) {
+    )
+    {
     }
 
     /**
@@ -54,7 +51,7 @@ class ControllerAccessChecker
 
     public function denyAccessUnlessAuthenticated(): void
     {
-        if($this->getToken() == null || $this->getToken()->getUser() == null) {
+        if ($this->getToken() == null || $this->getToken()->getUser() == null) {
             throw $this->createAuthenticationException();
         }
     }
@@ -88,12 +85,12 @@ class ControllerAccessChecker
     /**
      * Get a user from the Security Token Storage.
      *
-     * @throws \LogicException If SecurityBundle is not available
+     * @return UserInterface
      * @throws AuthenticationException
      *
+     * @throws \LogicException If SecurityBundle is not available
      * @see TokenInterface::getUser()
-     * 
-     * @return UserInterface
+     *
      */
     public function getUser(): UserInterface
     {
@@ -102,7 +99,8 @@ class ControllerAccessChecker
         return $token->getUser();
     }
 
-    public function getToken(): ?TokenInterface {
+    public function getToken(): ?TokenInterface
+    {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
         }
