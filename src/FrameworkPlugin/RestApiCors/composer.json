@@ -1,6 +1,0 @@
-{
-  "name": "",
-  "require": {
-    "fruitcake/php-cors": "^1.1"
-  }
-}
