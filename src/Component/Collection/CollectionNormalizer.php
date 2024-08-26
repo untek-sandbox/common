@@ -3,7 +3,6 @@
 namespace Untek\Component\Collection;
 
 use Doctrine\Common\Collections\Collection;
-use ReflectionClass;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
@@ -30,13 +29,12 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
         return new $type($list);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null): bool
     {
         if (!class_exists($type)) {
             return false;
         }
-        $reflection = new ReflectionClass($type);
-        return array_key_exists(Collection::class, $reflection->getInterfaces());
+        return is_subclass_of($type, Collection::class, true);
     }
 
     public function normalize(mixed $object, ?string $format = null, array $context = [])
@@ -45,7 +43,7 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
         return $object->toArray();
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null)
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $data instanceof Collection;
     }

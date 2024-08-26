@@ -18,9 +18,9 @@ class CustomDateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         return new DateTimeImmutable($data);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null): bool
     {
-        return in_array($type, [DateTimeInterface::class, \DateTime::class, \DateTimeImmutable::class]);
+        return is_subclass_of($type, DateTimeInterface::class, true);
     }
 
     public function normalize(mixed $object, ?string $format = null, array $context = [])
@@ -29,7 +29,7 @@ class CustomDateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         return $object->format(DateTimeInterface::ATOM);
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null)
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $data instanceof DateTimeInterface;
     }

@@ -113,12 +113,12 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $this->reflectionClassMap[$className];
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null): bool
     {
         return class_exists($type);
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null)
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return is_object($data);
     }

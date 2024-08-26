@@ -24,9 +24,6 @@ class UidNormalizer implements NormalizerInterface, DenormalizerInterface
         if (!class_exists($type)) {
             return false;
         }
-//        $reflection = new ReflectionClass($type);
-//        return array_key_exists(AbstractUid::class, $reflection->getInterfaces());
-
         return is_subclass_of($type, AbstractUid::class, true);
     }
 

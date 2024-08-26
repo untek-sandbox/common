@@ -2,7 +2,6 @@
 
 namespace Untek\Component\ValueObject;
 
-use ReflectionClass;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -17,13 +16,12 @@ class ValueObjectNormalizer implements NormalizerInterface, DenormalizerInterfac
         return new $type($data);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null): bool
     {
         if (!class_exists($type)) {
             return false;
         }
-        $reflection = new ReflectionClass($type);
-        return array_key_exists(ValueObjectInterface::class, $reflection->getInterfaces());
+        return is_subclass_of($type, ValueObjectInterface::class, true);
     }
 
     public function normalize(mixed $object, ?string $format = null, array $context = [])
@@ -32,7 +30,7 @@ class ValueObjectNormalizer implements NormalizerInterface, DenormalizerInterfac
         return $object->get();
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null)
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $data instanceof ValueObjectInterface;
     }
