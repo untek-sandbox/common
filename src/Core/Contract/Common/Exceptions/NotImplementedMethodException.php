@@ -3,7 +3,6 @@
 namespace Untek\Core\Contract\Common\Exceptions;
 
 use Exception;
-use Throwable;
 
 /**
  * Заглушка для ненужных методов интерфейса

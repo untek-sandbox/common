@@ -11,12 +11,20 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "ext-json": "*"
+    "ext-json": "*",
+    "doctrine/collections": "^1.0",
+    "symfony/serializer": "^5.4|^6.0|^7.0",
+    "symfony/uid": "^5.4|^6.0|^7.0",
+    "symfony/string": "^5.4|^6.0|^7.0"
   },
   "autoload": {
     "psr-4": {
       "Untek\\": "src",
       "Untek\\Tests\\": "tests"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5",
+    "symfony/var-dumper": "^5.4|^6.0|^7.0"
   }
 }

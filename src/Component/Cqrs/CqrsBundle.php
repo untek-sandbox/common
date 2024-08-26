@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Untek\Component\Cqrs\Application\Abstract\CqrsHandlerInterface;
-use Untek\Component\Cqrs\Infrastructure\DependencyInjection\CqrsExtension;
 use Untek\Component\Cqrs\Infrastructure\DependencyInjection\CqrsPass;
 
 class CqrsBundle extends AbstractBundle
