@@ -9,19 +9,18 @@ use Symfony\Component\Uid\Ulid;
 class Comment
 {
 
-    private string $id;
+    private Ulid $id;
     private string $content;
     private DateTimeInterface $createdAt;
 
     public function __construct(string $content)
     {
-        $createdAt = new DateTimeImmutable();
-        $this->id = Ulid::generate($createdAt);
+        $this->id = new Ulid();
         $this->content = $content;
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): string
+    public function getId(): Ulid
     {
         return $this->id;
     }

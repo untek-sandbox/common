@@ -4,7 +4,6 @@ namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Symfony\Component\Uid\AbstractUid;
 use Symfony\Component\Uid\Ulid;
 
 class Post
@@ -24,10 +23,9 @@ class Post
         ?CommentCollection $comments = null,
     )
     {
-        $createdAt = new DateTimeImmutable();
         $this->id = new Ulid();
         $this->title = $title;
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTimeImmutable();
         $this->tags = $tags;
         $this->valueObject1 = $valueObject1;
         $this->comments = $comments;

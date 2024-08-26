@@ -70,7 +70,7 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
         $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
         $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['valueObject1']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $normalizedData['comments'][0]['id']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase58(), $normalizedData['comments'][0]['id']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['createdAt']);
 
