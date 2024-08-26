@@ -122,9 +122,4 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         return is_object($data);
     }
-
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method array getSupportedTypes(?string $format)
-    }
 }

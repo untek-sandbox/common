@@ -33,9 +33,4 @@ class CustomDateTimeNormalizer implements NormalizerInterface, DenormalizerInter
     {
         return $data instanceof DateTimeInterface;
     }
-
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method array getSupportedTypes(?string $format)
-    }
 }
