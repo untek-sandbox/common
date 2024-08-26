@@ -8,9 +8,9 @@ use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
-use Untek\Component\Uid\UidNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Comment;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\CommentCollection;
@@ -65,12 +65,12 @@ class ObjectNormalizerTest extends TestCase
 
         $normalizedData = $this->getObjectNormalizer()->normalize($sourcePost);
 
-        $this->assertEquals($sourcePost->getId()->toBase58(), $normalizedData['id']);
+        $this->assertEquals($sourcePost->getId()->toBase32(), $normalizedData['id']);
         $this->assertEquals($sourcePost->getTitle(), $normalizedData['title']);
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
         $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
         $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['valueObject1']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase58(), $normalizedData['comments'][0]['id']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase32(), $normalizedData['comments'][0]['id']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['createdAt']);
 
