@@ -65,12 +65,12 @@ class ObjectNormalizerTest extends TestCase
 
         $normalizedData = $this->getObjectNormalizer()->normalize($sourcePost);
 
-        $this->assertEquals($sourcePost->getId()->toBase32(), $normalizedData['id']);
+        $this->assertEquals($sourcePost->getId()->toBase58(), $normalizedData['id']);
         $this->assertEquals($sourcePost->getTitle(), $normalizedData['title']);
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
         $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
         $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['valueObject1']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase32(), $normalizedData['comments'][0]['id']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase58(), $normalizedData['comments'][0]['id']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['createdAt']);
 
@@ -93,7 +93,9 @@ class ObjectNormalizerTest extends TestCase
             new ValueObjectNormalizer(),
             new CollectionNormalizer(),
             new BackedEnumNormalizer(),
-            new UidNormalizer(),
+            new UidNormalizer([
+                UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
+            ]),
         ]);
     }
 }
