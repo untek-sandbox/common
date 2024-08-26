@@ -3,6 +3,7 @@
 namespace Untek\Component\Collection;
 
 use Doctrine\Common\Collections\Collection;
+use ReflectionClass;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
@@ -13,18 +14,18 @@ use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
 class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
 {
 
-    private NormalizerInterface|DenormalizerInterface $hydrator;
+    private NormalizerInterface|DenormalizerInterface $rootNormalizer;
 
-    public function setRootNormalizer(NormalizerInterface|DenormalizerInterface $hydrator): void
+    public function setRootNormalizer(NormalizerInterface|DenormalizerInterface $rootNormalizer): void
     {
-        $this->hydrator = $hydrator;
+        $this->rootNormalizer = $rootNormalizer;
     }
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
         $list = [];
         foreach ($data as $item) {
-            $list[] = $this->hydrator->denormalize($item, $type::getClass());
+            $list[] = $this->rootNormalizer->denormalize($item, $type::getClass());
         }
         return new $type($list);
     }
@@ -34,7 +35,7 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
         if (!class_exists($type)) {
             return false;
         }
-        $reflection = new \ReflectionClass($type);
+        $reflection = new ReflectionClass($type);
         return array_key_exists(Collection::class, $reflection->getInterfaces());
     }
 
@@ -47,10 +48,5 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsNormalization(mixed $data, ?string $format = null)
     {
         return $data instanceof Collection;
-    }
-
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method array getSupportedTypes(?string $format)
     }
 }

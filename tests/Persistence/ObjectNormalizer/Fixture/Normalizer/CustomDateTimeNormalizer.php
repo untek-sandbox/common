@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Tests\Persistence\Hydrator\Fixture\Normalizer;
+namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Normalizer;
 
 use DateTimeImmutable;
 use DateTimeInterface;

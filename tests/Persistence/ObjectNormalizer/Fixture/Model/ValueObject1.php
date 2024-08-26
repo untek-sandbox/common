@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Tests\Persistence\Hydrator\Fixture\Model;
+namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 
 use Untek\Component\ValueObject\ValueObjectInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Tests\Persistence\Hydrator;
+namespace Untek\Tests\Persistence\ObjectNormalizer;
 
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\Post;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Post;
 
 class SerializerTest extends TestCase
 {

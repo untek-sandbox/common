@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Tests\Persistence\Hydrator;
+namespace Untek\Tests\Persistence\ObjectNormalizer;
 
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
@@ -11,10 +11,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\Comment;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\CommentCollection;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\Post;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\ValueObject1;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Comment;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\CommentCollection;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Post;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\ValueObject1;
 
 class HydratorTest extends TestCase
 {
