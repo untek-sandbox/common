@@ -5,17 +5,17 @@ namespace Untek\Component\Collection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Untek\Component\Hydrator\HydratorAwareInterface;
+use Untek\Component\Hydrator\RootNormalizerAwareInterface;
 
 /**
  * @method array getSupportedTypes(?string $format)
  */
-class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, HydratorAwareInterface
+class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
 {
 
     private NormalizerInterface|DenormalizerInterface $hydrator;
 
-    public function setHydrator(NormalizerInterface|DenormalizerInterface $hydrator): void
+    public function setRootNormalizer(NormalizerInterface|DenormalizerInterface $hydrator): void
     {
         $this->hydrator = $hydrator;
     }

@@ -19,8 +19,8 @@ class Hydrator implements NormalizerInterface, DenormalizerInterface
     public function __construct(array $normalizers = [])
     {
         foreach ($normalizers as $normalizer) {
-            if ($normalizer instanceof HydratorAwareInterface) {
-                $normalizer->setHydrator($this);
+            if ($normalizer instanceof RootNormalizerAwareInterface) {
+                $normalizer->setRootNormalizer($this);
             }
         }
         $this->normalizers = $normalizers;
