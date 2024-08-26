@@ -4,12 +4,13 @@ namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Symfony\Component\Uid\AbstractUid;
 use Symfony\Component\Uid\Ulid;
 
 class Post
 {
 
-    private string $id;
+    private Ulid $id;
     private string $title;
     private array $tags;
     private DateTimeInterface $createdAt;
@@ -24,7 +25,7 @@ class Post
     )
     {
         $createdAt = new DateTimeImmutable();
-        $this->id = Ulid::generate($createdAt);
+        $this->id = new Ulid();
         $this->title = $title;
         $this->createdAt = $createdAt;
         $this->tags = $tags;
@@ -32,7 +33,7 @@ class Post
         $this->comments = $comments;
     }
 
-    public function getId(): string
+    public function getId(): Ulid
     {
         return $this->id;
     }

@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
+use Untek\Component\Uid\UidNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Comment;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\CommentCollection;
@@ -64,7 +65,7 @@ class ObjectNormalizerTest extends TestCase
 
         $normalizedData = $this->getObjectNormalizer()->normalize($sourcePost);
 
-        $this->assertEquals($sourcePost->getId(), $normalizedData['id']);
+        $this->assertEquals($sourcePost->getId()->toBase58(), $normalizedData['id']);
         $this->assertEquals($sourcePost->getTitle(), $normalizedData['title']);
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
         $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
@@ -92,6 +93,7 @@ class ObjectNormalizerTest extends TestCase
             new ValueObjectNormalizer(),
             new CollectionNormalizer(),
             new BackedEnumNormalizer(),
+            new UidNormalizer(),
         ]);
     }
 }
