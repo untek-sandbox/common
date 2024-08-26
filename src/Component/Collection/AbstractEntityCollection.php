@@ -32,7 +32,7 @@ abstract class AbstractEntityCollection extends ArrayCollection implements Entit
     {
         $type = static::getClass();
         if (!$element instanceof $type) {
-            throw new RuntimeException(sprintf("Element %s not instance of %s", $element, $type));
+            throw new RuntimeException(sprintf("Element %s not instance of %s", get_class($element), $type));
         }
     }
 }

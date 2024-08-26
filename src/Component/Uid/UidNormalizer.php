@@ -2,7 +2,6 @@
 
 namespace Untek\Component\Uid;
 
-use ReflectionClass;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\AbstractUid;
@@ -13,6 +12,10 @@ use Symfony\Component\Uid\Ulid;
  */
 class UidNormalizer implements NormalizerInterface, DenormalizerInterface
 {
+
+    public function __construct(private string $defaultFormat)
+    {
+    }
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
