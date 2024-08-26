@@ -6,7 +6,10 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function Symfony\Component\String\u;
 
-class Hydrator implements HydratorInterface
+/**
+ * @method array getSupportedTypes(?string $format)
+ */
+class Hydrator implements NormalizerInterface, DenormalizerInterface
 {
     private array $reflectionClassMap;
 
@@ -16,16 +19,16 @@ class Hydrator implements HydratorInterface
     public function __construct(array $normalizers = [])
     {
         foreach ($normalizers as $normalizer) {
-            if($normalizer instanceof HydratorAwareInterface) {
+            if ($normalizer instanceof HydratorAwareInterface) {
                 $normalizer->setHydrator($this);
             }
         }
         $this->normalizers = $normalizers;
     }
 
-    public function hydrate(string $class, array $data): object
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
-        $reflection = $this->getReflectionClass($class);
+        $reflection = $this->getReflectionClass($type);
         $target = $reflection->newInstanceWithoutConstructor();
         foreach ($data as $name => $value) {
             $nameCamelCase = u($name)->camel();
@@ -42,7 +45,7 @@ class Hydrator implements HydratorInterface
         return $target;
     }
 
-    public function dehydrate(object $object): array
+    public function normalize(mixed $object, ?string $format = null, array $context = [])
     {
         $reflection = new \ReflectionObject($object);
         $data = [];
@@ -53,7 +56,7 @@ class Hydrator implements HydratorInterface
             if (is_array($value)) {
                 foreach ($value as $itemName => $itemValue) {
                     if (is_object($itemValue)) {
-                        $value[$itemName] = $this->dehydrate($itemValue);
+                        $value[$itemName] = $this->normalize($itemValue);
                     }
                 }
             }
@@ -108,5 +111,20 @@ class Hydrator implements HydratorInterface
             $this->reflectionClassMap[$className] = new \ReflectionClass($className);
         }
         return $this->reflectionClassMap[$className];
+    }
+
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null)
+    {
+        return class_exists($type);
+    }
+
+    public function supportsNormalization(mixed $data, ?string $format = null)
+    {
+        return is_object($data);
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method array getSupportedTypes(?string $format)
     }
 }

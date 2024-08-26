@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Untek\Component\Hydrator\HydratorAwareInterface;
-use Untek\Component\Hydrator\HydratorInterface;
 
 /**
  * @method array getSupportedTypes(?string $format)
@@ -14,9 +13,9 @@ use Untek\Component\Hydrator\HydratorInterface;
 class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, HydratorAwareInterface
 {
 
-    private HydratorInterface $hydrator;
+    private NormalizerInterface|DenormalizerInterface $hydrator;
 
-    public function setHydrator(HydratorInterface $hydrator): void
+    public function setHydrator(NormalizerInterface|DenormalizerInterface $hydrator): void
     {
         $this->hydrator = $hydrator;
     }
@@ -25,7 +24,7 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         $list = [];
         foreach ($data as $item) {
-            $list[] = $this->hydrator->hydrate($type::getClass(), $item);
+            $list[] = $this->hydrator->denormalize($item, $type::getClass());
         }
         return new $type($list);
     }

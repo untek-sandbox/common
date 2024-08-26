@@ -2,10 +2,9 @@
 
 namespace Untek\Component\Hydrator;
 
-interface HydratorInterface
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+interface HydratorInterface extends NormalizerInterface, DenormalizerInterface
 {
-
-    public function hydrate(string $class, array $data): object;
-
-    public function dehydrate(object $object): array;
 }
