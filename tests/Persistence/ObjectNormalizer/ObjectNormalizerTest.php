@@ -16,10 +16,10 @@ use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\CommentCollection;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Post;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\ValueObject1;
 
-class HydratorTest extends TestCase
+class ObjectNormalizerTest extends TestCase
 {
 
-    public function testHydrate()
+    public function testDenormalize()
     {
         $data = [
             "id" => "01J67QKTNVWQ73HB6J0YZ108RQ",
@@ -38,8 +38,8 @@ class HydratorTest extends TestCase
                 ]
             ]
         ];
-        /** @var Post $hydratedEntity1 */
-        $post = $this->getHydrator()->denormalize($data, Post::class);
+        /** @var Post $post */
+        $post = $this->getObjectNormalizer()->denormalize($data, Post::class);
 
         $this->assertEquals($post->getId(), $data['id']);
         $this->assertEquals($post->getTitle(), $data['title']);
@@ -51,7 +51,7 @@ class HydratorTest extends TestCase
         $this->assertEquals($post->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['createdAt']);
     }
 
-    public function testDehydrate()
+    public function testNormalize()
     {
         $sourcePost = new Post(
             'Title 1',
@@ -62,30 +62,30 @@ class HydratorTest extends TestCase
             ])
         );
 
-        $dehydratedData = $this->getHydrator()->normalize($sourcePost);
+        $normalizedData = $this->getObjectNormalizer()->normalize($sourcePost);
 
-        $this->assertEquals($sourcePost->getId(), $dehydratedData['id']);
-        $this->assertEquals($sourcePost->getTitle(), $dehydratedData['title']);
-        $this->assertEquals($sourcePost->getTags(), $dehydratedData['tags']);
-        $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $dehydratedData['createdAt']);
-        $this->assertEquals($sourcePost->getValueObject1()->get(), $dehydratedData['valueObject1']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $dehydratedData['comments'][0]['id']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $dehydratedData['comments'][0]['content']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $dehydratedData['comments'][0]['createdAt']);
+        $this->assertEquals($sourcePost->getId(), $normalizedData['id']);
+        $this->assertEquals($sourcePost->getTitle(), $normalizedData['title']);
+        $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
+        $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
+        $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['valueObject1']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $normalizedData['comments'][0]['id']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['createdAt']);
 
-        /** @var Post $hydratedPost */
-        $hydratedPost = $this->getHydrator()->denormalize($dehydratedData, Post::class);
+        /** @var Post $denormalizedPost */
+        $denormalizedPost = $this->getObjectNormalizer()->denormalize($normalizedData, Post::class);
 
-        $this->assertEquals($sourcePost->getCreatedAt()->getTimestamp(), $hydratedPost->getCreatedAt()->getTimestamp());
-        $this->assertEquals($sourcePost->getId(), $hydratedPost->getId());
-        $this->assertEquals($sourcePost->getTags(), $hydratedPost->getTags());
-        $this->assertEquals($sourcePost->getValueObject1()->get(), $hydratedPost->getValueObject1()->get());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $hydratedPost->getComments()->get(0)->getId());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $hydratedPost->getComments()->get(0)->getContent());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $hydratedPost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM));
+        $this->assertEquals($sourcePost->getCreatedAt()->getTimestamp(), $denormalizedPost->getCreatedAt()->getTimestamp());
+        $this->assertEquals($sourcePost->getId(), $denormalizedPost->getId());
+        $this->assertEquals($sourcePost->getTags(), $denormalizedPost->getTags());
+        $this->assertEquals($sourcePost->getValueObject1()->get(), $denormalizedPost->getValueObject1()->get());
+        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $denormalizedPost->getComments()->get(0)->getId());
+        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $denormalizedPost->getComments()->get(0)->getContent());
+        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $denormalizedPost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM));
     }
 
-    private function getHydrator(): NormalizerInterface|DenormalizerInterface
+    private function getObjectNormalizer(): NormalizerInterface|DenormalizerInterface
     {
         return new ObjectNormalizer([
             new DateTimeNormalizer(),
