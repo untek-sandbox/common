@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Component\Hydrator;
+namespace Untek\Component\ObjectNormalizer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -9,7 +9,7 @@ use function Symfony\Component\String\u;
 /**
  * @method array getSupportedTypes(?string $format)
  */
-class Hydrator implements NormalizerInterface, DenormalizerInterface
+class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     private array $reflectionClassMap;
 

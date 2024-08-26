@@ -5,7 +5,7 @@ namespace Untek\Component\Collection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Untek\Component\Hydrator\RootNormalizerAwareInterface;
+use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
 
 /**
  * @method array getSupportedTypes(?string $format)

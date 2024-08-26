@@ -1,6 +1,6 @@
 <?php
 
-namespace Untek\Component\Hydrator;
+namespace Untek\Component\ObjectNormalizer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
