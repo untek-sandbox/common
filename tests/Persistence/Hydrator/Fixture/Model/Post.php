@@ -14,13 +14,13 @@ class Post
     private array $tags;
     private DateTimeInterface $createdAt;
     private ?ValueObject1 $valueObject1;
-    private ?CommentCollectionAbstract $comments;
+    private ?CommentCollection $comments;
 
     public function __construct(
         string $title,
         array $tags = [],
         ?ValueObject1 $valueObject1 = null,
-        ?CommentCollectionAbstract $comments = null,
+        ?CommentCollection $comments = null,
     )
     {
         $createdAt = new DateTimeImmutable();
@@ -57,7 +57,7 @@ class Post
         return $this->valueObject1;
     }
 
-    public function getComments(): ?CommentCollectionAbstract
+    public function getComments(): ?CommentCollection
     {
         return $this->comments;
     }

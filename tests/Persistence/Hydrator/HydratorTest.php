@@ -12,7 +12,7 @@ use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\Hydrator\Hydrator;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Tests\Persistence\Hydrator\Fixture\Model\Comment;
-use Untek\Tests\Persistence\Hydrator\Fixture\Model\CommentCollectionAbstract;
+use Untek\Tests\Persistence\Hydrator\Fixture\Model\CommentCollection;
 use Untek\Tests\Persistence\Hydrator\Fixture\Model\Post;
 use Untek\Tests\Persistence\Hydrator\Fixture\Model\ValueObject1;
 
@@ -57,7 +57,7 @@ class HydratorTest extends TestCase
             'Title 1',
             ['php', 'js'],
             new ValueObject1('qwerty123'),
-            new CommentCollectionAbstract([
+            new CommentCollection([
                 new Comment('Comment 1'),
             ])
         );
