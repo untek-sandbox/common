@@ -32,22 +32,38 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         $reflection = $this->getReflectionClass($type);
         $target = $reflection->newInstanceWithoutConstructor();
+
+//        $properties = $reflection->getProperties();
+//        dd($properties);
+        
+//        foreach ($properties as $property) {
         foreach ($data as $name => $value) {
+//            $name = $property->getName();
             if ($this->nameConverter) {
                 $denormalizedName = $this->nameConverter->denormalize($name);
             } else {
                 $denormalizedName = $name;
             }
-            
-            $property = $reflection->getProperty($denormalizedName);
-            if ($property->isPrivate() || $property->isProtected()) {
-                $property->setAccessible(true);
-            }
-            $typeName = $property->getType()->getName();
+
+            /*if(!array_key_exists($denormalizedName, $data)) {
+                continue;
+            }*/
+//            $value = $data[$denormalizedName];
+
+            try {
+                $property = $reflection->getProperty($denormalizedName);
+                if ($property->isPrivate() || $property->isProtected()) {
+                    $property->setAccessible(true);
+                }
+                $typeName = $property->getType()->getName();
 //            if(!$property->getType()->isBuiltin()) {
-            $value = $this->denormalizeAttribute($value, $typeName);
+                $value = $this->denormalizeAttribute($value, $typeName);
 //            }
-            $property->setValue($target, $value);
+                $property->setValue($target, $value);
+            } catch (\Throwable $e) {
+//                dd($e);
+//                continue;
+            }
         }
         return $target;
     }
@@ -56,23 +72,26 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         $reflection = new \ReflectionObject($object);
         $data = [];
-        foreach ($reflection->getProperties() as $property) {
+        $properties = $reflection->getProperties();
+        foreach ($properties as $property) {
             $propertyName = $property->getName();
             if ($this->nameConverter) {
                 $normalizedName = $this->nameConverter->normalize($propertyName);
             } else {
                 $normalizedName = $propertyName;
             }
-            $value = $property->getValue($object);
-            $value = $this->normalizeAttribute($value, $propertyName);
-            if (is_array($value)) {
-                foreach ($value as $itemName => $itemValue) {
-                    if (is_object($itemValue)) {
-                        $value[$itemName] = $this->normalize($itemValue);
+            if($property->isInitialized($object)) {
+                $value = $property->getValue($object);
+                $value = $this->normalizeAttribute($value, $propertyName);
+                if (is_array($value)) {
+                    foreach ($value as $itemName => $itemValue) {
+                        if (is_object($itemValue)) {
+                            $value[$itemName] = $this->normalize($itemValue);
+                        }
                     }
                 }
+                $data[$normalizedName] = $value;
             }
-            $data[$normalizedName] = $value;
         }
         return $data;
     }
