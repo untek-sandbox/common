@@ -4,6 +4,7 @@ namespace Untek\Tests\Persistence\ObjectNormalizer;
 
 use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -29,13 +30,13 @@ class ObjectNormalizerTest extends TestCase
                 "php",
                 "js",
             ],
-            "createdAt" => "2024-08-26T16:16:57+00:00",
-            "valueObject1" => "qwerty123",
+            "created_at" => "2024-08-26T16:16:57+00:00",
+            "value_object1" => "qwerty123",
             "comments" => [
                 [
                     "id" => "01J67QKTNTFTZPH9ZV66HWTFXB",
                     "content" => "Comment 1",
-                    "createdAt" => "2024-08-26T16:16:57+00:00",
+                    "created_at" => "2024-08-26T16:16:57+00:00",
                 ]
             ]
         ];
@@ -45,11 +46,11 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($post->getId(), $data['id']);
         $this->assertEquals($post->getTitle(), $data['title']);
         $this->assertEquals($post->getTags(), $data['tags']);
-        $this->assertEquals($post->getCreatedAt()->format(DateTimeInterface::ATOM), $data['createdAt']);
-        $this->assertEquals($post->getValueObject1()->get(), $data['valueObject1']);
+        $this->assertEquals($post->getCreatedAt()->format(DateTimeInterface::ATOM), $data['created_at']);
+        $this->assertEquals($post->getValueObject1()->get(), $data['value_object1']);
         $this->assertEquals($post->getComments()->get(0)->getId(), $data['comments'][0]['id']);
         $this->assertEquals($post->getComments()->get(0)->getContent(), $data['comments'][0]['content']);
-        $this->assertEquals($post->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['createdAt']);
+        $this->assertEquals($post->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['created_at']);
     }
 
     public function testNormalize()
@@ -68,11 +69,11 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($sourcePost->getId()->toBase58(), $normalizedData['id']);
         $this->assertEquals($sourcePost->getTitle(), $normalizedData['title']);
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
-        $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['createdAt']);
-        $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['valueObject1']);
+        $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['created_at']);
+        $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['value_object1']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase58(), $normalizedData['comments'][0]['id']);
         $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['createdAt']);
+        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['created_at']);
 
         /** @var Post $denormalizedPost */
         $denormalizedPost = $this->getObjectNormalizer()->denormalize($normalizedData, Post::class);
@@ -88,14 +89,16 @@ class ObjectNormalizerTest extends TestCase
 
     private function getObjectNormalizer(): NormalizerInterface|DenormalizerInterface
     {
-        return new ObjectNormalizer([
+        $normalizers = [
             new DateTimeNormalizer(),
             new ValueObjectNormalizer(),
             new CollectionNormalizer(),
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
-            ]),
-        ]);
+            ],
+            ),
+        ];
+        return new ObjectNormalizer($normalizers, new CamelCaseToSnakeCaseNameConverter());
     }
 }

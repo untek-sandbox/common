@@ -1,0 +1,92 @@
+<?php
+
+namespace Untek\Component\Zip\Libs;
+
+use Exception;
+use ZipArchive;
+
+class Zip
+{
+
+    private $resource;
+    private $zipArchive;
+
+    public function __construct(string $zipFile)
+    {
+        $this->zipArchive = new ZipArchive();
+        $this->touchDirectoryForFile($dirName);
+        $this->resource = $this->zipArchive->open($zipFile, ZipArchive::CREATE);
+        if ($this->resource === TRUE) {
+
+        } else {
+            throw new Exception('Zip not opened!');
+        }
+    }
+
+    private function touchDirectoryForFile(string $zipFile): void
+    {
+        $dirName = dirname($zipFile);
+        if (!is_dir($dirName)) {
+            mkdir($dirName, recursive: true);
+        }
+    }
+
+    public function glob(string $pattern)
+    {
+        $resultFiles = [];
+        $fileList = $this->files();
+        foreach ($fileList as $file) {
+            $isMatch = fnmatch($pattern, $file);
+            if ($isMatch) {
+                $resultFiles[] = $file;
+            }
+        }
+        return $resultFiles;
+    }
+
+    public function getFilesContent(array $fileList)
+    {
+        $props = [];
+        foreach ($fileList as $file) {
+            $props[$file] = $this->readFile($file);
+        }
+        return $props;
+    }
+
+    public function getDirectoryFiles(string $directory)
+    {
+        $props = [];
+        $fileList = $this->glob($directory . '/*');
+        foreach ($fileList as $file) {
+            $name = str_replace($directory . '/', '', $file);
+            $props[$name] = $this->readFile($file);
+        }
+        return $props;
+    }
+
+    public function files()
+    {
+        $i = 0;
+        $list = array();
+        while ($name = $this->zipArchive->getNameIndex($i)) {
+            $list[$i] = $name;
+            $i++;
+        }
+        return $list;
+    }
+
+    public function readFile($name)
+    {
+        return $this->zipArchive->getFromName($name);
+    }
+
+    public function writeFile($name, $content)
+    {
+        return $this->zipArchive->addFromString($name, $content);
+    }
+
+    public function close()
+    {
+        $this->zipArchive->close();
+    }
+}

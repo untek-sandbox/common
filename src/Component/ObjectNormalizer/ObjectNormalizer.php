@@ -2,9 +2,9 @@
 
 namespace Untek\Component\ObjectNormalizer;
 
+use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use function Symfony\Component\String\u;
 
 /**
  * @method array getSupportedTypes(?string $format)
@@ -15,8 +15,9 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 
     /** @var NormalizerInterface[]|DenormalizerInterface[] */
     private array $normalizers = [];
+    private ?NameConverterInterface $nameConverter;
 
-    public function __construct(array $normalizers = [])
+    public function __construct(array $normalizers = [], NameConverterInterface $nameConverter = null)
     {
         foreach ($normalizers as $normalizer) {
             if ($normalizer instanceof RootNormalizerAwareInterface) {
@@ -24,6 +25,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
             }
         }
         $this->normalizers = $normalizers;
+        $this->nameConverter = $nameConverter;
     }
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
@@ -31,8 +33,13 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         $reflection = $this->getReflectionClass($type);
         $target = $reflection->newInstanceWithoutConstructor();
         foreach ($data as $name => $value) {
-            $nameCamelCase = u($name)->camel();
-            $property = $reflection->getProperty($nameCamelCase);
+            if ($this->nameConverter) {
+                $denormalizedName = $this->nameConverter->denormalize($name);
+            } else {
+                $denormalizedName = $name;
+            }
+            
+            $property = $reflection->getProperty($denormalizedName);
             if ($property->isPrivate() || $property->isProtected()) {
                 $property->setAccessible(true);
             }
@@ -50,9 +57,14 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         $reflection = new \ReflectionObject($object);
         $data = [];
         foreach ($reflection->getProperties() as $property) {
-            $typeName = $property->getName();
+            $propertyName = $property->getName();
+            if ($this->nameConverter) {
+                $normalizedName = $this->nameConverter->normalize($propertyName);
+            } else {
+                $normalizedName = $propertyName;
+            }
             $value = $property->getValue($object);
-            $value = $this->normalizeAttribute($value, $typeName);
+            $value = $this->normalizeAttribute($value, $propertyName);
             if (is_array($value)) {
                 foreach ($value as $itemName => $itemValue) {
                     if (is_object($itemValue)) {
@@ -60,7 +72,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
                     }
                 }
             }
-            $data[$typeName] = $value;
+            $data[$normalizedName] = $value;
         }
         return $data;
     }
