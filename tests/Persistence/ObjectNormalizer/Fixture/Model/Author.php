@@ -5,7 +5,7 @@ namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Untek\Component\ObjectNormalizer\Attributes\TypedCollection;
+use Untek\Component\ObjectNormalizer\Attributes\TypedArray;
 
 class Author
 {
@@ -13,8 +13,7 @@ class Author
     private Ulid $id;
     private string $name;
 
-    #[TypedCollection(Role::class)]
-    /** @var Role[] */
+    #[TypedArray(Role::class)]
     private Collection $roles;
 
     public function getId(): Ulid

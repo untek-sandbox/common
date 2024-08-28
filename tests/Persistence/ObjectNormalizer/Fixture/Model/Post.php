@@ -5,7 +5,7 @@ namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Component\Uid\Ulid;
-use Untek\Component\ObjectNormalizer\Attributes\TypedCollection;
+use Untek\Component\ObjectNormalizer\Attributes\TypedArray;
 
 class Post
 {
@@ -16,7 +16,7 @@ class Post
     private DateTimeInterface $createdAt;
     private ?ValueObject1 $valueObject1;
 
-    #[TypedCollection(Comment::class)]
+    #[TypedArray(Comment::class)]
     private ?array $comments;
 
     public function __construct(

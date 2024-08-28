@@ -5,7 +5,7 @@ namespace Untek\Component\ObjectNormalizer;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Untek\Component\ObjectNormalizer\Attributes\TypedCollection;
+use Untek\Component\ObjectNormalizer\Attributes\TypedArray;
 
 /**
  * @method array getSupportedTypes(?string $format)
@@ -84,7 +84,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         if ($property->getAttributes()) {
             foreach ($property->getAttributes() as $attribute) {
-                if ($attribute->getName() == TypedCollection::class) {
+                if ($attribute->getName() == TypedArray::class) {
                     foreach ($attribute->getArguments() as $attributeArgument) {
                         $propertyCollection = [];
                         foreach ($value as $itemValue) {
@@ -127,7 +127,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         if ($property->getAttributes()) {
             foreach ($property->getAttributes() as $attribute) {
-                if ($attribute->getName() == TypedCollection::class) {
+                if ($attribute->getName() == TypedArray::class) {
                     foreach ($attribute->getArguments() as $attributeArgument) {
                         $propertyCollection = [];
                         foreach ($value as $itemValue) {
@@ -168,7 +168,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $value;
     }
 
-    private function getReflectionClass($className)
+    private function getReflectionClass($className): \ReflectionClass
     {
         if (!isset($this->reflectionClassMap[$className])) {
             $this->reflectionClassMap[$className] = new \ReflectionClass($className);
