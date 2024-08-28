@@ -14,7 +14,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use function Symfony\Component\String\u;
 

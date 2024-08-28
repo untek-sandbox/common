@@ -10,7 +10,7 @@ use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
 /**
  * @method array getSupportedTypes(?string $format)
  */
-class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
+class EntityCollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
 {
 
     private NormalizerInterface|DenormalizerInterface $rootNormalizer;
@@ -34,17 +34,17 @@ class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface
         if (!class_exists($type)) {
             return false;
         }
-        return is_subclass_of($type, Collection::class, true);
+        return is_subclass_of($type, AbstractEntityCollection::class, true);
     }
 
     public function normalize(mixed $object, ?string $format = null, array $context = [])
     {
-        /** @var Collection $object */
+        /** @var AbstractEntityCollection $object */
         return $object->toArray();
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
-        return $data instanceof Collection;
+        return $data instanceof AbstractEntityCollection;
     }
 }

@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
-use Untek\Component\Collection\CollectionNormalizer;
+use Untek\Component\Collection\EntityCollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Author;
@@ -113,7 +113,7 @@ class ObjectNormalizerTest extends TestCase
         $normalizers = [
             new DateTimeNormalizer(),
             new ValueObjectNormalizer(),
-            new CollectionNormalizer(),
+            new EntityCollectionNormalizer(),
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
