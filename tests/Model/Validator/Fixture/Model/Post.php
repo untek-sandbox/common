@@ -9,7 +9,7 @@ class Post
 
     #[Assert\NotBlank()]
     #[Assert\Positive()]
-    private int $id;
+    private int|string $id;
 
     #[Assert\NotBlank()]
     #[Assert\Length(min: 3, max: 10)]

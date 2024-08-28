@@ -2,6 +2,7 @@
 
 namespace Untek\Component\ObjectNormalizer;
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -66,7 +67,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 
     private function denormalizeProperty(mixed $value, \ReflectionProperty $property): mixed
     {
-        $typeName = $property->getType()->getName();
+        $typeName = $this->getPropertyType($value, $property);
         $value = $this->denormalizePropertyAttributes($value, $property);
         if (empty($this->normalizers)) {
             return $value;
@@ -152,12 +153,28 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $normalizedName;
     }
 
+    private function getPropertyType(mixed $value, \ReflectionProperty $property)
+    {
+        if($property->getType() instanceof \ReflectionUnionType) {
+            foreach ($property->getType()->getTypes() as $type) {
+                if($type->getName() == get_debug_type($value) || is_subclass_of($value, $type->getName())) {
+                    $typeName = $type->getName();
+                }
+            }
+        } else {
+            $typeName = $property->getType()->getName();
+        }
+        return $typeName;
+    }
+
     private function normalizeProperty(mixed $value, \ReflectionProperty $property): mixed
     {
         if (empty($this->normalizers)) {
             return $value;
         }
-        $typeName = $property->getType()->getName();
+
+        $typeName = $this->getPropertyType($value, $property);
+
         $value = $this->normalizePropertyAttributes($value, $property);
         foreach ($this->normalizers as $normalizer) {
             $isSupported = $normalizer->supportsNormalization($value, $typeName);

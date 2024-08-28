@@ -26,19 +26,21 @@ class ObjectValidator
     {
         if (is_string($object)) {
             $type = $object;
-            $object = $this->normalizer->denormalize($data, $object);
+//            $object = $this->normalizer->denormalize($data, $object);
+            $payload = $data;
         } else {
             $type = get_class($object);
             if ($data === null) {
                 $data = $this->normalizer->normalize($object);
             }
+            $payload = $object;
         }
-        $rules = $this->extractor->extract($type);
-        $rules = new Assert\Collection([
-            'fields' => $rules
-        ], payload: $object);
+        $constraints = $this->extractor->extract($type);
+        $constraints = new Assert\Collection([
+            'fields' => $constraints
+        ], payload: $payload);
         $validator = $this->createValidator();
-        return $validator->validate($data, $rules);
+        return $validator->validate($data, $constraints);
     }
 
     private function createValidator(): ValidatorInterface

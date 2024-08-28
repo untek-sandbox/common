@@ -39,6 +39,23 @@ class ValidationConstraintExtractorTest extends TestCase
         $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
     }
 
+    public function testTypeError()
+    {
+        $postData = [
+            'id' => true,
+            'title' => 'asfddsfs00000000000000000000000000000',
+        ];
+        $errors = $this->getValidator()->validate(Post::class, $postData);
+
+        $this->assertCount(2, $errors);
+
+        $this->assertEquals('This value should satisfy at least one of the following constraints: [1] This value should be of type string. [2] This value should be of type int.', $errors->get(0)->getMessage());
+        $this->assertEquals('[id]', $errors->get(0)->getPropertyPath());
+
+        $this->assertEquals('This value is too long. It should have 10 characters or less.', $errors->get(1)->getMessage());
+        $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
+    }
+
     public function testHasErrorsInObject()
     {
         $postData = [
