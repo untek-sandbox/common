@@ -118,8 +118,7 @@ class ObjectNormalizerTest extends TestCase
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
-            ],
-            ),
+            ]),
         ];
         return new ObjectNormalizer($normalizers, new CamelCaseToSnakeCaseNameConverter());
     }

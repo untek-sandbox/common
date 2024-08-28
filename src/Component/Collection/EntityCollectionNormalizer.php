@@ -2,6 +2,7 @@
 
 namespace Untek\Component\Collection;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -22,29 +23,25 @@ class EntityCollectionNormalizer implements NormalizerInterface, DenormalizerInt
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
-        $list = [];
-        foreach ($data as $item) {
-            $list[] = $this->rootNormalizer->denormalize($item, $type::getClass());
-        }
-        return new $type($list);
+        return new ArrayCollection($data);
     }
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null): bool
     {
-        if (!class_exists($type)) {
+        if (!class_exists($type) && !interface_exists($type)) {
             return false;
         }
-        return is_subclass_of($type, AbstractEntityCollection::class, true);
+        return is_subclass_of($type, Collection::class, true) || $type == Collection::class;
     }
 
     public function normalize(mixed $object, ?string $format = null, array $context = [])
     {
-        /** @var AbstractEntityCollection $object */
+        /** @var Collection $object */
         return $object->toArray();
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
-        return $data instanceof AbstractEntityCollection;
+        return $data instanceof Collection;
     }
 }
