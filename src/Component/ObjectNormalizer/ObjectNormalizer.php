@@ -33,24 +33,22 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         $reflection = $this->getReflectionClass($type);
         $target = $reflection->newInstanceWithoutConstructor();
-//        dd($reflection->getProperties()[0]->getName());
+
+        $properties = [];
+        foreach ($reflection->getProperties() as $property) {
+            $properties[$property->getName()] = $property;
+        }
+
         foreach ($data as $name => $value) {
-//        foreach ($reflection->getProperties() as $property) {
-
-//            $denormalizedName = $property->getName();
-//            $name = $this->normalizePropertyName($denormalizedName);
-//            $value = $data[$name] ?? null;
-
             $denormalizedName = $this->denormalizePropertyName($name);
-            try {
-                $property = $reflection->getProperty($denormalizedName);
+            if(isset($properties[$denormalizedName]) && $value !== null) {
+                $property = $properties[$denormalizedName];
                 if ($property->isPrivate() || $property->isProtected()) {
                     $property->setAccessible(true);
                 }
                 $typeName = $property->getType()->getName();
                 $value = $this->denormalizeProperty($value, $property);
                 $property->setValue($target, $value);
-            } catch (\Throwable $e) {
             }
         }
         return $target;
