@@ -6,6 +6,10 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
+ * Преобразования для объектов-значений.
+ * 
+ * Этот класс помещать в конце массива в конструкторе класса ObjectNormalizer.
+ * 
  * @method array getSupportedTypes(?string $format)
  */
 class ValueObjectNormalizer implements NormalizerInterface, DenormalizerInterface
