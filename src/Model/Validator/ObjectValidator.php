@@ -17,6 +17,7 @@ class ObjectValidator
         private ValidationRulesExtractor $extractor,
         private NormalizerInterface|DenormalizerInterface $normalizer,
         private ?TranslatorInterface $translator = null,
+        private string $translationDomain = 'validators',
     )
     {
     }
@@ -45,8 +46,8 @@ class ObjectValidator
         $validatorBuilder = Validation::createValidatorBuilder();
         if ($this->translator) {
             $validatorBuilder->setTranslator($this->translator);
+            $validatorBuilder->setTranslationDomain($this->translationDomain);
         }
-        $validatorBuilder->setTranslationDomain('validators');
         return $validatorBuilder->getValidator();
     }
 }
