@@ -49,9 +49,9 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($post->getTags(), $data['tags']);
         $this->assertEquals($post->getCreatedAt()->format(DateTimeInterface::ATOM), $data['created_at']);
         $this->assertEquals($post->getValueObject1()->get(), $data['value_object1']);
-        $this->assertEquals($post->getComments()->get(0)->getId(), $data['comments'][0]['id']);
-        $this->assertEquals($post->getComments()->get(0)->getContent(), $data['comments'][0]['content']);
-        $this->assertEquals($post->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['created_at']);
+        $this->assertEquals($post->getComments()[0]->getId(), $data['comments'][0]['id']);
+        $this->assertEquals($post->getComments()[0]->getContent(), $data['comments'][0]['content']);
+        $this->assertEquals($post->getComments()[0]->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['created_at']);
     }
 
     public function testDenormalizeAuthor()
@@ -80,9 +80,9 @@ class ObjectNormalizerTest extends TestCase
             'Title 1',
             ['php', 'js'],
             new ValueObject1('qwerty123'),
-            new CommentCollection([
+            [
                 new Comment('Comment 1'),
-            ])
+            ]
         );
 
         $normalizedData = $this->getObjectNormalizer()->normalize($sourcePost);
@@ -92,9 +92,10 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($sourcePost->getTags(), $normalizedData['tags']);
         $this->assertEquals($sourcePost->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['created_at']);
         $this->assertEquals($sourcePost->getValueObject1()->get(), $normalizedData['value_object1']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId()->toBase58(), $normalizedData['comments'][0]['id']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $normalizedData['comments'][0]['content']);
-        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['created_at']);
+//        dd($normalizedData);
+        $this->assertEquals($sourcePost->getComments()[0]->getId()->toBase58(), $normalizedData['comments'][0]['id']);
+        $this->assertEquals($sourcePost->getComments()[0]->getContent(), $normalizedData['comments'][0]['content']);
+        $this->assertEquals($sourcePost->getComments()[0]->getCreatedAt()->format(DateTimeInterface::ATOM), $normalizedData['comments'][0]['created_at']);
 
         /** @var Post $denormalizedPost */
         $denormalizedPost = $this->getObjectNormalizer()->denormalize($normalizedData, Post::class);
@@ -103,9 +104,9 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($sourcePost->getId(), $denormalizedPost->getId());
         $this->assertEquals($sourcePost->getTags(), $denormalizedPost->getTags());
         $this->assertEquals($sourcePost->getValueObject1()->get(), $denormalizedPost->getValueObject1()->get());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getId(), $denormalizedPost->getComments()->get(0)->getId());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getContent(), $denormalizedPost->getComments()->get(0)->getContent());
-        $this->assertEquals($sourcePost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $denormalizedPost->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM));
+        $this->assertEquals($sourcePost->getComments()[0]->getId(), $denormalizedPost->getComments()[0]->getId());
+        $this->assertEquals($sourcePost->getComments()[0]->getContent(), $denormalizedPost->getComments()[0]->getContent());
+        $this->assertEquals($sourcePost->getComments()[0]->getCreatedAt()->format(DateTimeInterface::ATOM), $denormalizedPost->getComments()[0]->getCreatedAt()->format(DateTimeInterface::ATOM));
     }
 
     private function getObjectNormalizer(): NormalizerInterface|DenormalizerInterface

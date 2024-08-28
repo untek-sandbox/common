@@ -32,7 +32,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
         $reflection = $this->getReflectionClass($type);
-        $target = $reflection->newInstanceWithoutConstructor();
+        $object = $reflection->newInstanceWithoutConstructor();
 
         $properties = [];
         foreach ($reflection->getProperties() as $property) {
@@ -43,15 +43,15 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
             $denormalizedName = $this->denormalizePropertyName($name);
             if(isset($properties[$denormalizedName]) && $value !== null) {
                 $property = $properties[$denormalizedName];
-                if ($property->isPrivate() || $property->isProtected()) {
+                /*if ($property->isPrivate() || $property->isProtected()) {
                     $property->setAccessible(true);
-                }
-                $typeName = $property->getType()->getName();
-                $value = $this->denormalizeProperty($value, $property);
-                $property->setValue($target, $value);
+                }*/
+//                $typeName = $property->getType()->getName();
+                $denormalizedValue = $this->denormalizeProperty($value, $property);
+                $property->setValue($object, $denormalizedValue);
             }
         }
-        return $target;
+        return $object;
     }
 
     protected function denormalizePropertyName(string $name): string
@@ -110,17 +110,36 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
             if ($property->isInitialized($object)) {
                 $value = $property->getValue($object);
                 $value = $this->normalizeProperty($value, $property);
-                if (is_array($value)) {
+                /*if (is_array($value)) {
                     foreach ($value as $itemName => $itemValue) {
                         if (is_object($itemValue)) {
                             $value[$itemName] = $this->normalize($itemValue);
                         }
                     }
-                }
+                }*/
                 $data[$normalizedName] = $value;
             }
         }
         return $data;
+    }
+
+    private function normalizePropertyAttributes(mixed $value, \ReflectionProperty $property): mixed
+    {
+        if ($property->getAttributes()) {
+            foreach ($property->getAttributes() as $attribute) {
+                if ($attribute->getName() == TypedCollection::class) {
+                    foreach ($attribute->getArguments() as $attributeArgument) {
+                        $propertyCollection = [];
+                        foreach ($value as $itemValue) {
+                            $denormalizedProperty = $this->normalize($itemValue, $attributeArgument);
+                            $propertyCollection[] = $denormalizedProperty;
+                        }
+                        $value = $propertyCollection;
+                    }
+                }
+            }
+        }
+        return $value;
     }
 
     protected function normalizePropertyName(string $name): string
@@ -139,6 +158,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
             return $value;
         }
         $typeName = $property->getType()->getName();
+        $value = $this->normalizePropertyAttributes($value, $property);
         foreach ($this->normalizers as $normalizer) {
             $isSupported = $normalizer->supportsNormalization($value, $typeName);
             if ($isSupported) {

@@ -5,6 +5,7 @@ namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Component\Uid\Ulid;
+use Untek\Component\ObjectNormalizer\Attributes\TypedCollection;
 
 class Post
 {
@@ -14,13 +15,15 @@ class Post
     private array $tags;
     private DateTimeInterface $createdAt;
     private ?ValueObject1 $valueObject1;
-    private ?CommentCollection $comments;
+
+    #[TypedCollection(Comment::class)]
+    private ?array $comments;
 
     public function __construct(
         string $title,
         array $tags = [],
         ?ValueObject1 $valueObject1 = null,
-        ?CommentCollection $comments = null,
+        array $comments = null,
     )
     {
         $this->id = new Ulid();
@@ -56,7 +59,7 @@ class Post
         return $this->valueObject1;
     }
 
-    public function getComments(): ?CommentCollection
+    public function getComments(): ?array
     {
         return $this->comments;
     }
