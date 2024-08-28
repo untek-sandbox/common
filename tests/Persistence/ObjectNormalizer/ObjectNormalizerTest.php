@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
+use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Author;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Comment;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\CommentCollection;
 use Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model\Post;
@@ -51,6 +52,26 @@ class ObjectNormalizerTest extends TestCase
         $this->assertEquals($post->getComments()->get(0)->getId(), $data['comments'][0]['id']);
         $this->assertEquals($post->getComments()->get(0)->getContent(), $data['comments'][0]['content']);
         $this->assertEquals($post->getComments()->get(0)->getCreatedAt()->format(DateTimeInterface::ATOM), $data['comments'][0]['created_at']);
+    }
+
+    public function testDenormalizeAuthor()
+    {
+        $data = [
+            "id" => "01J67QKTNVWQ73HB6J0YZ108RQ",
+            "name" => "User1",
+            "roles" => [
+                [
+                    "id" => "01J67QKTNVWQ73HB6J0YZ108RQ",
+                    "name" => "Role1",
+                ],
+            ],
+        ];
+        /** @var Author $author */
+        $author = $this->getObjectNormalizer()->denormalize($data, Author::class);
+
+        $this->assertEquals($author->getId(), $data['id']);
+        $this->assertEquals($author->getName(), $data['name']);
+        $this->assertEquals($author->getRoles()[0]->getId(), $data['roles'][0]['id']);
     }
 
     public function testNormalize()

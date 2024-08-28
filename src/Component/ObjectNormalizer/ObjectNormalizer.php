@@ -5,6 +5,8 @@ namespace Untek\Component\ObjectNormalizer;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Type;
 
 /**
  * @method array getSupportedTypes(?string $format)
@@ -28,6 +30,16 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         $this->nameConverter = $nameConverter;
     }
 
+    protected function denormalizePropertyName(string $name): string
+    {
+        if ($this->nameConverter) {
+            $denormalizedName = $this->nameConverter->denormalize($name);
+        } else {
+            $denormalizedName = $name;
+        }
+        return $denormalizedName;
+    }
+    
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
     {
         $reflection = $this->getReflectionClass($type);
@@ -39,11 +51,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 //        foreach ($properties as $property) {
         foreach ($data as $name => $value) {
 //            $name = $property->getName();
-            if ($this->nameConverter) {
-                $denormalizedName = $this->nameConverter->denormalize($name);
-            } else {
-                $denormalizedName = $name;
-            }
+            $denormalizedName = $this->denormalizePropertyName($name);
 
             /*if(!array_key_exists($denormalizedName, $data)) {
                 continue;
@@ -56,8 +64,9 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
                     $property->setAccessible(true);
                 }
                 $typeName = $property->getType()->getName();
+                
 //            if(!$property->getType()->isBuiltin()) {
-                $value = $this->denormalizeAttribute($value, $typeName);
+                $value = $this->denormalizeProperty($value, $typeName, $property);
 //            }
                 $property->setValue($target, $value);
             } catch (\Throwable $e) {
@@ -68,6 +77,16 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $target;
     }
 
+    protected function normalizePropertyName(string $name): string
+    {
+        if ($this->nameConverter) {
+            $normalizedName = $this->nameConverter->normalize($name);
+        } else {
+            $normalizedName = $name;
+        }
+        return $normalizedName;
+    }
+    
     public function normalize(mixed $object, ?string $format = null, array $context = [])
     {
         $reflection = new \ReflectionObject($object);
@@ -75,14 +94,10 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         $properties = $reflection->getProperties();
         foreach ($properties as $property) {
             $propertyName = $property->getName();
-            if ($this->nameConverter) {
-                $normalizedName = $this->nameConverter->normalize($propertyName);
-            } else {
-                $normalizedName = $propertyName;
-            }
+            $normalizedName = $this->normalizePropertyName($propertyName);
             if($property->isInitialized($object)) {
                 $value = $property->getValue($object);
-                $value = $this->normalizeAttribute($value, $propertyName);
+                $value = $this->normalizeProperty($value, $propertyName);
                 if (is_array($value)) {
                     foreach ($value as $itemName => $itemValue) {
                         if (is_object($itemValue)) {
@@ -96,7 +111,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $data;
     }
 
-    private function normalizeAttribute(mixed $value, string $typeName): mixed
+    private function normalizeProperty(mixed $value, string $typeName): mixed
     {
         if (empty($this->normalizers)) {
             return $value;
@@ -116,8 +131,27 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
         return $value;
     }
 
-    private function denormalizeAttribute(mixed $value, string $typeName): mixed
+    private function denormalizeProperty(mixed $value, string $typeName, \ReflectionProperty $property): mixed
     {
+        if($property->getAttributes()) {
+            foreach ($property->getAttributes() as $attribute) {
+                if($attribute->getName() == All::class) {
+                    foreach ($attribute->getArguments() as $attributeArguments) {
+                        foreach ($attributeArguments as $attributeArgument) {
+                            if($attributeArgument instanceof Type) {
+                                $propertyCollection = [];
+                                foreach ($value as $itemValue) {
+                                    $denormalizedProperty = $this->denormalize($itemValue, $attributeArgument->type);
+                                    $propertyCollection[] = $denormalizedProperty;
+                                }
+                                return $propertyCollection;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         if (empty($this->normalizers)) {
             return $value;
         }
