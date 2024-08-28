@@ -5,39 +5,41 @@ namespace Untek\Model\Validator;
 use Symfony\Component\Validator\Constraint;
 use ReflectionClass;
 
-class ValidationRulesExtractor
+class ValidationConstraintExtractor
 {
 
     private array $reflectionClassMap;
-    private array $rules = [];
+    private array $constraints = [];
 
-    public function extractRuels(object|string $type): array
+    public function extract(object|string $type): array
     {
         if(is_object($type)) {
             $type = get_class($type);
         }
-        if(!isset($this->rules[$type])) {
-            $this->rules[$type] = $this->extractRulesFromClass($type);
+        if(!isset($this->constraints[$type])) {
+            $this->constraints[$type] = $this->extractConstraintsFromClass($type);
         }
-        return $this->rules[$type];
+        return $this->constraints[$type];
     }
 
-    private function extractRulesFromClass(string $type): array
+    private function extractConstraintsFromClass(string $className): array
     {
-        $reflection = $this->getReflectionClass($type);
-        $rules = [];
+        $reflection = $this->getReflectionClass($className);
+        $constraints = [];
         foreach ($reflection->getProperties() as $property) {
+            $propertyConstraints = [];
             if ($property->getAttributes()) {
                 foreach ($property->getAttributes() as $attribute) {
                     $constraintClass = $attribute->getName();
                     if (is_subclass_of($constraintClass, Constraint::class, true)) {
-                        $constraintInstance = $attribute->newInstance();
-                        $rules[$property->getName()][] = $constraintInstance;
+                        $propertyConstraints[] = $attribute->newInstance();
                     }
                 }
             }
+            $propertyName = $property->getName();
+            $constraints[$propertyName] = $propertyConstraints;
         }
-        return $rules;
+        return $constraints;
     }
 
     private function getReflectionClass($className): ReflectionClass

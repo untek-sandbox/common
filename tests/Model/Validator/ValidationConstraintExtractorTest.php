@@ -16,10 +16,10 @@ use Untek\Component\Collection\EntityCollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Model\Validator\ObjectValidator;
-use Untek\Model\Validator\ValidationRulesExtractor;
+use Untek\Model\Validator\ValidationConstraintExtractor;
 use Untek\Tests\Model\Validator\Fixture\Model\Post;
 
-class ValidationRulesExtractorTest extends TestCase
+class ValidationConstraintExtractorTest extends TestCase
 {
 
     public function testHasErrors()
@@ -88,7 +88,7 @@ class ValidationRulesExtractorTest extends TestCase
     private function getValidator(string $language = 'en_US'): ObjectValidator
     {
         $translator = $this->getTranslator($language);
-        $extrator = new ValidationRulesExtractor();
+        $extrator = new ValidationConstraintExtractor();
         return new ObjectValidator($extrator, $this->getObjectNormalizer(), $translator);
     }
 

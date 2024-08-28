@@ -14,7 +14,7 @@ class ObjectValidator
 {
 
     public function __construct(
-        private ValidationRulesExtractor $extractor,
+        private ValidationConstraintExtractor $extractor,
         private NormalizerInterface|DenormalizerInterface $normalizer,
         private ?TranslatorInterface $translator = null,
         private string $translationDomain = 'validators',
@@ -33,7 +33,7 @@ class ObjectValidator
                 $data = $this->normalizer->normalize($object);
             }
         }
-        $rules = $this->extractor->extractRuels($type);
+        $rules = $this->extractor->extract($type);
         $rules = new Assert\Collection([
             'fields' => $rules
         ], payload: $object);
