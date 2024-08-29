@@ -159,6 +159,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
             foreach ($property->getType()->getTypes() as $type) {
                 if($type->getName() == get_debug_type($value) || is_subclass_of($value, $type->getName())) {
                     $typeName = $type->getName();
+                    return $typeName;
                 }
             }
         } else {
