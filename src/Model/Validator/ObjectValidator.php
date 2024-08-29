@@ -2,6 +2,7 @@
 
 namespace Untek\Model\Validator;
 
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -32,14 +33,27 @@ class ObjectValidator
             $type = get_class($object);
             if ($data === null) {
                 $data = $this->normalizer->normalize($object);
+                /*$caseNameConverter = new CamelCaseToSnakeCaseNameConverter();
+                dd($data);
+                foreach ($data as $name => $value) {
+                    $name = $caseNameConverter->denormalize($name);
+                    dump($name);
+                }*/
+
             }
             $payload = $object;
         }
         $constraints = $this->extractor->extract($type);
-        $constraints = new Assert\Collection([
-            'fields' => $constraints
-        ], payload: $payload);
+        if($constraints) {
+            $constraints = new Assert\Collection([
+                'fields' => $constraints
+            ], payload: $payload);
+        } else {
+            $constraints = new Assert\Collection([], payload: $payload);
+        }
+
         $validator = $this->createValidator();
+//        dd($data);
         return $validator->validate($data, $constraints);
     }
 

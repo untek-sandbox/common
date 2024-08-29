@@ -2,7 +2,6 @@
 
 namespace Untek\Component\ObjectNormalizer;
 
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -42,7 +41,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 
         foreach ($data as $name => $value) {
             $denormalizedName = $this->denormalizePropertyName($name);
-            if(isset($properties[$denormalizedName]) && $value !== null) {
+            if (isset($properties[$denormalizedName]) && $value !== null) {
                 $property = $properties[$denormalizedName];
                 /*if ($property->isPrivate() || $property->isProtected()) {
                     $property->setAccessible(true);
@@ -155,17 +154,17 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface
 
     private function getPropertyType(mixed $value, \ReflectionProperty $property)
     {
-        if($property->getType() instanceof \ReflectionUnionType) {
+        if ($property->getType() instanceof \ReflectionUnionType) {
             foreach ($property->getType()->getTypes() as $type) {
-                if($type->getName() == get_debug_type($value) || is_subclass_of($value, $type->getName())) {
-                    $typeName = $type->getName();
-                    return $typeName;
+                $isEqualType = $type->getName() == get_debug_type($value);
+                $isSubclass = is_subclass_of($value, $type->getName());
+                if ($isEqualType || $isSubclass) {
+                    return $type->getName();
                 }
             }
         } else {
-            $typeName = $property->getType()->getName();
+            return $property->getType()->getName();
         }
-        return $typeName;
     }
 
     private function normalizeProperty(mixed $value, \ReflectionProperty $property): mixed

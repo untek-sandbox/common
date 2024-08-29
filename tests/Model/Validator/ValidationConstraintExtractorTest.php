@@ -3,131 +3,56 @@
 namespace Untek\Tests\Model\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
-use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\UidNormalizer;
-use Symfony\Component\Translation\Loader\XliffFileLoader;
-use Symfony\Component\Translation\Translator;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Untek\Component\Collection\EntityCollectionNormalizer;
-use Untek\Component\ObjectNormalizer\ObjectNormalizer;
-use Untek\Component\ValueObject\ValueObjectNormalizer;
-use Untek\Model\Validator\ObjectValidator;
+use Symfony\Component\Validator\Constraints\AtLeastOneOf;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
+use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Constraints\Type;
 use Untek\Model\Validator\ValidationConstraintExtractor;
+use Untek\Tests\Model\Validator\Fixture\Model\EmptyAttribute;
 use Untek\Tests\Model\Validator\Fixture\Model\Post;
 
 class ValidationConstraintExtractorTest extends TestCase
 {
 
-    public function testHasErrors()
+    public function testExtractByClassName()
     {
-        $postData = [
-            'id' => -123,
-            'title' => 'asfddsfs00000000000000000000000000000',
-        ];
-        $errors = $this->getValidator()->validate(Post::class, $postData);
-
-        $this->assertCount(2, $errors);
-
-        $this->assertEquals('This value should be positive.', $errors->get(0)->getMessage());
-        $this->assertEquals('[id]', $errors->get(0)->getPropertyPath());
-
-        $this->assertEquals('This value is too long. It should have 10 characters or less.', $errors->get(1)->getMessage());
-        $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
-    }
-
-    public function testTypeError()
-    {
-        $postData = [
-            'id' => true,
-            'title' => 'asfddsfs00000000000000000000000000000',
-        ];
-        $errors = $this->getValidator()->validate(Post::class, $postData);
-
-        $this->assertCount(2, $errors);
-
-        $this->assertEquals('This value should satisfy at least one of the following constraints: [1] This value should be of type string. [2] This value should be of type int.', $errors->get(0)->getMessage());
-        $this->assertEquals('[id]', $errors->get(0)->getPropertyPath());
-
-        $this->assertEquals('This value is too long. It should have 10 characters or less.', $errors->get(1)->getMessage());
-        $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
-    }
-
-    public function testHasErrorsInObject()
-    {
-        $postData = [
-            'id' => -123,
-            'title' => 'asfddsfs00000000000000000000000000000',
-        ];
-        $post = $this->getObjectNormalizer()->denormalize($postData, Post::class);
-        $errors = $this->getValidator()->validate($post);
-
-        $this->assertCount(2, $errors);
-
-        $this->assertEquals('This value should be positive.', $errors->get(0)->getMessage());
-        $this->assertEquals('[id]', $errors->get(0)->getPropertyPath());
-
-        $this->assertEquals('This value is too long. It should have 10 characters or less.', $errors->get(1)->getMessage());
-        $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
-    }
-
-    public function testHasErrorsRu()
-    {
-        $postData = [
-            'id' => -123,
-            'title' => 'asfddsfs00000000000000000000000000000',
-        ];
-        $errors = $this->getValidator('ru_RU')->validate(Post::class, $postData);
-
-        $this->assertCount(2, $errors);
-
-        $this->assertEquals('Значение должно быть положительным.', $errors->get(0)->getMessage());
-        $this->assertEquals('[id]', $errors->get(0)->getPropertyPath());
-
-        $this->assertEquals('Значение слишком длинное. Должно быть равно 10 символам или меньше.', $errors->get(1)->getMessage());
-        $this->assertEquals('[title]', $errors->get(1)->getPropertyPath());
-    }
-
-    public function testNotHasErrors()
-    {
-        $postData = [
-            'id' => 123,
-            'title' => 'asfddsfs',
-        ];
-        $errors = $this->getValidator()->validate(Post::class, $postData);
-
-        $this->assertCount(0, $errors);
-    }
-
-    private function getValidator(string $language = 'en_US'): ObjectValidator
-    {
-        $translator = $this->getTranslator($language);
         $extrator = new ValidationConstraintExtractor();
-        return new ObjectValidator($extrator, $this->getObjectNormalizer(), $translator);
-    }
+        $constraints = $extrator->extract(Post::class);
 
-    private function getTranslator(string $language = 'en_US'): TranslatorInterface
-    {
-        $translator = new Translator($language);
-        $translator->addLoader('xlf', new XliffFileLoader());
-        $translator->addResource('xlf', __DIR__ . '/../../../../../symfony/validator/Resources/translations/validators.ru.xlf', 'ru_RU', 'validators');
-        return $translator;
-    }
+        $this->assertCount(4, $constraints);
 
-    private function getObjectNormalizer(): NormalizerInterface|DenormalizerInterface
-    {
-        $normalizers = [
-            new DateTimeNormalizer(),
-            new ValueObjectNormalizer(),
-            new EntityCollectionNormalizer(),
-            new BackedEnumNormalizer(),
-            new UidNormalizer([
-                UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
+        $this->assertEquals([
+            new NotBlank(),
+            new AtLeastOneOf([
+                new Type('string'),
+                new Type('int'),
             ]),
-        ];
-        return new ObjectNormalizer($normalizers, new CamelCaseToSnakeCaseNameConverter());
+            new Positive(),
+        ], $constraints['id']);
+
+        $this->assertEquals([
+            new NotBlank(),
+            new Type('string'),
+            new Length(min: 3, max: 10),
+        ], $constraints['title']);
+
+
+        $this->assertEquals(new Optional([
+            new Type('int'),
+        ]), $constraints['status']);
+
+        $this->assertEquals(new Optional([
+            new Type('array'),
+        ]), $constraints['tags']);
+    }
+
+    public function testExtractByClassNameEmpty()
+    {
+        $extrator = new ValidationConstraintExtractor();
+        $constraints = $extrator->extract(EmptyAttribute::class);
+
+        $this->assertCount(0, $constraints);
     }
 }

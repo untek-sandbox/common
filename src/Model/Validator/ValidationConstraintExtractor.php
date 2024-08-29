@@ -5,7 +5,10 @@ namespace Untek\Model\Validator;
 use ReflectionClass;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\AtLeastOneOf;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
+use Yiisoft\Arrays\ArrayHelper;
 
 class ValidationConstraintExtractor
 {
@@ -13,24 +16,46 @@ class ValidationConstraintExtractor
     private array $reflectionClassMap;
     private array $constraints = [];
 
+    /**
+     * @param object|string $type
+     * @return Constraint[]
+     */
     public function extract(object|string $type): array
     {
         if (is_object($type)) {
             $type = get_class($type);
         }
         if (!isset($this->constraints[$type])) {
-            $this->constraints[$type] = $this->extractConstraintsFromClass($type);
+            $reqiredConstraints = $this->extractRequiredConstraintsFromClass($type);
+            $attributeConstraints = $this->extractConstraintsFromClass($type);
+            $propertyConstraints = ArrayHelper::merge($reqiredConstraints, $attributeConstraints);
+            foreach ($propertyConstraints as $field => &$constraints) {
+                $hasRequired = false;
+                foreach ($constraints as $constraint) {
+                    if(get_class($constraint) == NotBlank::class) {
+                        $hasRequired = true;
+                    }
+                }
+                if(!$hasRequired) {
+                    $constraints = new Optional($constraints);
+                }
+            }
+            $this->constraints[$type] = $propertyConstraints;
         }
         return $this->constraints[$type];
     }
 
-    private function extractConstraintsFromClass(string $className): array
+    public function extractRequiredConstraintsFromClass(string $className): array
     {
         $reflection = $this->getReflectionClass($className);
         $constraints = [];
         foreach ($reflection->getProperties() as $property) {
             $propertyConstraints = [];
             if ($property->getType()) {
+                $isRequired = !$property->getType()->allowsNull() && !$property->hasDefaultValue();
+                if($isRequired) {
+                    $propertyConstraints[] = new NotBlank();
+                }
                 if($property->getType() instanceof \ReflectionUnionType) {
                     $unionConstraints = [];
                     foreach ($property->getType()->getTypes() as $typeName) {
@@ -46,6 +71,20 @@ class ValidationConstraintExtractor
                     }
                 }
             }
+            if($propertyConstraints) {
+                $propertyName = $property->getName();
+                $constraints[$propertyName] = $propertyConstraints;
+            }
+        }
+        return $constraints;
+    }
+
+    private function extractConstraintsFromClass(string $className): array
+    {
+        $reflection = $this->getReflectionClass($className);
+        $constraints = [];
+        foreach ($reflection->getProperties() as $property) {
+            $propertyConstraints = [];
             if ($property->getAttributes()) {
                 foreach ($property->getAttributes() as $attribute) {
                     $constraintClass = $attribute->getName();
@@ -54,8 +93,10 @@ class ValidationConstraintExtractor
                     }
                 }
             }
-            $propertyName = $property->getName();
-            $constraints[$propertyName] = $propertyConstraints;
+            if($propertyConstraints) {
+                $propertyName = $property->getName();
+                $constraints[$propertyName] = $propertyConstraints;
+            }
         }
         return $constraints;
     }

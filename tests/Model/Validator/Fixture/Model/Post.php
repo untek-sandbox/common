@@ -7,11 +7,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Post
 {
 
-    #[Assert\NotBlank()]
     #[Assert\Positive()]
     private int|string $id;
 
-    #[Assert\NotBlank()]
     #[Assert\Length(min: 3, max: 10)]
     private string $title;
+
+    private int $status = 100;
+
+    private ?array $tags;
 }
