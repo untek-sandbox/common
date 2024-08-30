@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Untek\Component\Collection\EntityCollectionNormalizer;
+use Untek\Component\Collection\CollectionNormalizer;
 //use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\Collection\TypedEntityCollectionNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
@@ -96,6 +96,13 @@ class SerializerTest extends TestCase
         $this->assertEquals('01J67QKTNVWQ73HB6J0YZ108RQ', $author->getId()->toBase32());
         $this->assertEquals('User1', $author->getName());
         $this->assertEquals('2024-08-26', $author->getCreatedAt()->format('Y-m-d'));
+        $this->assertEquals([
+            [
+                "id" => "01J67QKTNTFTZPH9ZV66HWTFXB",
+                "content" => "Comment 1",
+                "created_at" => "2024-08-26T16:16:57+00:00",
+            ]
+        ], $author->getComments()->toArray());
 
         return;
 
@@ -140,7 +147,7 @@ class SerializerTest extends TestCase
             new PropertyNormalizer(),
             new DateTimeNormalizer(),
             new ValueObjectNormalizer(),
-            new EntityCollectionNormalizer(),
+            new CollectionNormalizer(),
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,
@@ -174,7 +181,7 @@ class SerializerTest extends TestCase
 //            new PropertyNormalizer(),
             new DateTimeNormalizer(),
             new ValueObjectNormalizer(),
-//            new EntityCollectionNormalizer(),
+            new CollectionNormalizer(),
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,

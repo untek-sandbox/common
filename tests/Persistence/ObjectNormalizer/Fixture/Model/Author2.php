@@ -2,6 +2,7 @@
 
 namespace Untek\Tests\Persistence\ObjectNormalizer\Fixture\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Ulid;
 use DateTimeInterface;
 
@@ -12,7 +13,7 @@ class Author2
     private string $name;
     private ObjectInner $inner;
     private DateTimeInterface $createdAt;
-    private CommentCollection $comments;
+    private Collection $comments;
 
     public function __construct(
         Ulid $id,
@@ -60,12 +61,12 @@ class Author2
         return $this->createdAt;
     }
 
-    public function getComments(): CommentCollection
+    public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    public function setComments(CommentCollection $comments): void
+    public function setComments(Collection $comments): void
     {
         $this->comments = $comments;
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Untek\Component\Collection\EntityCollectionNormalizer;
+use Untek\Component\Collection\CollectionNormalizer;
 use Untek\Component\ObjectNormalizer\ObjectNormalizer;
 use Untek\Component\ValueObject\ValueObjectNormalizer;
 use Untek\Develop\Debug\DataDumper;
@@ -143,7 +143,7 @@ class ObjectValidatorTest extends TestCase
         $normalizers = [
             new DateTimeNormalizer(),
             new ValueObjectNormalizer(),
-            new EntityCollectionNormalizer(),
+            new CollectionNormalizer(),
             new BackedEnumNormalizer(),
             new UidNormalizer([
                 UidNormalizer::NORMALIZATION_FORMAT_KEY => UidNormalizer::NORMALIZATION_FORMAT_BASE58,

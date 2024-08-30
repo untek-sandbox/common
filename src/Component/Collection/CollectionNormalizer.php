@@ -11,7 +11,7 @@ use Untek\Component\ObjectNormalizer\RootNormalizerAwareInterface;
 /**
  * @method array getSupportedTypes(?string $format)
  */
-class EntityCollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
+class CollectionNormalizer implements NormalizerInterface, DenormalizerInterface, RootNormalizerAwareInterface
 {
 
     private NormalizerInterface|DenormalizerInterface $rootNormalizer;
