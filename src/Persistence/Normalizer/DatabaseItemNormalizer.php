@@ -36,7 +36,7 @@ class DatabaseItemNormalizer extends AbstarctNormalizer implements DbNormalizerI
                     return $articles->getId();
                 }*/
         ];
-        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader(/*new AnnotationReader()*/));
         $propertyTypeExtractor = new ReflectionExtractor();
         $objectNormalizer = new ObjectNormalizer(
             classMetadataFactory: $classMetadataFactory,
