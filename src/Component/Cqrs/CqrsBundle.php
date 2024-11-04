@@ -2,6 +2,7 @@
 
 namespace Untek\Component\Cqrs;
 
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -13,6 +14,11 @@ use Untek\Component\Cqrs\Infrastructure\DependencyInjection\CqrsPass;
 class CqrsBundle extends AbstractBundle
 {
 
+    /**
+     * @param ContainerBuilder $container
+     * @return void
+     * @throws Exception
+     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new CqrsPass());
