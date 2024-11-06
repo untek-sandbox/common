@@ -2,6 +2,7 @@
 
 namespace Untek\Component\Cqs\Infrastructure\Services;
 
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Untek\Component\Cqs\Application\Interfaces\CommandBusInterface;
 use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -25,6 +26,8 @@ class CommandBus implements CommandBusInterface
             return $last?->getResult();
         } catch (NoHandlerForMessageException $exception) {
             return $this->cqrsBus->handle($command);
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
         }
     }
 
