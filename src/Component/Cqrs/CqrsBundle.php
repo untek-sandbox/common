@@ -28,9 +28,9 @@ class CqrsBundle extends AbstractBundle
         $loader->load(__DIR__ . '/resources/config/services/main.php');
     }
 
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    /*public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $builder->registerForAutoconfiguration(CqrsHandlerInterface::class)
             ->addTag('cqrs.handler');
-    }
+    }*/
 }
