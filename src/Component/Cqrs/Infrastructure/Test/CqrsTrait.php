@@ -2,7 +2,7 @@
 
 namespace Untek\Component\Cqrs\Infrastructure\Test;
 
-use Untek\Component\Cqrs\Application\Services\CommandBusInterface;
+use Untek\Component\Cqs\Application\Interfaces\CommandBusInterface;
 
 trait CqrsTrait
 {
