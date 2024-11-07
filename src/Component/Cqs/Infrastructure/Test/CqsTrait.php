@@ -1,10 +1,10 @@
 <?php
 
-namespace Untek\Component\Cqrs\Infrastructure\Test;
+namespace Untek\Component\Cqs\Infrastructure\Test;
 
 use Untek\Component\Cqs\Application\Interfaces\CommandBusInterface;
 
-trait CqrsTrait
+trait CqsTrait
 {
 
     protected function handleCommand(object $command): mixed
