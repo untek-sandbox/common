@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\App\Services\ControllerAccessChecker;
 use Untek\Core\Instance\Libs\Resolvers\InstanceResolver;
-use Untek\Component\Cqrs\Application\Services\CommandBusInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
