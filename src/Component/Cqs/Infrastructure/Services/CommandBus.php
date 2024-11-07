@@ -13,7 +13,7 @@ class CommandBus implements CommandBusInterface
 
     public function __construct(
         private MessageBusInterface                                            $messageBus,
-        private \Untek\Component\Cqrs\Application\Services\CommandBusInterface $cqrsBus,
+//        private \Untek\Component\Cqrs\Application\Services\CommandBusInterface $cqrsBus,
     )
     {
     }
@@ -24,8 +24,8 @@ class CommandBus implements CommandBusInterface
             $result = $this->messageBus->dispatch($command);
             $last = $result->last(HandledStamp::class);
             return $last?->getResult();
-        } catch (NoHandlerForMessageException $exception) {
-            return $this->cqrsBus->handle($command);
+//        } catch (NoHandlerForMessageException $exception) {
+//            return $this->cqrsBus->handle($command);
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
