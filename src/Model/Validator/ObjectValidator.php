@@ -2,7 +2,6 @@
 
 namespace Untek\Model\Validator;
 
-use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -53,7 +52,6 @@ class ObjectValidator
         }
 
         $validator = $this->createValidator();
-//        dd($data);
         return $validator->validate($data, $constraints);
     }
 
